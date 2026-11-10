@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"on-primary-fixed-variant":"#005323","secondary-fixed":"#b1f2be","surface-variant":"#d3e4fe","outline":"#6f7a6e","inverse-primary":"#79db8d","on-primary-fixed":"#00210a","on-tertiary-container":"#e7f8ee","on-primary-container":"#d3ffd5","inverse-on-surface":"#eaf1ff","on-tertiary-fixed":"#101e19","tertiary-container":"#63736b","on-error-container":"#93000a","primary":"#00652c","tertiary-fixed":"#d6e6dd","on-surface":"#0b1c30","on-background":"#0b1c30","on-tertiary":"#ffffff","on-secondary-container":"#347047","surface-container-low":"#eff4ff","surface-dim":"#cbdbf5","primary-fixed":"#95f8a7","error-container":"#ffdad6","surface-container":"#e5eeff","on-error":"#ffffff","secondary":"#2e6a41","surface-tint":"#006d30","outline-variant":"#becabc","surface-bright":"#f8f9ff","tertiary-fixed-dim":"#bacac1","on-secondary-fixed-variant":"#12512c","surface-container-high":"#dce9ff","secondary-fixed-dim":"#96d5a3","secondary-container":"#b1f2be","on-secondary":"#ffffff","primary-container":"#15803d","background":"#f8f9ff","on-secondary-fixed":"#00210d","inverse-surface":"#213145","on-tertiary-fixed-variant":"#3b4a43","surface-container-highest":"#d3e4fe","tertiary":"#4b5a53","error":"#ba1a1a","primary-fixed-dim":"#79db8d","on-primary":"#ffffff","surface-container-lowest":"#ffffff","on-surface-variant":"#3f493f","surface":"#f8f9ff"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-md":"1rem","gutter":"1.5rem","space-lg":"1.5rem","space-sm":"0.5rem","space-xs":"0.25rem","margin":"2rem","space-xl":"2rem"},"fontFamily":{"headline-xl":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"body-sm":["Inter"],"body-lg":["Inter"],"caption":["Inter"],"body-md":["Inter"],"display-lg":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"]},"fontSize":{"headline-xl":["28px",{"lineHeight":"36px","fontWeight":"700"}],"label-md":["13px",{"lineHeight":"18px","fontWeight":"600"}],"body-sm":["13px",{"lineHeight":"18px","fontWeight":"400"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"caption":["12px",{"lineHeight":"16px","fontWeight":"500"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"display-lg":["36px",{"lineHeight":"44px","fontWeight":"700"}],"label-sm":["11px",{"lineHeight":"16px","fontWeight":"600"}],"headline-md":["18px",{"lineHeight":"26px","fontWeight":"600"}],"headline-lg":["22px",{"lineHeight":"30px","fontWeight":"600"}]}}}};</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-screen w-[260px] bg-surface-container-lowest z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col flex-1 overflow-y-auto"><div class="px-space-lg py-space-lg flex items-center gap-space-sm"><div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center text-on-primary shadow-[0_1px_3px_rgba(20,83,45,0.04)]"><span class="material-symbols-outlined text-[24px]">potted_plant</span></div><div class="flex flex-col"><span class="font-headline-md text-headline-md tracking-tight text-primary">TumbuhKu</span><span class="font-caption text-caption text-on-surface-variant font-medium">Portal Petugas &amp; Kader</span></div></div><div class="px-space-md mb-space-sm"><span class="px-space-sm font-label-sm text-label-sm uppercase tracking-wider text-outline">Menu Navigasi</span></div><nav class="flex flex-col gap-space-xs px-space-md" data-active-classes="bg-primary-container text-on-primary shadow-sm font-label-md"><a class="flex items-center px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="dasbor-petugas-posyandu" href="#"><span>Dashboard</span></a><a class="flex items-center px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="data-balita" href="#"><span>Data Balita</span></a><a class="flex items-center px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="akun-orang-tua" href="#"><span>Akun Orang Tua</span></a><a class="flex items-center px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="pemeriksaan" href="#"><span>Pemeriksaan</span></a><a class="flex items-center px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="monitoring-dan-tindak-lanjut-balita" href="#"><span>Monitoring</span></a><a class="flex items-center px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="posyandu-dan-wilayah" href="#"><span>Posyandu &amp; Wilayah</span></a><a class="flex items-center px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="laporan" href="#"><span>Laporan</span></a><a class="flex items-center px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="pengumuman-dan-jadwal" href="#"><span>Pengumuman &amp; Jadwal</span></a><a class="flex items-center px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="profil" href="#"><span>Profil</span></a></nav></div><div class="p-space-md bg-surface-container-low m-space-md rounded-xl flex items-center justify-between"><div class="flex items-center gap-space-sm overflow-hidden"><div class="w-9 h-9 rounded-full bg-secondary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-secondary text-[20px]">local_hospital</span></div><div class="flex flex-col min-w-0"><span class="font-label-md text-label-md text-on-surface truncate">Bidan Sri Wahyuni, A.Md.Keb</span><span class="font-caption text-caption text-on-surface-variant truncate">Petugas Pembina</span></div></div><button class="p-space-xs text-on-surface-variant hover:text-error transition-colors rounded-lg" title="Ganti Akun atau Keluar" type="button"><span class="material-symbols-outlined text-[20px]">logout</span></button></div></aside><div class="pl-[260px]"><header class="fixed top-0 left-[260px] right-0 h-16 bg-surface/90 backdrop-blur-md z-40 flex items-center justify-between px-space-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-md"><div class="inline-flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-secondary-container text-on-secondary-container"><span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span><span class="font-label-sm text-label-sm">Wilayah Binaan: Posyandu Melati 1 s/d 4 (Kel. Sukamaju)</span></div></div><div class="flex-1 max-w-md mx-space-lg"><div class="relative flex items-center"><span class="material-symbols-outlined absolute left-3 text-[18px] text-outline pointer-events-none">search</span><input class="w-full pl-9 pr-4 py-2 bg-surface-container-lowest rounded-lg font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary shadow-[0_1px_3px_rgba(20,83,45,0.04)]" placeholder="Cari nama balita, NIK, nama orang tua, atau Posyandu..." type="text"/></div></div><div class="flex items-center gap-space-md shrink-0"><div class="hidden xl:flex items-center gap-space-xs text-on-surface-variant"><span class="material-symbols-outlined text-[18px]">calendar_today</span><span class="font-caption text-caption font-medium">Kamis, 24 Oktober 2024</span></div><button class="relative p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" title="Notifikasi Sistem" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-error rounded-full ring-2 ring-surface"></span></button><button class="inline-flex items-center gap-space-xs px-space-md py-2 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-all shadow-[0_1px_3px_rgba(20,83,45,0.04)]" type="button"><span class="material-symbols-outlined text-[18px]">add</span><span>Catat Pemeriksaan</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="w-full pt-16 bg-surface"><div class="flex flex-col w-full">
+<!-- Top Ambient Glow -->
+<div class="relative w-full px-space-xl py-space-lg flex flex-col gap-space-lg">
+<!-- Breadcrumb & Workspace Meta -->
+<div class="flex flex-wrap items-center justify-between gap-space-md">
+<nav class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md">
+<a class="hover:text-primary transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-[16px]">home</span>
+<span>Beranda</span>
+</a>
+<span class="material-symbols-outlined text-[14px] text-outline">chevron_right</span>
+<span class="text-primary font-bold">Pengumuman &amp; Jadwal</span>
+</nav>
+<div class="inline-flex items-center gap-space-sm bg-secondary-container/40 px-3 py-1.5 rounded-full text-on-secondary-container font-label-sm text-label-sm">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span>Sinkronisasi e-PPGBM &amp; WhatsApp Gateway: <strong>Aktif</strong></span>
+</div>
+</div>
+<!-- Header Block -->
+<div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-space-lg">
+<div class="flex flex-col max-w-2xl">
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">Kelola Pengumuman &amp; Jadwal Posyandu</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">
+          Publikasikan agenda posyandu, jadwal imunisasi berkala, serta informasi penting kesehatan anak langsung ke aplikasi orang tua binaan.
+        </p>
+</div>
+<!-- Header Action Buttons -->
+<div class="flex flex-wrap items-center gap-space-sm shrink-0">
+<button class="inline-flex items-center gap-space-xs px-3.5 py-2.5 rounded-xl bg-surface-container-lowest text-primary font-label-md text-label-md hover:bg-secondary-container/30 transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span>
+<span>+ Jadwal Kegiatan</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-3.5 py-2.5 rounded-xl bg-surface-container-lowest text-primary font-label-md text-label-md hover:bg-secondary-container/30 transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">vaccines</span>
+<span>+ Jadwal Imunisasi</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-4 py-2.5 rounded-xl bg-primary text-on-primary font-label-md text-label-md hover:bg-on-primary-fixed-variant transition-all shadow-md shadow-primary/20" id="btn-open-drawer" onclick="toggleDrawer(true)" type="button">
+<span class="material-symbols-outlined text-[20px]">add_circle</span>
+<span>+ Buat Pengumuman</span>
+</button>
+</div>
+</div>
+<!-- Metric Summary Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Total Pengumuman</span>
+<div class="flex items-baseline gap-space-xs mt-1">
+<span class="font-display-lg text-display-lg text-on-surface">14</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">materi informasi</span>
+</div>
+<div class="flex items-center gap-2 mt-3 font-caption text-caption text-on-surface-variant">
+<span class="inline-flex items-center gap-1 text-primary font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span> 8 Terbit</span>
+<span>•</span>
+<span class="inline-flex items-center gap-1 text-outline"><span class="w-1.5 h-1.5 rounded-full bg-outline"></span> 4 Draft</span>
+<span>•</span>
+<span class="inline-flex items-center gap-1 text-tertiary"><span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> 2 Arsip</span>
+</div>
+</div>
+<div class="w-12 h-12 rounded-xl bg-secondary-container/60 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[26px]">campaign</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Kegiatan Bulan Ini</span>
+<div class="flex items-baseline gap-space-xs mt-1">
+<span class="font-display-lg text-display-lg text-primary">6</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">sesi aktif Posyandu</span>
+</div>
+<div class="flex items-center gap-2 mt-3 font-caption text-caption text-on-surface-variant">
+<span class="inline-flex items-center gap-1 text-primary"><span class="material-symbols-outlined text-[14px]">event_available</span> 4 Posyandu Melati</span>
+<span>•</span>
+<span class="text-on-surface-variant">2 Sesi Imunisasi JE</span>
+</div>
+</div>
+<div class="w-12 h-12 rounded-xl bg-secondary-container/60 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[26px]">event</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Target Terjangkau</span>
+<div class="flex items-baseline gap-space-xs mt-1">
+<span class="font-display-lg text-display-lg text-on-surface">184</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">keluarga / orang tua</span>
+</div>
+<div class="flex items-center gap-2 mt-3 font-caption text-caption text-primary">
+<span class="material-symbols-outlined text-[14px]">cell_tower</span>
+<span class="font-semibold">Melati 01 s/d 04 (Kel. Sukamaju)</span>
+</div>
+</div>
+<div class="w-12 h-12 rounded-xl bg-secondary-container/60 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[26px]">family_restroom</span>
+</div>
+</div>
+</div>
+<!-- Main Navigation Tabs -->
+<div class="flex items-center justify-between border-b-0 bg-surface-container-low p-1.5 rounded-xl max-w-xl">
+<button class="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-surface-container-lowest text-primary shadow-sm font-label-md text-label-md transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">campaign</span>
+<span>Pengumuman</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">14</span>
+</button>
+<button class="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container/60 font-label-md text-label-md transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span>Jadwal Kegiatan</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm">6</span>
+</button>
+<button class="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container/60 font-label-md text-label-md transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">vaccines</span>
+<span>Jadwal Imunisasi</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm">8</span>
+</button>
+</div>
+<!-- Tab 1: Pengumuman Content Section -->
+<div class="flex flex-col gap-space-md">
+<!-- Filter and Query Bar -->
+<div class="bg-surface-container-lowest p-space-md rounded-2xl shadow-sm flex flex-col xl:flex-row gap-space-md items-stretch xl:items-center justify-between">
+<!-- Search -->
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[18px] text-outline pointer-events-none">search</span>
+<input class="w-full pl-10 pr-4 py-2.5 bg-surface rounded-xl font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest transition-colors shadow-inner" placeholder="Cari judul atau isi pengumuman..." type="text"/>
+</div>
+<!-- Filter Dropdowns -->
+<div class="flex flex-wrap items-center gap-space-sm">
+<div class="relative">
+<select class="appearance-none bg-surface text-on-surface font-body-sm text-body-sm pl-3.5 pr-8 py-2.5 rounded-xl cursor-pointer focus:outline-none hover:bg-surface-container-low transition-colors">
+<option value="">Semua Kategori</option>
+<option value="kesehatan">Kesehatan &amp; Gizi</option>
+<option value="jadwal">Jadwal Posyandu</option>
+<option value="imunisasi">Imunisasi</option>
+<option value="penyuluhan">Penyuluhan &amp; BKB</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-[18px] text-outline pointer-events-none">expand_more</span>
+</div>
+<div class="relative">
+<select class="appearance-none bg-surface text-on-surface font-body-sm text-body-sm pl-3.5 pr-8 py-2.5 rounded-xl cursor-pointer focus:outline-none hover:bg-surface-container-low transition-colors">
+<option value="">Semua Posyandu Binaan</option>
+<option value="melati-1">Posyandu Melati 01</option>
+<option value="melati-2">Posyandu Melati 02</option>
+<option value="melati-3">Posyandu Melati 03</option>
+<option value="melati-4">Posyandu Melati 04</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-[18px] text-outline pointer-events-none">expand_more</span>
+</div>
+<div class="relative">
+<select class="appearance-none bg-surface text-on-surface font-body-sm text-body-sm pl-3.5 pr-8 py-2.5 rounded-xl cursor-pointer focus:outline-none hover:bg-surface-container-low transition-colors">
+<option value="">Semua Status Publikasi</option>
+<option value="terbit">Terbit</option>
+<option value="draft">Draft</option>
+<option value="arsip">Diarsipkan</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-[18px] text-outline pointer-events-none">expand_more</span>
+</div>
+<button class="p-2.5 text-on-surface-variant hover:text-primary hover:bg-secondary-container/30 rounded-xl transition-colors" title="Reset Filter" type="button">
+<span class="material-symbols-outlined text-[20px]">filter_alt_off</span>
+</button>
+</div>
+</div>
+<!-- Data Table Card -->
+<div class="bg-surface-container-lowest rounded-2xl shadow-sm overflow-hidden flex flex-col">
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead class="bg-surface-container-low/70 text-on-surface font-label-md text-label-md">
+<tr>
+<th class="py-3.5 px-4 font-semibold">Judul Pengumuman</th>
+<th class="py-3.5 px-4 font-semibold">Kategori</th>
+<th class="py-3.5 px-4 font-semibold">Target Posyandu</th>
+<th class="py-3.5 px-4 font-semibold">Tanggal Rilis</th>
+<th class="py-3.5 px-4 font-semibold">Jangkauan Pembaca</th>
+<th class="py-3.5 px-4 font-semibold text-center">Status</th>
+<th class="py-3.5 px-4 font-semibold text-right">Aksi</th>
+</tr>
+</thead>
+<tbody class="divide-y-0 text-on-surface">
+<!-- Row 1 -->
+<tr class="hover:bg-surface transition-colors group">
+<td class="py-4 px-4 font-medium max-w-sm">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary shrink-0 mt-0.5" title="Disematkan di atas">push_pin</span>
+<div>
+<span class="font-headline-md text-[14px] leading-tight text-on-surface group-hover:text-primary transition-colors block">
+                        Bulan Penimbangan Serentak &amp; Distribusi Vitamin A Dosis Merah
+                      </span>
+<span class="font-caption text-caption text-on-surface-variant mt-0.5 block">
+                        Pesan pengingat KIA lengkap, kapsul dosis merah 200.000 IU
+                      </span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">event_note</span>
+<span>Jadwal Posyandu</span>
+</span>
+</td>
+<td class="py-4 px-4 whitespace-nowrap">
+<span class="text-on-surface font-medium">Posyandu Melati 01-04</span>
+<span class="block font-caption text-caption text-outline">Semua Wilayah Binaan</span>
+</td>
+<td class="py-4 px-4 whitespace-nowrap">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">18 Nov 2024</span>
+<span class="font-caption text-caption text-outline">Pukul 07:30 WIB</span>
+</div>
+</td>
+<td class="py-4 px-4 whitespace-nowrap">
+<div class="flex flex-col gap-1 w-36">
+<div class="flex justify-between items-center font-caption text-caption">
+<span class="font-semibold text-primary">162 / 184</span>
+<span class="text-outline">88%</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 88%"></div>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 whitespace-nowrap text-center">
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-secondary-container/80 text-primary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+<span>Terbit</span>
+</span>
+</td>
+<td class="py-4 px-4 whitespace-nowrap text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1.5 text-on-surface-variant hover:text-primary hover:bg-secondary-container/30 rounded-lg transition-colors" onclick="toggleDrawer(true)" title="Edit Pengumuman" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:text-tertiary hover:bg-surface-container rounded-lg transition-colors" title="Arsipkan" type="button">
+<span class="material-symbols-outlined text-[18px]">archive</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:text-error hover:bg-error-container rounded-lg transition-colors" title="Hapus Pengumuman" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface transition-colors group bg-surface/30">
+<td class="py-4 px-4 font-medium max-w-sm">
+<div class="flex items-start gap-2">
+<span class="w-4 shrink-0"></span>
+<div>
+<span class="font-headline-md text-[14px] leading-tight text-on-surface group-hover:text-primary transition-colors block">
+                        Pemberian Makanan Tambahan (PMT) Berbahan Pangan Lokal Kaya Protein Hewani
+                      </span>
+<span class="font-caption text-caption text-on-surface-variant mt-0.5 block">
+                        Menu telur, hati ayam, dan sayur kelor selama 90 hari pemulihan gizi
+                      </span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">nutrition</span>
+<span>Kesehatan &amp; Gizi</span>
+</span>
+</td>
+<td class="py-4 px-4 whitespace-nowrap">
+<span class="text-on-surface font-medium">Posyandu Melati 02, 04</span>
+<span class="block font-caption text-caption text-outline">Prioritas Gizi Kurang</span>
+</td>
+<td class="py-4 px-4 whitespace-nowrap">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">10 Nov 2024</span>
+<span class="font-caption text-caption text-outline">Pukul 09:00 WIB</span>
+</div>
+</td>
+<td class="py-4 px-4 whitespace-nowrap">
+<div class="flex flex-col gap-1 w-36">
+<div class="flex justify-between items-center font-caption text-caption">
+<span class="font-semibold text-primary">94 / 110</span>
+<span class="text-outline">85%</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 85%"></div>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 whitespace-nowrap text-center">
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-secondary-container/80 text-primary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+<span>Terbit</span>
+</span>
+</td>
+<td class="py-4 px-4 whitespace-nowrap text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1.5 text-on-surface-variant hover:text-primary hover:bg-secondary-container/30 rounded-lg transition-colors" onclick="toggleDrawer(true)" title="Edit Pengumuman" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:text-tertiary hover:bg-surface-container rounded-lg transition-colors" title="Arsipkan" type="button">
+<span class="material-symbols-outlined text-[18px]">archive</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:text-error hover:bg-error-container rounded-lg transition-colors" title="Hapus Pengumuman" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface transition-colors group">
+<td class="py-4 px-4 font-medium max-w-sm">
+<div class="flex items-start gap-2">
+<span class="w-4 shrink-0"></span>
+<div>
+<span class="font-headline-md text-[14px] leading-tight text-on-surface group-hover:text-primary transition-colors block">
+                        Pelaksanaan Imunisasi Tambahan Japanese Encephalitis (JE) &amp; Polio nOPV2
+                      </span>
+<span class="font-caption text-caption text-on-surface-variant mt-0.5 block">
+                        Vaksinasi pencegahan radang otak &amp; penguatan antibodi polio balita
+                      </span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">vaccines</span>
+<span>Imunisasi</span>
+</span>
+</td>
+<td class="py-4 px-4 whitespace-nowrap">
+<span class="text-on-surface font-medium">Melati 01, 03</span>
+<span class="block font-caption text-caption text-outline">Target 9 s/d 59 bln</span>
+</td>
+<td class="py-4 px-4 whitespace-nowrap">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">22 Nov 2024</span>
+<span class="font-caption text-caption text-outline">Draft Tersimpan</span>
+</div>
+</td>
+<td class="py-4 px-4 whitespace-nowrap">
+<span class="font-caption text-caption text-outline italic">Belum disiarkan</span>
+</td>
+<td class="py-4 px-4 whitespace-nowrap text-center">
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+<span>Draft</span>
+</span>
+</td>
+<td class="py-4 px-4 whitespace-nowrap text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1.5 text-on-surface-variant hover:text-primary hover:bg-secondary-container/30 rounded-lg transition-colors" onclick="toggleDrawer(true)" title="Edit &amp; Lengkapi" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 text-primary hover:bg-secondary-container/40 rounded-lg transition-colors" title="Terbitkan Sekarang" type="button">
+<span class="material-symbols-outlined text-[18px]">publish</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:text-error hover:bg-error-container rounded-lg transition-colors" title="Hapus" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface transition-colors group bg-surface/30">
+<td class="py-4 px-4 font-medium max-w-sm">
+<div class="flex items-start gap-2">
+<span class="w-4 shrink-0"></span>
+<div>
+<span class="font-headline-md text-[14px] leading-tight text-on-surface group-hover:text-primary transition-colors block">
+                        Sosialisasi Pencegahan Anemia Balita &amp; Pola Asuh 1000 Hari Pertama Kehidupan
+                      </span>
+<span class="font-caption text-caption text-on-surface-variant mt-0.5 block">
+                        Edukasi bersama Tim Pendamping Keluarga (TPK) dan Kader Posyandu
+                      </span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 whitespace-nowrap">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">diversity_3</span>
+<span>Penyuluhan &amp; BKB</span>
+</span>
+</td>
+<td class="py-4 px-4 whitespace-nowrap">
+<span class="text-on-surface font-medium">Semua Posyandu</span>
+<span class="block font-caption text-caption text-outline">Kelurahan Sukamaju</span>
+</td>
+<td class="py-4 px-4 whitespace-nowrap">
+<div class="flex flex-col">
+<span class="font-medium text-on-surface">04 Okt 2024</span>
+<span class="font-caption text-caption text-outline">Arsip Selesai</span>
+</div>
+</td>
+<td class="py-4 px-4 whitespace-nowrap">
+<div class="flex flex-col gap-1 w-36">
+<div class="flex justify-between items-center font-caption text-caption">
+<span class="font-semibold text-primary">178 / 184</span>
+<span class="text-outline">97%</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 97%"></div>
+</div>
+</div>
+</td>
+<td class="py-4 px-4 whitespace-nowrap text-center">
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-surface-container text-tertiary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">inventory_2</span>
+<span>Diarsipkan</span>
+</span>
+</td>
+<td class="py-4 px-4 whitespace-nowrap text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1.5 text-on-surface-variant hover:text-primary hover:bg-secondary-container/30 rounded-lg transition-colors" title="Pulihkan Pengumuman" type="button">
+<span class="material-symbols-outlined text-[18px]">unarchive</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:text-primary hover:bg-secondary-container/30 rounded-lg transition-colors" onclick="toggleDrawer(true)" title="Edit" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:text-error hover:bg-error-container rounded-lg transition-colors" title="Hapus Permanen" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer / Pagination -->
+<div class="py-3 px-space-lg bg-surface-container-low/40 flex flex-col sm:flex-row items-center justify-between gap-space-sm font-body-sm text-body-sm text-on-surface-variant">
+<span>Menampilkan <strong class="text-on-surface">1 - 4</strong> dari <strong class="text-on-surface">14</strong> pengumuman</span>
+<div class="flex items-center gap-1.5">
+<button class="p-1.5 rounded-lg text-outline hover:bg-surface-container transition-colors disabled:opacity-40" disabled="" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded-lg bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center shadow-sm" type="button">1</button>
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container text-on-surface font-label-md text-label-md flex items-center justify-center transition-colors" type="button">2</button>
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container text-on-surface font-label-md text-label-md flex items-center justify-center transition-colors" type="button">3</button>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Info Banner for Cadres -->
+<div class="bg-gradient-to-r from-secondary-container/40 via-surface-container-lowest to-surface-container-low p-space-md rounded-2xl flex flex-col md:flex-row items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-xl bg-primary text-on-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">tips_and_updates</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">Integrasi Pesan WhatsApp Kader</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Setiap pengumuman berstatus "Terbit" akan otomatis memicu blast reminder 24 jam sebelum agenda kegiatan berlangsung.</span>
+</div>
+</div>
+<button class="px-4 py-2 rounded-xl bg-surface-container-lowest text-primary font-label-md text-label-md hover:bg-secondary-container/30 transition-all shrink-0" type="button">
+        Konfigurasi Gateway
+      </button>
+</div>
+</div>
+<!-- SLIDE-OVER DRAWER MODAL (Edit / Buat Pengumuman) -->
+<div class="fixed inset-0 z-50 bg-inverse-surface/40 backdrop-blur-xs flex justify-end transition-opacity duration-300" id="drawer-overlay">
+<!-- Backdrop dismiss area -->
+<div class="flex-1 cursor-pointer" onclick="toggleDrawer(false)"></div>
+<!-- Drawer Body -->
+<div class="relative w-full max-w-[960px] bg-surface-container-lowest h-screen shadow-2xl flex flex-col z-10 overflow-hidden">
+<!-- Drawer Header -->
+<div class="px-space-xl py-space-md bg-surface-container-low/70 flex items-center justify-between shrink-0">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-primary-container text-on-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">post_add</span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-headline-md text-headline-md text-on-surface tracking-tight">Formulir Pengumuman</h2>
+<span class="font-caption text-caption text-on-surface-variant">Kelola rincian materi yang disiarkan ke dashboard orang tua</span>
+</div>
+</div>
+<button class="p-2 text-on-surface-variant hover:text-error hover:bg-error-container rounded-xl transition-colors" onclick="toggleDrawer(false)" type="button">
+<span class="material-symbols-outlined text-[22px]">close</span>
+</button>
+</div>
+<!-- Drawer Content: Split 2-Column Grid (Form + Live Mobile/Web Preview) -->
+<div class="flex-1 overflow-y-auto p-space-xl grid grid-cols-1 lg:grid-cols-12 gap-space-xl">
+<!-- Left Column: Form Fields (7 Cols) -->
+<div class="lg:col-span-7 flex flex-col gap-space-md">
+<!-- Judul Input -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface flex items-center justify-between">
+<span>Judul Pengumuman <span class="text-error">*</span></span>
+<span class="font-caption text-caption text-outline">Maks. 120 karakter</span>
+</label>
+<input class="w-full px-3.5 py-2.5 bg-surface rounded-xl font-body-md text-body-md text-on-surface focus:outline-none focus:bg-surface-container-lowest transition-colors shadow-inner" id="input-title" placeholder="Tuliskan judul informasi secara ringkas &amp; jelas..." type="text" value="Bulan Penimbangan Serentak &amp; Distribusi Vitamin A Dosis Merah"/>
+</div>
+<!-- Kategori Selector -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface">
+              Kategori Pengumuman <span class="text-error">*</span>
+</label>
+<div class="relative">
+<select class="w-full appearance-none bg-surface text-on-surface font-body-md text-body-md px-3.5 py-2.5 rounded-xl cursor-pointer focus:outline-none focus:bg-surface-container-lowest transition-colors" id="select-category">
+<option selected="" value="Jadwal Posyandu">Jadwal Posyandu</option>
+<option value="Kesehatan &amp; Gizi">Kesehatan &amp; Gizi</option>
+<option value="Imunisasi">Imunisasi</option>
+<option value="Penyuluhan &amp; BKB">Penyuluhan &amp; BKB</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-outline pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Rich Text Formatting Toolbar & Container -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface">
+              Isi Pengumuman <span class="text-error">*</span>
+</label>
+<div class="bg-surface rounded-xl overflow-hidden flex flex-col">
+<!-- Toolbar -->
+<div class="flex items-center flex-wrap gap-1 p-2 bg-surface-container-low/80">
+<button class="p-1.5 rounded-lg text-on-surface hover:bg-surface-container transition-colors" title="Bold" type="button">
+<span class="material-symbols-outlined text-[18px]">format_bold</span>
+</button>
+<button class="p-1.5 rounded-lg text-on-surface hover:bg-surface-container transition-colors" title="Italic" type="button">
+<span class="material-symbols-outlined text-[18px]">format_italic</span>
+</button>
+<button class="p-1.5 rounded-lg text-on-surface hover:bg-surface-container transition-colors" title="Heading 2" type="button">
+<span class="material-symbols-outlined text-[18px]">format_size</span>
+</button>
+<span class="w-px h-4 bg-outline-variant mx-1"></span>
+<button class="p-1.5 rounded-lg text-on-surface hover:bg-surface-container transition-colors" title="Bullet List" type="button">
+<span class="material-symbols-outlined text-[18px]">format_list_bulleted</span>
+</button>
+<button class="p-1.5 rounded-lg text-on-surface hover:bg-surface-container transition-colors" title="Numbered List" type="button">
+<span class="material-symbols-outlined text-[18px]">format_list_numbered</span>
+</button>
+<button class="p-1.5 rounded-lg text-on-surface hover:bg-surface-container transition-colors" title="Quote" type="button">
+<span class="material-symbols-outlined text-[18px]">format_quote</span>
+</button>
+<button class="p-1.5 rounded-lg text-on-surface hover:bg-surface-container transition-colors" title="Link" type="button">
+<span class="material-symbols-outlined text-[18px]">link</span>
+</button>
+</div>
+<!-- Body Textarea -->
+<textarea class="w-full p-3.5 bg-surface font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest leading-relaxed resize-none" id="textarea-content" rows="6">Halo Ayah &amp; Ibu balita wilayah Posyandu Melati!
+
+Diberitahukan bahwa penimbangan serentak &amp; pengukuran antropometri serta pembagian Kapsul Vitamin A dosis merah akan dilaksanakan pada:
+
+• Hari/Tanggal: Senin, 18 November 2024
+• Waktu: Pukul 08:00 - 11:30 WIB
+• Tempat: Balai Warga RW 02 (Posyandu Melati Indah)
+
+Mohon membawa Buku KIA (Kesehatan Ibu &amp; Anak) dan memastikan si kecil sudah sarapan sebelum pemeriksaan. Vitamin A merah diperuntukkan bagi balita usia 12-59 bulan.</textarea>
+</div>
+</div>
+<!-- Target Posyandu Binaan -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-on-surface">Target Posyandu Binaan <span class="text-error">*</span></label>
+<button class="font-label-sm text-label-sm text-primary hover:underline" type="button">Pilih Semua Posyandu</button>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<label class="flex items-center gap-2.5 p-2.5 bg-surface rounded-xl cursor-pointer hover:bg-surface-container-low transition-colors">
+<input checked="" class="w-4 h-4 rounded text-primary focus:ring-primary accent-primary" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Melati 01 (RW 01)</span>
+</label>
+<label class="flex items-center gap-2.5 p-2.5 bg-surface rounded-xl cursor-pointer hover:bg-surface-container-low transition-colors">
+<input checked="" class="w-4 h-4 rounded text-primary focus:ring-primary accent-primary" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Melati 02 (RW 02)</span>
+</label>
+<label class="flex items-center gap-2.5 p-2.5 bg-surface rounded-xl cursor-pointer hover:bg-surface-container-low transition-colors">
+<input checked="" class="w-4 h-4 rounded text-primary focus:ring-primary accent-primary" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Melati 03 (RW 03)</span>
+</label>
+<label class="flex items-center gap-2.5 p-2.5 bg-surface rounded-xl cursor-pointer hover:bg-surface-container-low transition-colors">
+<input checked="" class="w-4 h-4 rounded text-primary focus:ring-primary accent-primary" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Melati 04 (RW 04)</span>
+</label>
+</div>
+</div>
+<!-- Publication Options & Toggles -->
+<div class="flex flex-col gap-3 pt-2">
+<!-- Pin to Top -->
+<label class="flex items-start gap-3 p-3 bg-surface rounded-xl cursor-pointer hover:bg-surface-container-low transition-colors">
+<input checked="" class="w-4 h-4 mt-0.5 rounded text-primary focus:ring-primary accent-primary" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">push_pin</span>
+                  Sematkan di Bagian Atas Dashboard Orang Tua (Pinned)
+                </span>
+<span class="font-caption text-caption text-on-surface-variant">Prioritaskan pengumuman ini agar langsung terlihat saat orang tua membuka aplikasi TumbuhKu.</span>
+</div>
+</label>
+<!-- Send WA Notification -->
+<label class="flex items-start gap-3 p-3 bg-surface rounded-xl cursor-pointer hover:bg-surface-container-low transition-colors">
+<input checked="" class="w-4 h-4 mt-0.5 rounded text-primary focus:ring-primary accent-primary" type="checkbox"/>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">chat</span>
+                  Kirim Notifikasi Pesan WhatsApp Otomatis
+                </span>
+<span class="font-caption text-caption text-on-surface-variant">Meneruskan ringkasan kegiatan ke nomor telepon ibu/ayah yang terdaftar pada sistem.</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Right Column: Live Preview Card (Parent App View) (5 Cols) -->
+<div class="lg:col-span-5 flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Pratinjau Layar Orang Tua</span>
+<span class="inline-flex items-center gap-1 font-caption text-caption text-primary">
+<span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+              Live Sync
+            </span>
+</div>
+<!-- Realistic Mockup Container mimicking Mobile/Parent Card -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-md shadow-md flex flex-col gap-space-md relative overflow-hidden">
+<!-- Simulated App Bar Element -->
+<div class="flex items-center justify-between pb-2">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">stay_current_portrait</span>
+<span>TumbuhKu Orang Tua Mobile</span>
+</div>
+<span class="font-caption text-caption text-outline">18 Nov</span>
+</div>
+<!-- Parent Card Body -->
+<div class="bg-surface rounded-xl p-space-md flex flex-col gap-space-sm shadow-sm">
+<!-- Badges -->
+<div class="flex flex-wrap items-center gap-1.5">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">event_note</span>
+<span>Jadwal Posyandu</span>
+</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-primary font-caption text-caption font-semibold">
+<span>📌 Pengumuman Penting</span>
+</span>
+</div>
+<!-- Title -->
+<h3 class="font-headline-md text-headline-md text-on-surface leading-snug" id="preview-title">
+                Bulan Penimbangan Serentak &amp; Distribusi Vitamin A Dosis Merah
+              </h3>
+<!-- Meta info -->
+<div class="flex items-center gap-2 font-caption text-caption text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px] text-primary">verified_user</span>
+<span>Bidan Sri Wahyuni, A.Md.Keb</span>
+<span>•</span>
+<span>Posyandu Melati</span>
+</div>
+<!-- Content snippet -->
+<div class="font-body-sm text-body-sm text-on-surface-variant bg-surface-container-lowest p-3 rounded-lg flex flex-col gap-2 mt-1">
+<p>Halo Ayah &amp; Ibu balita wilayah Posyandu Melati!</p>
+<div class="bg-surface-container-low p-2 rounded-lg text-primary font-medium text-[12px] flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+<span>Senin, 18 Nov 2024 • 08:00 - 11:30 WIB</span>
+</div>
+<ul class="list-disc pl-4 space-y-1 text-[12px] text-on-surface">
+<li>Wajib membawa Buku KIA</li>
+<li>Kapsul Vitamin A dosis merah (12-59 bln)</li>
+</ul>
+</div>
+<!-- Mockup action button -->
+<div class="flex items-center gap-2 mt-2 pt-2">
+<button class="flex-1 py-2 px-3 rounded-xl bg-primary text-on-primary font-label-sm text-label-sm text-center shadow-xs flex items-center justify-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px]">alarm</span>
+<span>Pasang Pengingat WA</span>
+</button>
+<button class="py-2 px-3 rounded-xl bg-surface-container-low text-on-surface font-label-sm text-label-sm hover:bg-surface-container transition-colors" type="button">
+                  Tandai Dibaca
+                </button>
+</div>
+</div>
+<!-- Informational Footnote -->
+<div class="p-3 bg-secondary-container/30 rounded-xl flex items-start gap-2 text-on-secondary-container font-caption text-caption">
+<span class="material-symbols-outlined text-[16px] text-primary shrink-0 mt-0.5">info</span>
+<span>Pratinjau ini merefleksikan tampilan kartu beranda pada ponsel pintar keluarga penerima notifikasi.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Drawer Actions Footer -->
+<div class="px-space-xl py-space-md bg-surface-container-low/70 flex items-center justify-between shrink-0">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+<span class="font-caption text-caption text-on-surface-variant">Status target: <strong>Siap Diterbitkan ke 184 Akun</strong></span>
+</div>
+<div class="flex items-center gap-space-sm">
+<button class="px-4 py-2.5 rounded-xl bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:bg-surface-container transition-colors" onclick="toggleDrawer(false)" type="button">
+            Simpan Draft
+          </button>
+<button class="inline-flex items-center gap-space-xs px-5 py-2.5 rounded-xl bg-primary text-on-primary font-label-md text-label-md hover:bg-on-primary-fixed-variant transition-all shadow-md shadow-primary/20" onclick="toggleDrawer(false)" type="button">
+<span class="material-symbols-outlined text-[18px]">send</span>
+<span>Terbitkan Pengumuman</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+    function toggleDrawer(show) {
+      const drawer = document.getElementById('drawer-overlay');
+      if (!drawer) return;
+      if (show) {
+        drawer.classList.remove('hidden');
+        drawer.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+      } else {
+        drawer.classList.add('hidden');
+        drawer.classList.remove('flex');
+        document.body.style.overflow = '';
+      }
+    }
+
+    // Interactive live sync preview on input title
+    const inputTitle = document.getElementById('input-title');
+    const previewTitle = document.getElementById('preview-title');
+    if (inputTitle && previewTitle) {
+      inputTitle.addEventListener('input', (e) => {
+        previewTitle.textContent = e.target.value.trim() || 'Judul Pengumuman';
+      });
+    }
+
+    // Default open state for demonstration
+    document.addEventListener('DOMContentLoaded', () => {
+      // Keep open initially so reviewer immediately sees the full side drawer & live preview feature
+      toggleDrawer(true);
+    });
+  </script>
+</div></main></div></body></html>

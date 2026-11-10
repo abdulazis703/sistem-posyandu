@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_blank" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-container":"#e5eeff","on-secondary-fixed":"#00210d","primary-fixed-dim":"#79db8d","surface-container-low":"#eff4ff","on-surface":"#0b1c30","background":"#f8f9ff","on-secondary-fixed-variant":"#12512c","on-error-container":"#93000a","on-tertiary-fixed-variant":"#3b4a43","tertiary-container":"#63736b","on-secondary-container":"#347047","tertiary-fixed-dim":"#bacac1","on-primary-container":"#d3ffd5","secondary-container":"#b1f2be","surface-dim":"#cbdbf5","surface-container-highest":"#d3e4fe","secondary-fixed":"#b1f2be","error":"#ba1a1a","surface-container-lowest":"#ffffff","inverse-surface":"#213145","outline":"#6f7a6e","tertiary-fixed":"#d6e6dd","surface-container-high":"#dce9ff","inverse-primary":"#79db8d","on-tertiary":"#ffffff","on-surface-variant":"#3f493f","surface":"#f8f9ff","on-error":"#ffffff","on-primary-fixed-variant":"#005323","primary-container":"#15803d","secondary":"#2e6a41","secondary-fixed-dim":"#96d5a3","primary-fixed":"#95f8a7","tertiary":"#4b5a53","on-secondary":"#ffffff","on-primary-fixed":"#00210a","on-primary":"#ffffff","surface-bright":"#f8f9ff","primary":"#00652c","on-background":"#0b1c30","inverse-on-surface":"#eaf1ff","surface-tint":"#006d30","outline-variant":"#becabc","on-tertiary-fixed":"#101e19","on-tertiary-container":"#e7f8ee","error-container":"#ffdad6","surface-variant":"#d3e4fe"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"margin":"2rem","space-xl":"2rem","space-xs":"0.25rem","gutter":"1.5rem","space-sm":"0.5rem","space-lg":"1.5rem","space-md":"1rem"},fontFamily:{"headline-md":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"],"body-sm":["Inter"],"body-lg":["Inter"],"display-lg":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"caption":["Inter"],"body-md":["Inter"]},fontSize:{"headline-md":["18px",{"lineHeight":"26px","fontWeight":"600"}],"headline-lg":["22px",{"lineHeight":"30px","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"16px","fontWeight":"600"}],"body-sm":["13px",{"lineHeight":"18px","fontWeight":"400"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"display-lg":["36px",{"lineHeight":"44px","fontWeight":"700"}],"label-md":["13px",{"lineHeight":"18px","fontWeight":"600"}],"headline-xl":["28px",{"lineHeight":"36px","fontWeight":"700"}],"caption":["12px",{"lineHeight":"16px","fontWeight":"500"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface min-h-screen selection:bg-secondary-container selection:text-on-secondary-fixed"><main class="w-full min-h-screen bg-surface flex flex-col"><div class="flex flex-col w-full">
+<div class="relative w-full min-h-screen bg-surface flex flex-col justify-between items-center py-10 px-6 overflow-hidden">
+<div class="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-secondary-container/40 blur-3xl pointer-events-none"></div>
+<div class="absolute top-1/3 -right-24 w-80 h-80 rounded-full bg-on-tertiary-container/60 blur-2xl pointer-events-none"></div>
+<div class="absolute -bottom-24 left-1/4 w-96 h-96 rounded-full bg-secondary-fixed/30 blur-3xl pointer-events-none"></div>
+<div class="w-full max-w-5xl mx-auto flex items-center justify-between mb-8 z-10">
+<a class="inline-flex items-center gap-2 text-primary hover:text-on-secondary-fixed-variant transition-colors group" href="#">
+<span class="material-symbols-outlined text-[20px] transition-transform group-hover:-translate-x-1">arrow_back</span>
+<span class="font-label-md text-label-md">Kembali ke Beranda TumbuhKu</span>
+</a>
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-fixed text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[15px] text-primary">verified_user</span>
+<span>Aman &amp; Terverifikasi Kemenkes RI</span>
+</div>
+</div>
+<div class="w-full max-w-xl mx-auto z-10">
+<div class="flex justify-center mb-6">
+<div class="inline-flex p-1 rounded-full bg-surface-container-low shadow-sm">
+<button class="px-5 py-1.5 rounded-full text-label-sm font-label-sm transition-all duration-200 bg-primary-container text-on-primary shadow-sm flex items-center gap-1.5" id="btnTabForm" onclick="switchState('form')" type="button">
+<span class="material-symbols-outlined text-[16px]">edit_note</span>
+<span>1. Formulir Permintaan</span>
+</button>
+<button class="px-5 py-1.5 rounded-full text-label-sm font-label-sm transition-all duration-200 text-tertiary hover:text-on-surface flex items-center gap-1.5" id="btnTabSuccess" onclick="switchState('success')" type="button">
+<span class="material-symbols-outlined text-[16px]">mark_email_read</span>
+<span>2. Simulasi Terkirim</span>
+</button>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl shadow-xl shadow-primary/5 p-8 sm:p-10 relative overflow-hidden transition-all duration-300">
+<div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-primary via-primary-fixed-dim to-secondary"></div>
+<div class="flex flex-col" id="stateForm">
+<div class="flex flex-col items-center text-center mb-6">
+<div class="flex items-center gap-2 mb-3">
+<div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm">
+<span class="material-symbols-outlined text-[22px]">spa</span>
+</div>
+<div class="text-left">
+<span class="font-headline-lg text-headline-lg tracking-tight text-primary leading-none block">TumbuhKu</span>
+<span class="font-label-sm text-label-sm text-tertiary tracking-wide uppercase">Posyandu Digital Indonesia</span>
+</div>
+</div>
+<div class="w-14 h-14 rounded-full bg-secondary-container/60 text-primary flex items-center justify-center my-3">
+<span class="material-symbols-outlined text-[28px]">lock_reset</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface mt-1 mb-2">Lupa Password?</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md">
+              Masukkan nomor WhatsApp atau alamat email yang terdaftar pada akun TumbuhKu Anda. Kami akan mengirimkan tautan atau instruksi untuk mengatur ulang kata sandi.
+            </p>
+</div>
+<form class="flex flex-col gap-5" onsubmit="handleFormSubmit(event)">
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface flex items-center gap-1.5" for="identifier">
+<span>Nomor WhatsApp atau Alamat Email</span>
+<span class="text-error font-body-sm text-body-sm">*</span>
+</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3.5 text-outline text-[20px] pointer-events-none">contact_phone</span>
+<input class="w-full h-11 pl-11 pr-4 bg-surface-container-low rounded-lg text-on-surface font-body-md text-body-md placeholder:text-outline/70 focus:outline-none focus:bg-surface-container-lowest focus:shadow-md transition-all" id="identifier" placeholder="contoh: 081234567890 atau kader@posyandu.id" required="" type="text" value="sari.rahmawati@posyandu.id"/>
+</div>
+<div class="flex items-start gap-1.5 mt-1 text-tertiary font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] shrink-0 mt-0.5 text-primary">info</span>
+<span>Pastikan kontak aktif untuk menerima tautan akses pemulihan dalam 15 menit.</span>
+</div>
+</div>
+<button class="w-full h-12 bg-primary-container hover:bg-primary text-on-primary rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 shadow-md shadow-primary/20 transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer mt-2" type="submit">
+<span>Kirim Instruksi Reset</span>
+<span class="material-symbols-outlined text-[20px]">send</span>
+</button>
+</form>
+<div class="flex items-center justify-center mt-6 pt-5">
+<a class="inline-flex items-center gap-1.5 text-primary hover:text-on-secondary-fixed-variant font-label-md text-label-md group" href="#">
+<span class="material-symbols-outlined text-[18px] transition-transform group-hover:-translate-x-1">arrow_back</span>
+<span>Kembali ke Halaman Masuk</span>
+</a>
+</div>
+</div>
+<div class="hidden flex-col items-center text-center" id="stateSuccess">
+<div class="relative my-2">
+<div class="w-16 h-16 rounded-full bg-secondary-container flex items-center justify-center text-primary shadow-inner">
+<span class="material-symbols-outlined text-[34px]">mark_email_read</span>
+</div>
+<div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-primary-container text-on-primary flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+</div>
+<h2 class="font-headline-xl text-headline-xl text-on-surface mt-3 mb-2">Instruksi Telah Dikirim</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md mb-5">
+            Tautan reset kata sandi telah dikirimkan ke kontak terdaftar. Silakan periksa pesan WhatsApp atau kotak masuk email Anda (termasuk folder spam).
+          </p>
+<div class="w-full bg-surface-container-low rounded-xl p-4 mb-6 flex flex-col gap-2">
+<div class="flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-tertiary">Alamat Pengiriman:</span>
+<span class="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-fixed">Aktif 15 Menit</span>
+</div>
+<div class="flex items-center gap-2 justify-center text-on-surface font-label-md text-label-md pt-1">
+<span class="material-symbols-outlined text-[18px] text-primary">alternate_email</span>
+<span id="targetEcho">sari.r*******@posyandu.id</span>
+</div>
+</div>
+<div class="w-full flex flex-col gap-3">
+<a class="w-full h-11 bg-primary-container hover:bg-primary text-on-primary rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 shadow-md shadow-primary/20 transition-all" href="#">
+<span>Buka Email / Masuk ke Akun</span>
+<span class="material-symbols-outlined text-[18px]">open_in_new</span>
+</a>
+<button class="w-full h-11 bg-surface-container text-tertiary rounded-lg font-label-md text-label-md flex items-center justify-center gap-1.5 transition-colors cursor-not-allowed opacity-80" disabled="" id="btnResend" onclick="handleResend()" type="button">
+<span class="material-symbols-outlined text-[18px]">timer</span>
+<span id="timerLabel">Kirim ulang dalam 54 detik</span>
+</button>
+</div>
+<div class="mt-6">
+<button class="inline-flex items-center gap-1 text-primary hover:text-on-secondary-fixed-variant font-label-md text-label-md" onclick="switchState('form')" type="button">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+<span>Gunakan kontak lain</span>
+</button>
+</div>
+</div>
+</div>
+<div class="mt-8 flex flex-col items-center gap-3 text-center">
+<div class="inline-flex items-center gap-2 text-tertiary font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[18px] text-secondary">support_agent</span>
+<span>Butuh bantuan kader? Hubungi Bidan Posyandu binaan atau Layanan Bantuan TumbuhKu.</span>
+</div>
+<div class="flex items-center gap-4 text-outline font-label-sm text-label-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+            Enkripsi TLS 256-bit
+          </span>
+<span>•</span>
+<span>Kementerian Kesehatan RI</span>
+<span>•</span>
+<a class="hover:text-primary underline" href="#">Pusat Bantuan</a>
+</div>
+</div>
+</div>
+<div class="w-full max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between text-outline font-caption text-caption pt-8 mt-6">
+<p>© 2025 TumbuhKu. Sistem Informasi Kesehatan Terpadu Posyandu &amp; Tumbuh Kembang Anak.</p>
+<div class="flex items-center gap-4 mt-2 sm:mt-0">
+<a class="hover:text-primary transition-colors" href="#">Kebijakan Privasi</a>
+<a class="hover:text-primary transition-colors" href="#">Syarat &amp; Ketentuan</a>
+<a class="hover:text-primary transition-colors" href="#">Keamanan Data Pasien</a>
+</div>
+</div>
+</div>
+</div>
+<script>
+  let countdown = 54;
+  let timerInterval = null;
+
+  function switchState(state) {
+    const formEl = document.getElementById('stateForm');
+    const successEl = document.getElementById('stateSuccess');
+    const tabForm = document.getElementById('btnTabForm');
+    const tabSuccess = document.getElementById('btnTabSuccess');
+
+    if (state === 'success') {
+      formEl.classList.add('hidden');
+      successEl.classList.remove('hidden');
+      successEl.classList.add('flex');
+
+      tabSuccess.className = "px-5 py-1.5 rounded-full text-label-sm font-label-sm transition-all duration-200 bg-primary-container text-on-primary shadow-sm flex items-center gap-1.5";
+      tabForm.className = "px-5 py-1.5 rounded-full text-label-sm font-label-sm transition-all duration-200 text-tertiary hover:text-on-surface flex items-center gap-1.5";
+      startTimer();
+    } else {
+      successEl.classList.add('hidden');
+      successEl.classList.remove('flex');
+      formEl.classList.remove('hidden');
+
+      tabForm.className = "px-5 py-1.5 rounded-full text-label-sm font-label-sm transition-all duration-200 bg-primary-container text-on-primary shadow-sm flex items-center gap-1.5";
+      tabSuccess.className = "px-5 py-1.5 rounded-full text-label-sm font-label-sm transition-all duration-200 text-tertiary hover:text-on-surface flex items-center gap-1.5";
+      clearInterval(timerInterval);
+    }
+  }
+
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    const inputVal = document.getElementById('identifier').value.trim();
+    if (inputVal) {
+      const echoEl = document.getElementById('targetEcho');
+      if (inputVal.includes('@')) {
+        const parts = inputVal.split('@');
+        const name = parts[0];
+        const masked = name.slice(0, 3) + '*******@' + parts[1];
+        echoEl.textContent = masked;
+      } else {
+        const masked = inputVal.slice(0, 4) + '-****-' + inputVal.slice(-3);
+        echoEl.textContent = masked;
+      }
+    }
+    switchState('success');
+  }
+
+  function startTimer() {
+    clearInterval(timerInterval);
+    countdown = 54;
+    const btn = document.getElementById('btnResend');
+    const label = document.getElementById('timerLabel');
+    btn.disabled = true;
+    btn.classList.add('cursor-not-allowed', 'opacity-80');
+    btn.classList.remove('hover:bg-primary-container', 'hover:text-on-primary', 'cursor-pointer');
+
+    timerInterval = setInterval(() => {
+      countdown--;
+      if (countdown > 0) {
+        label.textContent = `Kirim ulang dalam ${countdown} detik`;
+      } else {
+        clearInterval(timerInterval);
+        label.textContent = "Kirim Ulang Instruksi";
+        btn.disabled = false;
+        btn.classList.remove('cursor-not-allowed', 'opacity-80');
+        btn.classList.add('hover:bg-primary-container', 'hover:text-on-primary', 'cursor-pointer');
+      }
+    }, 1000);
+  }
+
+  function handleResend() {
+    const btn = document.getElementById('btnResend');
+    if (!btn.disabled) {
+      startTimer();
+    }
+  }
+</script></main></body></html>

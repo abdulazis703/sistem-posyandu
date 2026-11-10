@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"secondary-fixed-dim":"#96d5a3","surface-bright":"#f8f9ff","surface-dim":"#cbdbf5","outline":"#6f7a6e","primary-fixed":"#95f8a7","primary-container":"#15803d","on-primary":"#ffffff","tertiary-fixed":"#d6e6dd","on-primary-fixed-variant":"#005323","surface-tint":"#006d30","on-secondary-fixed":"#00210d","on-tertiary-fixed":"#101e19","on-primary-fixed":"#00210a","on-tertiary-container":"#e7f8ee","on-secondary-container":"#347047","surface":"#f8f9ff","surface-container-highest":"#d3e4fe","on-tertiary":"#ffffff","primary":"#00652c","inverse-primary":"#79db8d","primary-fixed-dim":"#79db8d","error-container":"#ffdad6","on-surface":"#0b1c30","on-surface-variant":"#3f493f","on-error":"#ffffff","on-background":"#0b1c30","on-error-container":"#93000a","background":"#f8f9ff","surface-container":"#e5eeff","surface-variant":"#d3e4fe","inverse-on-surface":"#eaf1ff","surface-container-low":"#eff4ff","secondary":"#2e6a41","secondary-fixed":"#b1f2be","inverse-surface":"#213145","on-primary-container":"#d3ffd5","tertiary-fixed-dim":"#bacac1","on-secondary-fixed-variant":"#12512c","surface-container-lowest":"#ffffff","outline-variant":"#becabc","tertiary":"#4b5a53","on-tertiary-fixed-variant":"#3b4a43","on-secondary":"#ffffff","error":"#ba1a1a","secondary-container":"#b1f2be","tertiary-container":"#63736b","surface-container-high":"#dce9ff"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-lg":"1.5rem","space-sm":"0.5rem","space-md":"1rem","gutter":"1.5rem","margin":"2rem","space-xl":"2rem","space-xs":"0.25rem"},"fontFamily":{"display-lg":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"body-sm":["Inter"],"caption":["Inter"],"headline-md":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"body-md":["Inter"],"label-sm":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"body-lg":["Inter"]},"fontSize":{"display-lg":["36px",{"lineHeight":"44px","fontWeight":"700"}],"headline-lg":["22px",{"lineHeight":"30px","fontWeight":"600"}],"body-sm":["13px",{"lineHeight":"18px","fontWeight":"400"}],"caption":["12px",{"lineHeight":"16px","fontWeight":"500"}],"headline-md":["18px",{"lineHeight":"26px","fontWeight":"600"}],"headline-xl":["28px",{"lineHeight":"36px","fontWeight":"700"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"label-sm":["11px",{"lineHeight":"16px","fontWeight":"600"}],"label-md":["13px",{"lineHeight":"18px","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}]}}}};</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-screen w-[260px] bg-surface-container-lowest z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col flex-1 overflow-y-auto"><div class="px-space-lg py-space-lg flex items-center gap-space-sm"><div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center text-on-primary shadow-[0_1px_3px_rgba(20,83,45,0.04)]"><span class="material-symbols-outlined text-[24px]">potted_plant</span></div><div class="flex flex-col"><span class="font-headline-md text-headline-md tracking-tight text-primary">TumbuhKu</span><span class="font-caption text-caption text-on-surface-variant font-medium">Portal Petugas &amp; Kader</span></div></div><div class="px-space-md mb-space-sm"><span class="px-space-sm font-label-sm text-label-sm uppercase tracking-wider text-outline">Menu Navigasi</span></div><nav class="flex flex-col gap-space-xs px-space-md" data-active-classes="bg-primary-container text-on-primary shadow-sm font-label-md"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[20px]">space_dashboard</span><span>Dashboard</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="data-balita" href="#"><span class="material-symbols-outlined text-[20px]">child_care</span><span>Data Balita</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="akun-orang-tua" href="#"><span class="material-symbols-outlined text-[20px]">group</span><span>Akun Orang Tua</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="pemeriksaan" href="#"><span class="material-symbols-outlined text-[20px]">assignment</span><span>Pemeriksaan</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="monitoring" href="#"><span class="material-symbols-outlined text-[20px]">monitoring</span><span>Monitoring</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="posyandu-dan-wilayah" href="#"><span class="material-symbols-outlined text-[20px]">location_city</span><span>Posyandu &amp; Wilayah</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="laporan" href="#"><span class="material-symbols-outlined text-[20px]">bar_chart</span><span>Laporan</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="pengumuman-dan-jadwal" href="#"><span class="material-symbols-outlined text-[20px]">event_available</span><span>Pengumuman &amp; Jadwal</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="profil" href="#"><span class="material-symbols-outlined text-[20px]">account_circle</span><span>Profil</span></a></nav></div><div class="p-space-md bg-surface-container-low m-space-md rounded-xl flex items-center justify-between"><div class="flex items-center gap-space-sm overflow-hidden"><div class="w-9 h-9 rounded-full bg-secondary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-secondary text-[20px]">local_hospital</span></div><div class="flex flex-col min-w-0"><span class="font-label-md text-label-md text-on-surface truncate">Bidan Sri Wahyuni, A.Md.Keb</span><span class="font-caption text-caption text-on-surface-variant truncate">Petugas Pembina</span></div></div><button class="p-space-xs text-on-surface-variant hover:text-error transition-colors rounded-lg" title="Ganti Akun atau Keluar" type="button"><span class="material-symbols-outlined text-[20px]">logout</span></button></div></aside><div class="pl-[260px]"><header class="fixed top-0 left-[260px] right-0 h-16 bg-surface/90 backdrop-blur-md z-40 flex items-center justify-between px-space-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-md"><div class="inline-flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-secondary-container text-on-secondary-container"><span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span><span class="font-label-sm text-label-sm">Wilayah Binaan: Posyandu Melati 1 s/d 4 (Kel. Sukamaju)</span></div></div><div class="flex-1 max-w-md mx-space-lg"><div class="relative flex items-center"><span class="material-symbols-outlined absolute left-3 text-[18px] text-outline pointer-events-none">search</span><input class="w-full pl-9 pr-4 py-2 bg-surface-container-lowest rounded-lg font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary shadow-[0_1px_3px_rgba(20,83,45,0.04)]" placeholder="Cari nama balita, NIK, nama orang tua, atau Posyandu..." type="text"/></div></div><div class="flex items-center gap-space-md shrink-0"><div class="hidden xl:flex items-center gap-space-xs text-on-surface-variant"><span class="material-symbols-outlined text-[18px]">calendar_today</span><span class="font-caption text-caption font-medium">Kamis, 24 Oktober 2024</span></div><button class="relative p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" title="Notifikasi Sistem" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-error rounded-full ring-2 ring-surface"></span></button><button class="inline-flex items-center gap-space-xs px-space-md py-2 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-all shadow-[0_1px_3px_rgba(20,83,45,0.04)]" type="button"><span class="material-symbols-outlined text-[18px]">add</span><span>Catat Pemeriksaan</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="w-full pt-16 bg-surface"><div class="flex flex-col w-full">
+<!-- Interactive Script for Tab and Drawer Controls -->
+<script>
+    function switchTab(tabId) {
+      document.querySelectorAll('[data-tab-content]').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('[data-tab-btn]').forEach(el => {
+        el.classList.remove('text-primary-container', 'bg-surface-container-lowest', 'shadow-sm', 'font-label-md');
+        el.classList.add('text-on-surface-variant');
+      });
+      const activeContent = document.getElementById(tabId);
+      if (activeContent) activeContent.classList.remove('hidden');
+      const activeBtn = document.getElementById('btn-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-on-surface-variant');
+        activeBtn.classList.add('text-primary-container', 'bg-surface-container-lowest', 'shadow-sm', 'font-label-md');
+      }
+    }
+
+    function toggleDrawer(show) {
+      const drawer = document.getElementById('edit-drawer');
+      const backdrop = document.getElementById('drawer-backdrop');
+      if (show) {
+        drawer.classList.remove('translate-x-full');
+        backdrop.classList.remove('pointer-events-none', 'opacity-0');
+        backdrop.classList.add('opacity-100');
+      } else {
+        drawer.classList.add('translate-x-full');
+        backdrop.classList.add('pointer-events-none', 'opacity-0');
+        backdrop.classList.remove('opacity-100');
+      }
+    }
+
+    function insertReasonTag(tagText) {
+      const textarea = document.getElementById('koreksi-alasan');
+      if (textarea) {
+        if (!textarea.value.includes(tagText)) {
+          textarea.value = textarea.value ? (textarea.value + '; ' + tagText) : tagText;
+        }
+        textarea.focus();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Set active nav in parent shell dynamically
+      const navLinks = parent?.document?.querySelectorAll('aside nav a') || document.querySelectorAll('aside nav a');
+      navLinks.forEach(link => {
+        if (link.getAttribute('data-path') === 'data-balita') {
+          link.classList.add('bg-primary-container', 'text-on-primary', 'shadow-sm');
+          link.classList.remove('text-on-surface-variant');
+        }
+      });
+    });
+  </script>
+<!-- Canvas Container with 12-Column Responsive Workspace Grid -->
+<div class="px-space-xl py-space-lg flex flex-col gap-space-lg max-w-[1440px] mx-auto w-full">
+<!-- Top Breadcrumb & Quick Action Bar -->
+<div class="flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-xs font-caption text-caption text-on-surface-variant">
+<a class="hover:text-primary transition-colors flex items-center gap-1 font-medium" href="#">
+<span class="material-symbols-outlined text-[16px]">home</span>
+          Beranda
+        </a>
+<span class="text-outline-variant">/</span>
+<a class="hover:text-primary transition-colors font-medium" href="#">Data Balita</a>
+<span class="text-outline-variant">/</span>
+<span class="text-primary font-semibold">Rayhan Al-Ghifari (TBK-2023-0842)</span>
+</div>
+<a class="inline-flex items-center gap-1.5 px-space-md py-1.5 rounded-lg bg-surface-container-lowest text-on-surface hover:text-primary font-label-md text-label-md transition-all shadow-sm" href="#">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        Kembali ke Data Balita
+      </a>
+</div>
+<!-- 1. Header Card (Child Profile Comprehensive Hero) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm relative overflow-hidden">
+<div class="flex flex-col lg:flex-row lg:items-start justify-between gap-space-lg">
+<!-- Left Section: Avatar, Primary Identity & Badges -->
+<div class="flex flex-col sm:flex-row items-start gap-space-lg flex-1">
+<!-- Monogram Avatar with Gender Badge Overlay -->
+<div class="relative shrink-0">
+<div class="w-20 h-20 rounded-2xl bg-secondary-container text-on-secondary-container flex items-center justify-center font-headline-xl text-headline-xl font-bold shadow-sm">
+              RA
+            </div>
+<span class="absolute -bottom-1.5 -right-1.5 inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-primary-container text-on-primary text-[10px] font-bold shadow-sm" title="Jenis Kelamin">
+<span class="material-symbols-outlined text-[12px]">male</span>
+              Laki-laki
+            </span>
+</div>
+<!-- Name, Registry & Demographic Meta -->
+<div class="flex flex-col gap-space-xs flex-1">
+<div class="flex flex-wrap items-center gap-space-sm">
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">Rayhan Al-Ghifari</h1>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                Aktif • Terdaftar Kemenkes RI
+              </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container text-tertiary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[13px]">verified_user</span>
+                Buku KIA Fisik Ada
+              </span>
+</div>
+<!-- Details 4-Column Clinical Metadata Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md mt-space-sm pt-space-sm bg-surface rounded-xl p-space-md">
+<div class="flex flex-col gap-0.5">
+<span class="font-caption text-caption text-outline">Tanggal Lahir &amp; Usia</span>
+<span class="font-label-md text-label-md text-on-surface">14 Maret 2023</span>
+<span class="font-caption text-caption text-primary font-semibold">20 Bulan (Batita)</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<span class="font-caption text-caption text-outline">No. Rekam Medis &amp; NIK</span>
+<span class="font-label-md text-label-md text-on-surface font-mono">TBK-2023-0842</span>
+<span class="font-caption text-caption text-on-surface-variant font-mono">3201121008230002</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<span class="font-caption text-caption text-outline">Posyandu &amp; Domisili</span>
+<span class="font-label-md text-label-md text-on-surface">Posyandu Melati 04</span>
+<span class="font-caption text-caption text-on-surface-variant">Kel. Sukamaju, RT 03/RW 04</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<span class="font-caption text-caption text-outline">Orang Tua / Wali</span>
+<a class="group inline-flex items-center gap-1 font-label-md text-label-md text-primary hover:underline" href="#">
+<span>Sari Rahmawati (Ibu)</span>
+<span class="material-symbols-outlined text-[14px] group-hover:translate-x-0.5 transition-transform">open_in_new</span>
+</a>
+<span class="font-caption text-caption text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-outline">phone</span>
+                  +62 812-3456-7890
+                </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Section: Action Buttons -->
+<div class="flex flex-wrap lg:flex-col items-stretch justify-end gap-space-xs shrink-0 lg:w-52">
+<button class="inline-flex items-center justify-center gap-1.5 px-space-md py-2.5 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md hover:bg-primary transition-all shadow-sm" onclick="toggleDrawer(true)" type="button">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>+ Catat Pemeriksaan</span>
+</button>
+<button class="inline-flex items-center justify-center gap-1.5 px-space-md py-2 rounded-lg bg-surface-container-lowest text-primary font-label-md text-label-md hover:bg-surface-container-low transition-all" onclick="toggleDrawer(true)" type="button">
+<span class="material-symbols-outlined text-[18px]">edit_note</span>
+<span>Edit Data Balita</span>
+</button>
+<button class="inline-flex items-center justify-center gap-1.5 px-space-md py-1.5 rounded-lg text-tertiary hover:text-error hover:bg-error-container/20 font-caption text-caption transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">person_off</span>
+<span>Nonaktifkan Balita</span>
+</button>
+</div>
+</div>
+</div>
+<!-- 2. Primary Tab Navigation Bar -->
+<div class="bg-surface-container-low p-1.5 rounded-xl flex items-center gap-1 shadow-sm">
+<button class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-space-lg py-2.5 rounded-lg font-label-md text-label-md text-primary-container bg-surface-container-lowest shadow-sm transition-all" data-tab-btn="" id="btn-tab-ringkasan" onclick="switchTab('tab-ringkasan')" type="button">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>
+<span>Ringkasan Klinis</span>
+</button>
+<button class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-space-lg py-2.5 rounded-lg font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-tab-btn="" id="btn-tab-grafik" onclick="switchTab('tab-grafik')" type="button">
+<span class="material-symbols-outlined text-[18px]">show_chart</span>
+<span>Grafik Pertumbuhan (KMS)</span>
+</button>
+<button class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-space-lg py-2.5 rounded-lg font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-tab-btn="" id="btn-tab-riwayat" onclick="switchTab('tab-riwayat')" type="button">
+<span class="material-symbols-outlined text-[18px]">history</span>
+<span>Riwayat Pemeriksaan (8)</span>
+</button>
+<button class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-space-lg py-2.5 rounded-lg font-body-md text-body-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-tab-btn="" id="btn-tab-audit" onclick="switchTab('tab-audit')" type="button">
+<span class="material-symbols-outlined text-[18px]">policy</span>
+<span>Log Perubahan &amp; Audit</span>
+</button>
+</div>
+<!-- 3. TAB CONTENT 1: Ringkasan Klinis (Default View) -->
+<div class="flex flex-col gap-space-lg" data-tab-content="" id="tab-ringkasan">
+<!-- Monitoring Completeness Status Banner -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col md:flex-row items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md w-full md:w-auto">
+<div class="w-12 h-12 rounded-xl bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[26px]">fact_check</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-md text-headline-md text-on-surface">Kelengkapan Data Pemantauan</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                Kepatuhan Rutin
+              </span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Balita telah hadir 8 kali penimbangan berturut-turut dalam 12 bulan kalender terakhir.</span>
+</div>
+</div>
+<div class="w-full md:w-80 flex flex-col gap-1.5 shrink-0">
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant font-medium">8 dari 12 Bulan</span>
+<span class="font-bold text-primary font-headline-md text-headline-md">67%</span>
+</div>
+<div class="w-full bg-surface-container h-2.5 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full rounded-full transition-all duration-500" style="width: 67%;"></div>
+</div>
+<div class="flex items-center justify-between font-caption text-caption text-outline">
+<span>Target Minimal Kemenkes: 65%</span>
+<span class="text-primary font-medium">Sesuai Target</span>
+</div>
+</div>
+</div>
+<!-- Key Indicator Cards Row (5 Vital Metrics) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-space-md">
+<!-- Card 1: Berat Badan -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between hover:bg-surface-container-low transition-all">
+<div class="flex items-center justify-between text-outline">
+<span class="font-label-md text-label-md uppercase tracking-wider text-outline">Berat Badan (BB)</span>
+<span class="material-symbols-outlined text-[20px] text-primary">scale</span>
+</div>
+<div class="my-space-sm">
+<div class="flex items-baseline gap-1">
+<span class="font-display-lg text-display-lg text-on-surface tracking-tight">10.8</span>
+<span class="font-label-md text-label-md text-on-surface-variant">kg</span>
+</div>
+<div class="flex items-center gap-1 font-caption text-caption text-primary font-semibold mt-1">
+<span class="material-symbols-outlined text-[15px]">trending_up</span>
+<span>+0.3 kg dari bln lalu (N)</span>
+</div>
+</div>
+<div class="pt-space-xs">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm w-full justify-center">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              Normal (Gizi Baik)
+            </span>
+</div>
+</div>
+<!-- Card 2: Tinggi Badan -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between hover:bg-surface-container-low transition-all">
+<div class="flex items-center justify-between text-outline">
+<span class="font-label-md text-label-md uppercase tracking-wider text-outline">Tinggi Badan (TB)</span>
+<span class="material-symbols-outlined text-[20px] text-primary">straighten</span>
+</div>
+<div class="my-space-sm">
+<div class="flex items-baseline gap-1">
+<span class="font-display-lg text-display-lg text-on-surface tracking-tight">82.5</span>
+<span class="font-label-md text-label-md text-on-surface-variant">cm</span>
+</div>
+<div class="flex items-center gap-1 font-caption text-caption text-primary font-semibold mt-1">
+<span class="material-symbols-outlined text-[15px]">trending_up</span>
+<span>+0.7 cm dari bln lalu</span>
+</div>
+</div>
+<div class="pt-space-xs">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm w-full justify-center">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              Normal (TB/U Sesuai)
+            </span>
+</div>
+</div>
+<!-- Card 3: Lingkar Kepala -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between hover:bg-surface-container-low transition-all">
+<div class="flex items-center justify-between text-outline">
+<span class="font-label-md text-label-md uppercase tracking-wider text-outline">Lingkar Kepala</span>
+<span class="material-symbols-outlined text-[20px] text-primary">psychology</span>
+</div>
+<div class="my-space-sm">
+<div class="flex items-baseline gap-1">
+<span class="font-display-lg text-display-lg text-on-surface tracking-tight">47.2</span>
+<span class="font-label-md text-label-md text-on-surface-variant">cm</span>
+</div>
+<div class="flex items-center gap-1 font-caption text-caption text-primary font-semibold mt-1">
+<span class="material-symbols-outlined text-[15px]">trending_up</span>
+<span>+0.2 cm dari bln lalu</span>
+</div>
+</div>
+<div class="pt-space-xs">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm w-full justify-center">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              Normosefali (Sesuai)
+            </span>
+</div>
+</div>
+<!-- Card 4: Lingkar Lengan Atas (LiLA) -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between hover:bg-surface-container-low transition-all">
+<div class="flex items-center justify-between text-outline">
+<span class="font-label-md text-label-md uppercase tracking-wider text-outline">LiLA</span>
+<span class="material-symbols-outlined text-[20px] text-primary">fitness_center</span>
+</div>
+<div class="my-space-sm">
+<div class="flex items-baseline gap-1">
+<span class="font-display-lg text-display-lg text-on-surface tracking-tight">15.1</span>
+<span class="font-label-md text-label-md text-on-surface-variant">cm</span>
+</div>
+<div class="flex items-center gap-1 font-caption text-caption text-on-surface-variant mt-1">
+<span class="material-symbols-outlined text-[15px] text-primary">check</span>
+<span>Ambang: &gt; 12.5 cm</span>
+</div>
+</div>
+<div class="pt-space-xs">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm w-full justify-center">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              Gizi Normal (Hijau Pita)
+            </span>
+</div>
+</div>
+<!-- Card 5: Indeks Massa Tubuh (IMT/U) -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between hover:bg-surface-container-low transition-all">
+<div class="flex items-center justify-between text-outline">
+<span class="font-label-md text-label-md uppercase tracking-wider text-outline">IMT / U</span>
+<span class="material-symbols-outlined text-[20px] text-primary">calculate</span>
+</div>
+<div class="my-space-sm">
+<div class="flex items-baseline gap-1">
+<span class="font-display-lg text-display-lg text-on-surface tracking-tight">15.9</span>
+<span class="font-label-md text-label-md text-on-surface-variant">kg/m²</span>
+</div>
+<div class="flex items-center gap-1 font-caption text-caption text-primary font-semibold mt-1">
+<span class="material-symbols-outlined text-[15px]">done_all</span>
+<span>Z-Score: +0.2 SD (Aman)</span>
+</div>
+</div>
+<div class="pt-space-xs">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm w-full justify-center">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              Gizi Baik (Ideal)
+            </span>
+</div>
+</div>
+</div>
+<!-- Quick Medical Notes & Posyandu Briefing Split Panel -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-space-lg">
+<!-- Left: Catatan Kader Terakhir -->
+<div class="lg:col-span-2 bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]">medical_services</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Catatan Kader &amp; Riwayat Intervensi Medis</h2>
+</div>
+<span class="font-caption text-caption text-outline">Penimbangan Terakhir: 12 Nov 2024</span>
+</div>
+<div class="bg-surface rounded-xl p-space-md flex flex-col gap-space-sm">
+<div class="flex items-start gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[18px]">assignment_turned_in</span>
+</div>
+<div class="flex flex-col flex-1">
+<span class="font-label-md text-label-md text-on-surface">Pemberian Vitamin A &amp; Imunisasi</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                    Kapsul Vitamin A dosis merah (200.000 IU) telah diberikan tuntas pada Posyandu Bulan Agustus 2024. Status Imunisasi DPT-HB-Hib lanjutan dan Campak Rubella (MR) tercatat lengkap sesuai jadwal usia balita.
+                  </p>
+</div>
+</div>
+<div class="flex items-start gap-space-sm pt-space-sm">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[18px]">restaurant</span>
+</div>
+<div class="flex flex-col flex-1">
+<span class="font-label-md text-label-md text-on-surface">Konseling Pola Makan &amp; Protein Hewani (PMT)</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                    Ibu balita (Ibu Sari) dianjurkan mempertahankan konsumsi 1 butir telur per hari dan variasi lauk ikan air tawar guna mengoptimalkan laju tinggi badan memasuki usia 2 tahun. Nafsu makan anak dinilai sangat baik.
+                  </p>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-space-md flex items-center justify-between pt-space-sm">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-on-secondary text-[11px] font-bold">SW</span>
+<span class="font-caption text-caption text-on-surface-variant">Dicatat oleh: <strong>Bidan Sri Wahyuni, A.Md.Keb</strong> (Pembina Posyandu)</span>
+</div>
+<button class="inline-flex items-center gap-1 font-label-md text-label-md text-primary hover:underline" onclick="toggleDrawer(true)" type="button">
+<span>Perbarui Catatan Medis</span>
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+</div>
+</div>
+<!-- Right: Jadwal Posyandu Berikutnya & Quick Assessment -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-2 mb-space-md">
+<span class="material-symbols-outlined text-primary text-[22px]">event_repeat</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Jadwal Posyandu Selanjutnya</h2>
+</div>
+<div class="p-space-md rounded-xl bg-secondary-container/50 flex flex-col gap-2">
+<span class="font-caption text-caption uppercase tracking-wider text-on-secondary-container font-semibold">Bulan Penimbangan Serentak</span>
+<span class="font-headline-md text-headline-md text-on-secondary-container font-bold">Selasa, 10 Desember 2024</span>
+<div class="flex items-center gap-1.5 font-body-sm text-body-sm text-on-secondary-container">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span>Pukul 08.30 - 11.30 WIB</span>
+</div>
+<div class="flex items-center gap-1.5 font-body-sm text-body-sm text-on-secondary-container">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span>Balai RW 04, Kelurahan Sukamaju</span>
+</div>
+</div>
+<div class="mt-space-md flex flex-col gap-1.5">
+<span class="font-label-md text-label-md text-on-surface">Rencana Intervensi Mendatang:</span>
+<ul class="font-body-sm text-body-sm text-on-surface-variant flex flex-col gap-1">
+<li class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
+                  Pemberian Obat Cacing (Albendazole dosis 1)
+                </li>
+<li class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
+                  Skrining Perkembangan KPSP 24 Bulan
+                </li>
+</ul>
+</div>
+</div>
+<button class="w-full mt-space-md py-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors flex items-center justify-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[18px]">notifications_active</span>
+            Kirim Pengingat WhatsApp ke Ibu
+          </button>
+</div>
+</div>
+</div>
+<!-- 4. TAB CONTENT 2: Grafik Pertumbuhan KMS (Integrated SVG Chart) -->
+<div class="hidden flex flex-col gap-space-lg" data-tab-content="" id="tab-grafik">
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col gap-space-md">
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-sm">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Kurva Pertumbuhan Berat Badan menurut Umur (BB/U) - WHO Standard</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Memetakan tren kenaikan bobot Rayhan Al-Ghifari terhadap standar pita KMS Kementerian Kesehatan.</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">
+<span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+              Pertumbuhan Naik Sesuai Garis (N)
+            </span>
+</div>
+</div>
+<!-- Inline SVG Visualization Chart (WHO Growth Percentiles) -->
+<div class="w-full bg-surface p-space-md rounded-xl overflow-x-auto">
+<svg class="w-full h-auto min-w-[700px] text-primary" fill="none" viewbox="0 0 900 280" xmlns="http://www.w3.org/2000/svg">
+<!-- Background Z-Score Tinted Mint Bands -->
+<path d="M 50 190 Q 250 170 450 140 T 850 80 L 850 140 Q 650 190 450 210 T 50 250 Z" fill="#DCFCE7" opacity="0.6"></path>
+<path d="M 50 160 Q 250 140 450 110 T 850 50 L 850 80 Q 650 140 450 140 T 50 190 Z" fill="#BBF7D0" opacity="0.7"></path>
+<path d="M 50 130 Q 250 110 450 80 T 850 20 L 850 50 Q 650 110 450 110 T 50 160 Z" fill="#86EFAC" opacity="0.4"></path>
+<!-- Grid Reference Lines -->
+<line stroke="#CBD5E1" stroke-dasharray="4 4" x1="50" x2="850" y1="240" y2="240"></line>
+<line stroke="#CBD5E1" stroke-dasharray="4 4" x1="50" x2="850" y1="180" y2="180"></line>
+<line stroke="#CBD5E1" stroke-dasharray="4 4" x1="50" x2="850" y1="120" y2="120"></line>
+<line stroke="#CBD5E1" stroke-dasharray="4 4" x1="50" x2="850" y1="60" y2="60"></line>
+<!-- Month Markers on X-Axis -->
+<text fill="#64748B" font-family="Inter" font-size="11" x="50" y="260">Usia 13 Bln</text>
+<text fill="#64748B" font-family="Inter" font-size="11" x="160" y="260">14 Bln</text>
+<text fill="#64748B" font-family="Inter" font-size="11" x="270" y="260">15 Bln</text>
+<text fill="#64748B" font-family="Inter" font-size="11" x="380" y="260">16 Bln</text>
+<text fill="#64748B" font-family="Inter" font-size="11" x="490" y="260">17 Bln</text>
+<text fill="#64748B" font-family="Inter" font-size="11" x="600" y="260">18 Bln</text>
+<text fill="#64748B" font-family="Inter" font-size="11" x="710" y="260">19 Bln</text>
+<text fill="#15803D" font-family="Inter" font-size="11" font-weight="bold" x="820" y="260">20 Bln (Kini)</text>
+<!-- Y-Axis KG Indicators -->
+<text fill="#64748B" font-family="Inter" font-size="11" x="15" y="244">8 kg</text>
+<text fill="#64748B" font-family="Inter" font-size="11" x="15" y="184">9 kg</text>
+<text fill="#64748B" font-family="Inter" font-size="11" x="15" y="124">10 kg</text>
+<text fill="#64748B" font-family="Inter" font-size="11" x="15" y="64">11 kg</text>
+<!-- Rayhan's Actual Measured Growth Curve -->
+<path d="M 50 205 L 160 192 L 270 178 L 380 162 L 490 148 L 600 135 L 710 120 L 820 102" fill="none" stroke="#15803D" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<!-- Child Data Nodes -->
+<circle cx="50" cy="205" fill="#14532D" r="4.5" stroke="#FFFFFF" stroke-width="2"></circle>
+<circle cx="160" cy="192" fill="#14532D" r="4.5" stroke="#FFFFFF" stroke-width="2"></circle>
+<circle cx="270" cy="178" fill="#14532D" r="4.5" stroke="#FFFFFF" stroke-width="2"></circle>
+<circle cx="380" cy="162" fill="#14532D" r="4.5" stroke="#FFFFFF" stroke-width="2"></circle>
+<circle cx="490" cy="148" fill="#14532D" r="4.5" stroke="#FFFFFF" stroke-width="2"></circle>
+<circle cx="600" cy="135" fill="#14532D" r="4.5" stroke="#FFFFFF" stroke-width="2"></circle>
+<circle cx="710" cy="120" fill="#14532D" r="4.5" stroke="#FFFFFF" stroke-width="2"></circle>
+<!-- Latest Active Plot Node -->
+<circle cx="820" cy="102" fill="#15803D" r="6" stroke="#FFFFFF" stroke-width="2.5"></circle>
+<circle cx="820" cy="102" fill="#15803D" opacity="0.2" r="10"></circle>
+<!-- Latest Data Callout -->
+<rect fill="#14532D" height="34" rx="6" width="110" x="765" y="58"></rect>
+<text fill="#FFFFFF" font-family="Plus Jakarta Sans" font-size="10" font-weight="bold" text-anchor="middle" x="820" y="73">10.8 kg (+0.3)</text>
+<text fill="#DCFCE7" font-family="Inter" font-size="9" text-anchor="middle" x="820" y="86">Usia 20 Bulan</text>
+</svg>
+</div>
+<div class="flex flex-wrap items-center justify-between text-body-sm font-body-sm p-space-sm bg-surface rounded-xl text-on-surface-variant">
+<div class="flex items-center gap-4">
+<span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-primary-container"></span> Jalur Aktual Balita</span>
+<span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-secondary-container"></span> Zona Ideal (Median WHO)</span>
+<span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-surface-container"></span> Garis Batas Waspada (-2 SD)</span>
+</div>
+<span class="text-caption font-caption text-primary font-semibold">Status: Pertumbuhan Naik (N) Konsisten</span>
+</div>
+</div>
+</div>
+<!-- 4. TAB CONTENT 3 & SECTION: Riwayat Pemeriksaan Table -->
+<div class="flex flex-col gap-space-md" data-tab-content="" id="tab-riwayat">
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<!-- Table Toolbar -->
+<div class="p-space-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Riwayat Pemeriksaan &amp; Hasil Tera Posyandu</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Daftar penimbangan berkala dengan status verifikasi medis Puskesmas.</p>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-surface hover:bg-surface-container font-label-md text-label-md text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">download</span>
+              Unduh CSV
+            </button>
+<button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary-container hover:bg-primary font-label-md text-label-md text-on-primary transition-colors shadow-sm" onclick="toggleDrawer(true)" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+              Input Penimbangan Baru
+            </button>
+</div>
+</div>
+<!-- High-Density Clinical Table -->
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead class="bg-surface font-label-sm text-label-sm uppercase tracking-wider text-outline">
+<tr>
+<th class="py-3 px-space-md">Tanggal Penimbangan</th>
+<th class="py-3 px-space-md">Usia Balita</th>
+<th class="py-3 px-space-md">BB (kg)</th>
+<th class="py-3 px-space-md">TB (cm)</th>
+<th class="py-3 px-space-md">LK / LiLA</th>
+<th class="py-3 px-space-md">Status Validasi &amp; Verifikasi</th>
+<th class="py-3 px-space-md">Petugas Pengukur</th>
+<th class="py-3 px-space-md text-right">Aksi</th>
+</tr>
+</thead>
+<tbody class="divide-y-0">
+<!-- Row 1: Tervalidasi (November 2024) -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-3.5 px-space-md font-semibold text-on-surface">
+                  12 Nov 2024
+                  <span class="block font-caption text-caption text-outline font-normal">Posyandu Melati 04</span>
+</td>
+<td class="py-3.5 px-space-md text-on-surface">20 Bulan</td>
+<td class="py-3.5 px-space-md font-semibold text-primary">10.8 kg <span class="font-normal text-outline text-caption">(+0.3)</span></td>
+<td class="py-3.5 px-space-md text-on-surface">82.5 cm</td>
+<td class="py-3.5 px-space-md text-on-surface-variant font-mono">47.2 / 15.1 cm</td>
+<td class="py-3.5 px-space-md">
+<!-- BADGE 1: Tervalidasi -->
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[13px] font-bold">check_circle</span>
+                    ✓ Tervalidasi
+                  </span>
+</td>
+<td class="py-3.5 px-space-md text-on-surface-variant">Bidan Sri Wahyuni</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface hover:bg-surface-container text-primary font-label-md text-label-md transition-colors" onclick="toggleDrawer(true)" type="button">
+<span class="material-symbols-outlined text-[15px]">edit</span>
+                    Edit
+                  </button>
+</td>
+</tr>
+<!-- Row 2: Draft Sementara (Oktober 2024) -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-3.5 px-space-md font-semibold text-on-surface">
+                  10 Okt 2024
+                  <span class="block font-caption text-caption text-outline font-normal">Posyandu Melati 04</span>
+</td>
+<td class="py-3.5 px-space-md text-on-surface">19 Bulan</td>
+<td class="py-3.5 px-space-md font-semibold text-on-surface">10.5 kg <span class="font-normal text-outline text-caption">(+0.3)</span></td>
+<td class="py-3.5 px-space-md text-on-surface">81.8 cm</td>
+<td class="py-3.5 px-space-md text-on-surface-variant font-mono">47.0 / 15.0 cm</td>
+<td class="py-3.5 px-space-md">
+<!-- BADGE 2: Draft -->
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container text-tertiary font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[13px]">pending</span>
+                    ⏱ Draft Sementara
+                  </span>
+</td>
+<td class="py-3.5 px-space-md text-on-surface-variant">Kader Siti Aminah</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface hover:bg-surface-container text-primary font-label-md text-label-md transition-colors" onclick="toggleDrawer(true)" type="button">
+<span class="material-symbols-outlined text-[15px]">edit</span>
+                    Edit
+                  </button>
+</td>
+</tr>
+<!-- Row 3: Indikasi Perlu Ditinjau (September 2024) -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-3.5 px-space-md font-semibold text-on-surface">
+                  14 Sep 2024
+                  <span class="block font-caption text-caption text-outline font-normal">Posyandu Melati 04</span>
+</td>
+<td class="py-3.5 px-space-md text-on-surface">18 Bulan</td>
+<td class="py-3.5 px-space-md font-semibold text-on-surface">10.2 kg <span class="font-normal text-outline text-caption">(+0.2)</span></td>
+<td class="py-3.5 px-space-md text-on-surface">81.0 cm</td>
+<td class="py-3.5 px-space-md text-on-surface-variant font-mono">46.8 / 14.9 cm</td>
+<td class="py-3.5 px-space-md">
+<!-- BADGE 3: Indikasi Perlu Ditinjau -->
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-high text-tertiary font-label-sm text-label-sm" title="Ada selisih pembacaan panjang dacin">
+<span class="material-symbols-outlined text-[13px] text-primary">warning</span>
+                    ⚠ Perlu Ditinjau Bidan
+                  </span>
+</td>
+<td class="py-3.5 px-space-md text-on-surface-variant">Kader Nurhayati</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface hover:bg-surface-container text-primary font-label-md text-label-md transition-colors" onclick="toggleDrawer(true)" type="button">
+<span class="material-symbols-outlined text-[15px]">edit</span>
+                    Edit
+                  </button>
+</td>
+</tr>
+<!-- Row 4: Data Tidak Valid (Agustus 2024) -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-3.5 px-space-md font-semibold text-on-surface">
+                  12 Agu 2024
+                  <span class="block font-caption text-caption text-outline font-normal">Posyandu Melati 04</span>
+</td>
+<td class="py-3.5 px-space-md text-on-surface">17 Bulan</td>
+<td class="py-3.5 px-space-md text-outline line-through font-mono">13.0 kg</td>
+<td class="py-3.5 px-space-md text-on-surface">80.2 cm</td>
+<td class="py-3.5 px-space-md text-on-surface-variant font-mono">46.6 / 14.8 cm</td>
+<td class="py-3.5 px-space-md">
+<!-- BADGE 4: Data Tidak Valid -->
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[13px]">cancel</span>
+                    ✕ Data Tidak Valid
+                  </span>
+</td>
+<td class="py-3.5 px-space-md text-on-surface-variant">Kader Anisa Putri</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface hover:bg-surface-container text-primary font-label-md text-label-md transition-colors" onclick="toggleDrawer(true)" type="button">
+<span class="material-symbols-outlined text-[15px]">edit</span>
+                    Koreksi
+                  </button>
+</td>
+</tr>
+<!-- Row 5: Tervalidasi (Juli 2024) -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-3.5 px-space-md font-semibold text-on-surface">
+                  11 Jul 2024
+                  <span class="block font-caption text-caption text-outline font-normal">Posyandu Melati 04</span>
+</td>
+<td class="py-3.5 px-space-md text-on-surface">16 Bulan</td>
+<td class="py-3.5 px-space-md font-semibold text-on-surface">9.8 kg <span class="font-normal text-outline text-caption">(+0.4)</span></td>
+<td class="py-3.5 px-space-md text-on-surface">79.5 cm</td>
+<td class="py-3.5 px-space-md text-on-surface-variant font-mono">46.5 / 14.7 cm</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[13px] font-bold">check_circle</span>
+                    ✓ Tervalidasi
+                  </span>
+</td>
+<td class="py-3.5 px-space-md text-on-surface-variant">Bidan Sri Wahyuni</td>
+<td class="py-3.5 px-space-md text-right">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface hover:bg-surface-container text-primary font-label-md text-label-md transition-colors" onclick="toggleDrawer(true)" type="button">
+<span class="material-symbols-outlined text-[15px]">edit</span>
+                    Edit
+                  </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer Pagination / Summary -->
+<div class="p-space-md bg-surface flex flex-col sm:flex-row items-center justify-between gap-space-sm text-caption font-caption text-on-surface-variant">
+<span>Menampilkan 5 dari 8 data pemeriksaan Rayhan Al-Ghifari</span>
+<div class="flex items-center gap-1">
+<button class="p-1.5 rounded-lg text-outline cursor-not-allowed" disabled="" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<span class="px-2.5 py-1 rounded-lg bg-primary-container text-on-primary font-semibold">1</span>
+<button class="px-2.5 py-1 rounded-lg hover:bg-surface-container text-on-surface" type="button">2</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- 5. TAB CONTENT 4: Log Perubahan & Audit -->
+<div class="hidden flex flex-col gap-space-md" data-tab-content="" id="tab-audit">
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col gap-space-md">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Jejak Audit Medis &amp; Mutasi Data Balita</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Transparansi kepatuhan rekam medis digital sesuai Peraturan Menteri Kesehatan RI.</p>
+</div>
+<div class="flex flex-col gap-space-md pl-space-md relative">
+<!-- Timeline Vertical Track -->
+<div class="flex items-start gap-space-md">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">edit_note</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Koreksi Berat Badan Agustus 2024 (13.0 kg → 9.6 kg)</span>
+<span class="font-caption text-caption text-outline">15 Agustus 2024 • 14:22 WIB oleh Bidan Sri Wahyuni (NIP: 198504122010012015)</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant bg-surface p-space-sm rounded-lg mt-1">
+<strong>Alasan audit:</strong> Koreksi salah ketik kader posyandu saat pengukuran dacin balita (tertukar dengan balita lain dalam antrean).
+              </p>
+</div>
+</div>
+<div class="flex items-start gap-space-md">
+<div class="w-8 h-8 rounded-full bg-surface-container text-tertiary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">person_add</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Pendaftaran Awal Data Balita &amp; Penautan KIA</span>
+<span class="font-caption text-caption text-outline">14 Maret 2023 • 09:15 WIB oleh Kader Siti Aminah</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant bg-surface p-space-sm rounded-lg mt-1">
+                Data balita baru berhasil diimpor dari registrasi persalinan Bidan Praktik Mandiri Sukamaju.
+              </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- BACKDROP OVERLAY FOR SIDE DRAWER -->
+<div class="fixed inset-0 bg-inverse-surface/40 backdrop-blur-sm z-50 transition-opacity duration-300 pointer-events-none opacity-0" id="drawer-backdrop" onclick="toggleDrawer(false)"></div>
+<!-- 5. SIDE DRAWER FOR "Edit / Koreksi Pemeriksaan Balita" -->
+<aside class="fixed top-0 right-0 h-screen w-full max-w-[480px] bg-surface-container-lowest shadow-2xl z-50 flex flex-col justify-between transform translate-x-full transition-transform duration-300 ease-out" id="edit-drawer">
+<!-- Drawer Header -->
+<div class="p-space-lg bg-surface flex items-start justify-between">
+<div class="flex flex-col gap-0.5">
+<span class="font-caption text-caption uppercase tracking-wider text-outline font-semibold">Formulir Petugas &amp; Kader</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Koreksi Pemeriksaan Balita</h2>
+<span class="font-label-sm text-label-sm text-primary font-medium">Pemeriksaan 12 Nov 2024 (Usia 20 Bulan)</span>
+</div>
+<button class="p-1 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" onclick="toggleDrawer(false)" type="button">
+<span class="material-symbols-outlined text-[24px]">close</span>
+</button>
+</div>
+<!-- Drawer Body Form Content (Scrollable) -->
+<div class="p-space-lg flex-1 overflow-y-auto flex flex-col gap-space-lg">
+<!-- Patient Brief Pill -->
+<div class="p-space-sm rounded-xl bg-surface flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-label-sm">
+            RA
+          </div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Rayhan Al-Ghifari</span>
+<span class="font-caption text-caption text-outline">NIK: 3201121008230002</span>
+</div>
+</div>
+<span class="font-caption text-caption bg-surface-container px-2 py-0.5 rounded text-tertiary">Melati 04</span>
+</div>
+<!-- Critical Required Field: Alasan Perubahan Data * -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface flex items-center justify-between" for="koreksi-alasan">
+<span>Alasan Perubahan Data <span class="text-error font-bold">*</span></span>
+<span class="font-caption text-caption text-outline font-normal">Wajib diisi audit KIA</span>
+</label>
+<textarea class="w-full p-3 rounded-lg bg-surface text-on-surface font-body-sm text-body-sm focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" id="koreksi-alasan" placeholder="Wajib diisi sesuai SOP audit medik, contoh: Kesalahan input angka timbangan oleh kader sebelumnya / koreksi hasil tera dacin" rows="3"></textarea>
+<!-- Quick Preset Reason Tags -->
+<div class="flex flex-wrap items-center gap-1.5 mt-1">
+<span class="font-caption text-caption text-outline">Tag cepat:</span>
+<button class="px-2 py-1 rounded bg-surface hover:bg-surface-container text-on-surface-variant font-caption text-caption transition-colors" onclick="insertReasonTag('Koreksi Alat Ukur Dacin')" type="button">
+            + Koreksi Alat Ukur
+          </button>
+<button class="px-2 py-1 rounded bg-surface hover:bg-surface-container text-on-surface-variant font-caption text-caption transition-colors" onclick="insertReasonTag('Salah Ketik Input Kader')" type="button">
+            + Salah Ketik Kader
+          </button>
+<button class="px-2 py-1 rounded bg-surface hover:bg-surface-container text-on-surface-variant font-caption text-caption transition-colors" onclick="insertReasonTag('Verifikasi Ulang Puskesmas')" type="button">
+            + Verifikasi Ulang
+          </button>
+</div>
+</div>
+<!-- Editable Measurement Inputs Grid -->
+<div class="flex flex-col gap-space-md">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-bold">Hasil Pengukuran Fisik</span>
+<div class="grid grid-cols-2 gap-space-md">
+<!-- Input Berat Badan -->
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface">Berat Badan (BB)</label>
+<div class="relative flex items-center">
+<input class="w-full px-3 py-2 pr-10 rounded-lg bg-surface font-label-md text-label-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" step="0.1" type="number" value="10.8"/>
+<span class="absolute right-3 font-caption text-caption text-outline">kg</span>
+</div>
+</div>
+<!-- Input Tinggi Badan -->
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface">Tinggi Badan (TB)</label>
+<div class="relative flex items-center">
+<input class="w-full px-3 py-2 pr-10 rounded-lg bg-surface font-label-md text-label-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" step="0.1" type="number" value="82.5"/>
+<span class="absolute right-3 font-caption text-caption text-outline">cm</span>
+</div>
+</div>
+<!-- Input Lingkar Kepala -->
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface">Lingkar Kepala (LK)</label>
+<div class="relative flex items-center">
+<input class="w-full px-3 py-2 pr-10 rounded-lg bg-surface font-label-md text-label-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" step="0.1" type="number" value="47.2"/>
+<span class="absolute right-3 font-caption text-caption text-outline">cm</span>
+</div>
+</div>
+<!-- Input Lingkar Lengan Atas -->
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface">LiLA</label>
+<div class="relative flex items-center">
+<input class="w-full px-3 py-2 pr-10 rounded-lg bg-surface font-label-md text-label-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" step="0.1" type="number" value="15.1"/>
+<span class="absolute right-3 font-caption text-caption text-outline">cm</span>
+</div>
+</div>
+</div>
+<!-- Catatan Kader Tambahan -->
+<div class="flex flex-col gap-1 mt-1">
+<label class="font-label-md text-label-md text-on-surface">Catatan Kader / Petugas</label>
+<input class="w-full px-3 py-2 rounded-lg bg-surface font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" type="text" value="Pemberian PMT biskuit &amp; telur disukai anak. Imunisasi DPT lengkap."/>
+</div>
+</div>
+<!-- Clinical Audit Compliance Info Banner -->
+<div class="p-space-md rounded-xl bg-secondary-container/40 flex items-start gap-space-sm text-on-secondary-container">
+<span class="material-symbols-outlined text-[20px] text-primary shrink-0 mt-0.5">policy</span>
+<p class="font-caption text-caption leading-relaxed">
+          Setiap perubahan data hasil penimbangan akan dicatat ke dalam <strong>Audit Log Kemenkes</strong> dan diverifikasi oleh Bidan Desa penanggung jawab wilayah.
+        </p>
+</div>
+</div>
+<!-- Drawer Footer Actions -->
+<div class="p-space-lg bg-surface flex items-center justify-end gap-space-sm">
+<button class="px-space-md py-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant font-label-md text-label-md transition-colors" onclick="toggleDrawer(false)" type="button">
+        Batal
+      </button>
+<button class="px-space-md py-2.5 rounded-lg bg-primary-container text-on-primary hover:bg-primary font-label-md text-label-md transition-all shadow-sm flex items-center gap-1.5" onclick="toggleDrawer(false)" type="button">
+<span class="material-symbols-outlined text-[18px]">save</span>
+        Simpan Perubahan &amp; Catat Log
+      </button>
+</div>
+</aside>
+</div></main></div></body></html>
