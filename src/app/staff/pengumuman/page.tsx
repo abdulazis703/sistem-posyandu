@@ -1,17 +1,27 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { mockAnnouncements, Announcement } from "@/lib/mockData";
 
 type FilterTabKey = "all" | "jadwal" | "imunisasi" | "edukasi";
+
+function getFilterFromParam(param: string | null): FilterTabKey {
+  const p = param?.toLowerCase();
+  if (p === "jadwal-posyandu" || p === "jadwal") return "jadwal";
+  if (p === "jadwal-imunisasi" || p === "imunisasi") return "imunisasi";
+  if (p === "edukasi-gizi" || p === "edukasi") return "edukasi";
+  return "all";
+}
 
 function PengumumanPetugasContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
   const [announcements, setAnnouncements] = useState<Announcement[]>(mockAnnouncements);
-  const [activeFilter, setActiveFilter] = useState<FilterTabKey>("all");
+  const tabParam = searchParams.get("tab");
+  const [selectedFilter, setSelectedFilter] = useState<FilterTabKey | null>(null);
+  const activeFilter = selectedFilter ?? getFilterFromParam(tabParam);
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState<Announcement["category"]>("Jadwal Posyandu");
@@ -19,22 +29,8 @@ function PengumumanPetugasContent() {
   const [eventDate, setEventDate] = useState("");
   const [location, setLocation] = useState("");
 
-  // Sinkronkan active filter tab dari URL parameter ?tab=...
-  useEffect(() => {
-    const tabParam = searchParams.get("tab")?.toLowerCase();
-    if (tabParam === "jadwal-posyandu" || tabParam === "jadwal") {
-      setActiveFilter("jadwal");
-    } else if (tabParam === "jadwal-imunisasi" || tabParam === "imunisasi") {
-      setActiveFilter("imunisasi");
-    } else if (tabParam === "edukasi-gizi" || tabParam === "edukasi") {
-      setActiveFilter("edukasi");
-    } else if (tabParam === "semua" || tabParam === "all") {
-      setActiveFilter("all");
-    }
-  }, [searchParams]);
-
   const handleTabChange = (key: FilterTabKey) => {
-    setActiveFilter(key);
+    setSelectedFilter(key);
     let queryVal = "all";
     if (key === "jadwal") queryVal = "jadwal-posyandu";
     if (key === "imunisasi") queryVal = "jadwal-imunisasi";
@@ -136,7 +132,7 @@ function PengumumanPetugasContent() {
           <div className="bg-white rounded-2xl p-12 text-center border border-slate-200/80">
             <span className="material-symbols-outlined text-4xl text-slate-400 mb-2">event_busy</span>
             <p className="text-sm font-semibold text-slate-800">Belum ada pengumuman pada kategori ini</p>
-            <p className="text-xs text-slate-500 mt-1">Gunakan tombol "+ Buat Pengumuman Baru" untuk mempublikasikan informasi.</p>
+            <p className="text-xs text-slate-500 mt-1">Gunakan tombol &ldquo;+ Buat Pengumuman Baru&rdquo; untuk mempublikasikan informasi.</p>
           </div>
         ) : (
           filteredAnnouncements.map((ann) => (

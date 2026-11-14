@@ -2,13 +2,16 @@
 
 import React from "react";
 import Link from "next/link";
-import { mockChildren, mockAnnouncements } from "@/lib/mockData";
+import useChildrenData from "@/app/hooks/useChildrenData";
+import { mockChildren } from "@/lib/mockData";
 import { StuntingBadge } from "@/components/ui/badge";
 
 export default function ParentDashboardPage() {
-  const myChildren = mockChildren.filter(
-    (c) => c.parentId === "parent-1" || c.parentName === "Sari Rahmawati"
+  const { children } = useChildrenData();
+  const matched = children.filter(
+    (c) => c.parentId === "parent-1" || c.parentName.toLowerCase().includes("sari")
   );
+  const myChildren = matched.length > 0 ? matched : (children.length > 0 ? children.slice(0, 2) : mockChildren.slice(0, 2));
 
   return (
     <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-6 sm:gap-8">

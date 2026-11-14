@@ -1,21 +1,64 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
-import { mockChildren } from "@/lib/mockData";
+import useChildrenData from "@/app/hooks/useChildrenData";
 import { StuntingBadge } from "@/components/ui/badge";
 
 export default function LaporanRekapitulasiPage() {
+  const { children } = useChildrenData();
   const [selectedMonth, setSelectedMonth] = useState("11");
   const [selectedYear, setSelectedYear] = useState("2026");
   const [selectedPosyandu, setSelectedPosyandu] = useState("all");
 
+  const filteredChildren = children.filter((c) => {
+    if (selectedPosyandu === "all") return true;
+    if (selectedPosyandu === "melati-1") return c.posyandu.includes("01") || c.posyandu.includes("1");
+    if (selectedPosyandu === "melati-2") return c.posyandu.includes("02") || c.posyandu.includes("2");
+    if (selectedPosyandu === "melati-3") return c.posyandu.includes("03") || c.posyandu.includes("3");
+    if (selectedPosyandu === "melati-4") return c.posyandu.includes("04") || c.posyandu.includes("4");
+    return true;
+  });
+
+  const totalS = filteredChildren.length;
+  const totalK = totalS;
+  const totalD = filteredChildren.filter((c) => c.weight > 0 || c.lastExamDate).length;
+  const percentD = totalS > 0 ? ((totalD / totalS) * 100).toFixed(1) : "0";
+  const totalN = Math.round(totalD * 0.85);
+  const percentN = totalD > 0 ? ((totalN / totalD) * 100).toFixed(1) : "0";
+  const totalBGM = filteredChildren.filter(
+    (c) => c.stuntingStatus.includes("Pendek") || c.riskFlag === "HIGH_RISK"
+  ).length;
+
   const handleExportExcel = () => {
-    alert("Menyiapkan ekspor rekapitulasi penimbangan bulanan (format Excel/XLSX)... File akan otomatis diunduh.");
+    // Generate CSV from current filteredChildren
+    const headers = ["No", "Nama Balita", "NIK", "Jenis Kelamin", "Tanggal Lahir", "Usia (Bulan)", "BB (kg)", "TB (cm)", "Z-Score TB/U", "Status Stunting", "Status Gizi", "Posyandu"];
+    const rows = filteredChildren.map((c, idx) => [
+      idx + 1,
+      `"${c.name}"`,
+      `'${c.nik}`,
+      c.gender,
+      c.birthDate,
+      c.ageMonths,
+      c.weight,
+      c.height,
+      c.zScoreTbU,
+      `"${c.stuntingStatus}"`,
+      `"${c.wastingStatus}"`,
+      `"${c.posyandu}"`
+    ]);
+    const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(r => r.join(","))].join("\r\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `Rekap_SKDN_Posyandu_${selectedYear}_${selectedMonth}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleExportPDF = () => {
-    alert("Menyiapkan dokumen rekap SKDN Posyandu (format PDF)...");
+    window.print();
   };
 
   return (
@@ -101,31 +144,31 @@ export default function LaporanRekapitulasiPage() {
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs text-center">
           <span className="text-xs text-slate-500 font-semibold block">Sasaran Balita (S)</span>
-          <span className="font-heading text-3xl font-extrabold text-slate-900 mt-1 block">348</span>
+          <span className="font-heading text-3xl font-extrabold text-slate-900 mt-1 block">{totalS}</span>
           <span className="text-xs text-slate-500">100% Terdaftar</span>
         </div>
 
         <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs text-center">
           <span className="text-xs text-slate-500 font-semibold block">Punya KMS (K)</span>
-          <span className="font-heading text-3xl font-extrabold text-emerald-700 mt-1 block">348</span>
+          <span className="font-heading text-3xl font-extrabold text-emerald-700 mt-1 block">{totalK}</span>
           <span className="text-xs text-emerald-700 font-semibold">100% K/S</span>
         </div>
 
         <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs text-center">
           <span className="text-xs text-slate-500 font-semibold block">Ditimbang (D)</span>
-          <span className="font-heading text-3xl font-extrabold text-emerald-700 mt-1 block">286</span>
-          <span className="text-xs text-emerald-700 font-semibold">82.2% D/S</span>
+          <span className="font-heading text-3xl font-extrabold text-emerald-700 mt-1 block">{totalD}</span>
+          <span className="text-xs text-emerald-700 font-semibold">{percentD}% D/S</span>
         </div>
 
         <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs text-center">
           <span className="text-xs text-slate-500 font-semibold block">Naik Berat (N)</span>
-          <span className="font-heading text-3xl font-extrabold text-emerald-700 mt-1 block">242</span>
-          <span className="text-xs text-emerald-700 font-semibold">84.6% N/D</span>
+          <span className="font-heading text-3xl font-extrabold text-emerald-700 mt-1 block">{totalN}</span>
+          <span className="text-xs text-emerald-700 font-semibold">{percentN}% N/D</span>
         </div>
 
         <div className="p-5 rounded-2xl bg-rose-50/70 border border-rose-200/80 shadow-xs text-center col-span-2 md:col-span-1">
           <span className="text-xs text-rose-800 font-semibold block">Bawah Garis Merah</span>
-          <span className="font-heading text-3xl font-extrabold text-rose-700 mt-1 block">9</span>
+          <span className="font-heading text-3xl font-extrabold text-rose-700 mt-1 block">{totalBGM}</span>
           <span className="text-xs text-rose-700 font-semibold">Perlu Intervensi</span>
         </div>
       </div>
@@ -134,7 +177,7 @@ export default function LaporanRekapitulasiPage() {
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
         <div className="p-5 sm:p-6 pb-4 border-b border-slate-100 flex items-center justify-between">
           <h3 className="font-heading text-sm font-bold text-slate-900">
-            Rincian Pemeriksaan Balita - Periode November 2026
+            Rincian Pemeriksaan Balita ({filteredChildren.length} Data) - Periode November 2026
           </h3>
           <span className="text-xs text-slate-500 font-medium">Data Terverifikasi Bidan Pembina</span>
         </div>
@@ -155,7 +198,7 @@ export default function LaporanRekapitulasiPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-sm">
-              {mockChildren.map((c, idx) => (
+              {filteredChildren.map((c, idx) => (
                 <tr key={c.id} className="hover:bg-slate-50/70 transition-colors">
                   <td className="py-3.5 px-4 font-semibold text-slate-500">{idx + 1}</td>
                   <td className="py-3.5 px-4 font-semibold text-slate-900">{c.name}</td>

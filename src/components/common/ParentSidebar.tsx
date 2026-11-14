@@ -2,7 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { signOut } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
 
 const parentNavItems = [
@@ -16,6 +17,17 @@ const parentNavItems = [
 
 export function ParentSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+    } catch (e) {
+      console.warn("Logout error:", e);
+    } finally {
+      router.push("/login");
+    }
+  };
 
   return (
     <aside className="hidden lg:flex fixed left-0 top-0 h-screen w-[260px] bg-white text-[#0b1c30] z-50 flex-col justify-between border-r border-[#e2ebe5] shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
@@ -94,13 +106,14 @@ export function ParentSidebar() {
             <span className="w-1.5 h-1.5 rounded-full bg-[#00652c]"></span>
             Akun Orang Tua
           </span>
-          <Link
-            href="/login"
+          <button
+            type="button"
+            onClick={handleLogout}
             className="text-[#4b5a53] hover:text-[#ba1a1a] transition-colors"
             title="Keluar"
           >
             <span className="material-symbols-outlined text-[18px]">logout</span>
-          </Link>
+          </button>
         </div>
       </div>
     </aside>

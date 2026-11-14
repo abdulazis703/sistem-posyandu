@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { mockAnnouncements } from "@/lib/mockData";
@@ -10,27 +10,23 @@ import { ParentBottomBar } from "@/components/common/ParentBottomBar";
 
 type FilterTabKey = "all" | "jadwal" | "imunisasi" | "edukasi";
 
+function getFilterFromParam(param: string | null): FilterTabKey {
+  const p = param?.toLowerCase();
+  if (p === "jadwal-posyandu" || p === "jadwal") return "jadwal";
+  if (p === "jadwal-imunisasi" || p === "imunisasi") return "imunisasi";
+  if (p === "edukasi-gizi" || p === "edukasi") return "edukasi";
+  return "all";
+}
+
 function PengumumanJadwalContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [activeFilter, setActiveFilter] = useState<FilterTabKey>("all");
-
-  // Sinkronkan tab filter dari URL query parameter ?tab=...
-  useEffect(() => {
-    const tabParam = searchParams.get("tab")?.toLowerCase();
-    if (tabParam === "jadwal-posyandu" || tabParam === "jadwal") {
-      setActiveFilter("jadwal");
-    } else if (tabParam === "jadwal-imunisasi" || tabParam === "imunisasi") {
-      setActiveFilter("imunisasi");
-    } else if (tabParam === "edukasi-gizi" || tabParam === "edukasi") {
-      setActiveFilter("edukasi");
-    } else if (tabParam === "semua" || tabParam === "all") {
-      setActiveFilter("all");
-    }
-  }, [searchParams]);
+  const tabParam = searchParams.get("tab");
+  const [selectedFilter, setSelectedFilter] = useState<FilterTabKey | null>(null);
+  const activeFilter = selectedFilter ?? getFilterFromParam(tabParam);
 
   const handleTabChange = (key: FilterTabKey) => {
-    setActiveFilter(key);
+    setSelectedFilter(key);
     let queryVal = "all";
     if (key === "jadwal") queryVal = "jadwal-posyandu";
     if (key === "imunisasi") queryVal = "jadwal-imunisasi";

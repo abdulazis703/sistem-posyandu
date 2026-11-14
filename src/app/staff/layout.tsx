@@ -10,7 +10,7 @@ export default function StaffLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [, setSearchQuery] = useState("");
 
   return (
     <div className="min-h-screen bg-slate-50">

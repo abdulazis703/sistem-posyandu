@@ -6,7 +6,7 @@ export default function ProfilPetugasPage() {
   const [name, setName] = useState("Bidan Sri Wahyuni, A.Md.Keb");
   const [phone, setPhone] = useState("081234567890");
   const [email, setEmail] = useState("sri.wahyuni@puskesmas-sukamaju.go.id");
-  const [position, setPosition] = useState("Bidan Pembina Wilayah Kel. Sukamaju");
+  const position = "Bidan Pembina Wilayah Kel. Sukamaju";
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");

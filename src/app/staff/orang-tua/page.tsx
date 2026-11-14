@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
+import useChildrenData from "@/app/hooks/useChildrenData";
 import { mockParents, Parent } from "@/lib/mockData";
 
 export default function AkunOrangTuaPage() {
-  const [parents, setParents] = useState<Parent[]>(mockParents);
+  const { children } = useChildrenData();
   const [search, setSearch] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [newParentName, setNewParentName] = useState("");
@@ -14,7 +15,42 @@ export default function AkunOrangTuaPage() {
   const [newAddress, setNewAddress] = useState("");
   const [newPosyandu, setNewPosyandu] = useState("Posyandu Melati 04");
 
-  const filteredParents = parents.filter(
+  const [extraParents, setExtraParents] = useState<Parent[]>([]);
+
+  // Gabungkan parents statis, parents baru ditambah, dan parents hasil import excel
+  const allParents: Parent[] = useMemo(() => {
+    const map = new Map<string, Parent>();
+    mockParents.forEach((p) => map.set(p.name.toLowerCase(), p));
+    extraParents.forEach((p) => map.set(p.name.toLowerCase(), p));
+
+    children.forEach((c) => {
+      const pName = (c.parentName || "").trim();
+      if (pName && !map.has(pName.toLowerCase())) {
+        const assigned = children.filter((ch) => ch.parentName === pName);
+        map.set(pName.toLowerCase(), {
+          id: `parent-dyn-${c.id}`,
+          name: pName,
+          phone: "08" + (Math.abs(pName.split("").reduce((a, b) => a + b.charCodeAt(0), 123456789)) % 90000000 + 10000000),
+          email: `${pName.toLowerCase().replace(/[^a-z0-9]/g, "")}@posyandu.id`,
+          nik: `3201${c.nik.slice(-12) || "123456789012"}`,
+          address: `${c.posyandu}, Kel. Sukamaju`,
+          posyandu: c.posyandu,
+          childrenCount: assigned.length,
+          children: assigned.map((ch) => ({
+            id: ch.id,
+            name: ch.name,
+            age: `${ch.ageMonths} Bulan`,
+            status: ch.stuntingStatus,
+          })),
+          joinDate: "2026-10-01",
+        });
+      }
+    });
+
+    return Array.from(map.values());
+  }, [children, extraParents]);
+
+  const filteredParents = allParents.filter(
     (p) =>
       p.name.toLowerCase().includes(search.toLowerCase()) ||
       p.phone.includes(search) ||
@@ -35,7 +71,7 @@ export default function AkunOrangTuaPage() {
       children: [],
       joinDate: new Date().toISOString().split("T")[0],
     };
-    setParents([newEntry, ...parents]);
+    setExtraParents([newEntry, ...extraParents]);
     setShowAddModal(false);
     setNewParentName("");
     setNewPhone("");

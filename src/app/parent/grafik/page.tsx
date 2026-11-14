@@ -2,19 +2,20 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { mockChildren, mockExamRecords } from "@/lib/mockData";
+import useChildrenData from "@/app/hooks/useChildrenData";
+import { mockChildren } from "@/lib/mockData";
 import { StuntingBadge } from "@/components/ui/badge";
 
 export default function GrafikPertumbuhanParentPage() {
   const [selectedChildIndex, setSelectedChildIndex] = useState(0);
-  const myChildren = mockChildren.filter(
-    (c) => c.parentId === "parent-1" || c.parentName === "Sari Rahmawati"
+  const { children } = useChildrenData();
+
+  const matched = children.filter(
+    (c) => c.parentId === "parent-1" || c.parentName.toLowerCase().includes("sari")
   );
+  const myChildren = matched.length > 0 ? matched : (children.length > 0 ? children : mockChildren);
 
   const activeChild = myChildren[selectedChildIndex] || myChildren[0];
-  const exams = mockExamRecords.filter(
-    (e) => e.childId === activeChild.id || e.childName === activeChild.name
-  );
 
   return (
     <div className="w-full max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-6 sm:gap-8">

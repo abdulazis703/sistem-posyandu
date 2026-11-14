@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL,GRAD,opsz,wght@0..1,-50..200,20..48,100..700&display=swap');
 @import "tailwindcss";
 
 @layer base {
@@ -40,7 +42,13 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  h1, h2, h3, h4, h5, h6, .font-heading {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .font-heading {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 }
@@ -67,52 +75,203 @@
 }
 
 /* Custom Utilities */
-.bg-surface { background-color: #f8f9ff; }
-.bg-surface-dim { background-color: #cbdbf5; }
-.bg-surface-container-lowest { background-color: #ffffff; }
-.bg-surface-container-low { background-color: #eff4ff; }
-.bg-surface-container { background-color: #e5eeff; }
-.bg-surface-container-high { background-color: #dce9ff; }
-.bg-surface-container-highest { background-color: #d3e4fe; }
+.bg-surface {
+  background-color: #f8f9ff;
+}
 
-.bg-primary-main { background-color: #00652c; }
-.bg-primary-container { background-color: #15803d; }
-.bg-secondary-main { background-color: #2e6a41; }
-.bg-secondary-container { background-color: #b1f2be; }
-.bg-secondary-fixed { background-color: #b1f2be; }
-.bg-error-container { background-color: #ffdad6; }
+.bg-surface-dim {
+  background-color: #cbdbf5;
+}
 
-.text-primary { color: #00652c; }
-.text-primary-container { color: #15803d; }
-.text-secondary { color: #2e6a41; }
-.text-tertiary { color: #4b5a53; }
-.text-on-surface { color: #0b1c30; }
-.text-on-surface-variant { color: #3f493f; }
-.text-on-primary { color: #ffffff; }
-.text-on-primary-container { color: #d3ffd5; }
-.text-on-secondary { color: #ffffff; }
-.text-on-secondary-container { color: #347047; }
-.text-on-secondary-fixed { color: #00210d; }
-.text-on-secondary-fixed-variant { color: #12512c; }
-.text-outline { color: #6f7a6e; }
-.text-outline-variant { color: #becabc; }
-.text-error { color: #ba1a1a; }
-.text-on-error-container { color: #93000a; }
+.bg-surface-container-lowest {
+  background-color: #ffffff;
+}
 
-.border-outline-variant { border-color: #becabc; }
-.border-surface-border { border-color: #e2ebe5; }
-.border-outline { border-color: #6f7a6e; }
+.bg-surface-container-low {
+  background-color: #eff4ff;
+}
 
-.font-headline-xl { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 28px; line-height: 36px; font-weight: 700; }
-.font-headline-lg { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; line-height: 30px; font-weight: 600; }
-.font-headline-md { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; line-height: 26px; font-weight: 600; }
-.font-display-lg { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 36px; line-height: 44px; font-weight: 700; }
-.font-label-md { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; line-height: 18px; font-weight: 600; }
-.font-label-sm { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; line-height: 16px; font-weight: 600; }
-.font-body-lg { font-family: 'Inter', sans-serif; font-size: 16px; line-height: 24px; font-weight: 400; }
-.font-body-md { font-family: 'Inter', sans-serif; font-size: 14px; line-height: 20px; font-weight: 400; }
-.font-body-sm { font-family: 'Inter', sans-serif; font-size: 13px; line-height: 18px; font-weight: 400; }
-.font-caption { font-family: 'Inter', sans-serif; font-size: 12px; line-height: 16px; font-weight: 500; }
+.bg-surface-container {
+  background-color: #e5eeff;
+}
+
+.bg-surface-container-high {
+  background-color: #dce9ff;
+}
+
+.bg-surface-container-highest {
+  background-color: #d3e4fe;
+}
+
+.bg-primary-main {
+  background-color: #00652c;
+}
+
+.bg-primary-container {
+  background-color: #15803d;
+}
+
+.bg-secondary-main {
+  background-color: #2e6a41;
+}
+
+.bg-secondary-container {
+  background-color: #b1f2be;
+}
+
+.bg-secondary-fixed {
+  background-color: #b1f2be;
+}
+
+.bg-error-container {
+  background-color: #ffdad6;
+}
+
+.text-primary {
+  color: #00652c;
+}
+
+.text-primary-container {
+  color: #15803d;
+}
+
+.text-secondary {
+  color: #2e6a41;
+}
+
+.text-tertiary {
+  color: #4b5a53;
+}
+
+.text-on-surface {
+  color: #0b1c30;
+}
+
+.text-on-surface-variant {
+  color: #3f493f;
+}
+
+.text-on-primary {
+  color: #ffffff;
+}
+
+.text-on-primary-container {
+  color: #d3ffd5;
+}
+
+.text-on-secondary {
+  color: #ffffff;
+}
+
+.text-on-secondary-container {
+  color: #347047;
+}
+
+.text-on-secondary-fixed {
+  color: #00210d;
+}
+
+.text-on-secondary-fixed-variant {
+  color: #12512c;
+}
+
+.text-outline {
+  color: #6f7a6e;
+}
+
+.text-outline-variant {
+  color: #becabc;
+}
+
+.text-error {
+  color: #ba1a1a;
+}
+
+.text-on-error-container {
+  color: #93000a;
+}
+
+.border-outline-variant {
+  border-color: #becabc;
+}
+
+.border-surface-border {
+  border-color: #e2ebe5;
+}
+
+.border-outline {
+  border-color: #6f7a6e;
+}
+
+.font-headline-xl {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: 700;
+}
+
+.font-headline-lg {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 22px;
+  line-height: 30px;
+  font-weight: 600;
+}
+
+.font-headline-md {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 600;
+}
+
+.font-display-lg {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 36px;
+  line-height: 44px;
+  font-weight: 700;
+}
+
+.font-label-md {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+}
+
+.font-label-sm {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 600;
+}
+
+.font-body-lg {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+}
+
+.font-body-md {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+}
+
+.font-body-sm {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 400;
+}
+
+.font-caption {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+}
 
 .blob-bg {
   background: radial-gradient(circle at 60% 40%, rgba(220, 252, 231, 0.75) 0%, rgba(240, 253, 244, 0.45) 55%, transparent 75%);

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -48,11 +48,13 @@ const moreMenuItems: DrawerItem[] = [
 export function StaffBottomBar() {
   const pathname = usePathname();
   const [isMoreOpen, setIsMoreOpen] = useState(false);
+  const [prevPathname, setPrevPathname] = useState(pathname);
 
-  // Close drawer when path changes
-  useEffect(() => {
+  // Close drawer when path changes without useEffect
+  if (prevPathname !== pathname) {
+    setPrevPathname(pathname);
     setIsMoreOpen(false);
-  }, [pathname]);
+  }
 
   const isMoreActive = moreMenuItems.some(
     (item) => pathname === item.href || pathname.startsWith(item.href)

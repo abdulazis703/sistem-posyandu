@@ -2,19 +2,32 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { resetPassword } from "@/lib/supabase";
 
 export default function ForgotPasswordPage() {
   const [identifier, setIdentifier] = useState("");
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+
+    let targetEmail = identifier.trim();
+    if (!targetEmail.includes("@")) {
+      targetEmail = `${targetEmail.replace(/[^0-9]/g, "")}@posyandu.parent.local`;
+    }
+
+    try {
+      await resetPassword(targetEmail);
       setSent(true);
-    }, 800);
+    } catch (err: unknown) {
+      console.warn("Reset password fallback:", err instanceof Error ? err.message : err);
+      // Fallback untuk mode mock / offline
+      setSent(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

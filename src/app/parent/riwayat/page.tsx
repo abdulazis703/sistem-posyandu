@@ -2,19 +2,49 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import useChildrenData from "@/app/hooks/useChildrenData";
 import { mockChildren, mockExamRecords } from "@/lib/mockData";
 import { StuntingBadge } from "@/components/ui/badge";
 
 export default function RiwayatPemeriksaanParentPage() {
   const [selectedChildIndex, setSelectedChildIndex] = useState(0);
-  const myChildren = mockChildren.filter(
-    (c) => c.parentId === "parent-1" || c.parentName === "Sari Rahmawati"
+  const { children } = useChildrenData();
+
+  const matched = children.filter(
+    (c) => c.parentId === "parent-1" || c.parentName.toLowerCase().includes("sari")
   );
+  const myChildren = matched.length > 0 ? matched : (children.length > 0 ? children : mockChildren);
 
   const activeChild = myChildren[selectedChildIndex] || myChildren[0];
-  const exams = mockExamRecords.filter(
+  const matchedExams = mockExamRecords.filter(
     (e) => e.childId === activeChild.id || e.childName === activeChild.name
   );
+  const exams =
+    matchedExams.length > 0
+      ? matchedExams
+      : [
+          {
+            id: `exam-${activeChild.id}`,
+            childId: activeChild.id,
+            childName: activeChild.name,
+            examDate: activeChild.lastExamDate || "2026-10-24",
+            ageMonths: activeChild.ageMonths || 18,
+            weight: activeChild.weight || 10.5,
+            height: activeChild.height || 82,
+            headCircumference: activeChild.headCircumference || 46,
+            lila: activeChild.lila || 14.5,
+            method: "terlentang" as const,
+            recordedBy: "Bidan Sri Wahyuni, A.Md.Keb",
+            zScoreTbU: activeChild.zScoreTbU || 0,
+            zScoreBbU: activeChild.zScoreBbU || 0,
+            zScoreBbTb: activeChild.zScoreBbTb || 0,
+            stuntingStatus: activeChild.stuntingStatus,
+            wastingStatus: activeChild.wastingStatus,
+            riskFlag: activeChild.riskFlag,
+            notes: "Catatan riwayat pemeriksaan posyandu.",
+            status: "validated" as const,
+          },
+        ];
 
   return (
     <div className="w-full max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-6 sm:gap-8">

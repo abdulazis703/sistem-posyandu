@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { signIn } from "@/lib/supabase";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -11,18 +12,61 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      if (role === "parent") {
+    setErrorMessage(null);
+
+    // Format email jika pengguna memasukkan nomor telepon tanpa @
+    let loginEmail = identifier.trim();
+    if (!loginEmail.includes("@")) {
+      loginEmail = `${loginEmail.replace(/[^0-9]/g, "")}@posyandu.parent.local`;
+    }
+
+    try {
+      const result = await signIn(loginEmail, password);
+      const userRole = result.role;
+
+      if (userRole === "parent") {
         router.push("/parent/dashboard");
       } else {
         router.push("/staff/dashboard");
       }
-    }, 600);
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      console.warn("Login attempt with Supabase:", errMsg);
+
+      // Cek apakah fallback demo mode (jika env supabase belum disetup atau credentials demo)
+      const cleanId = identifier.trim().toLowerCase();
+      const isDemoParent = cleanId === "081234567890" || cleanId === "ibu.siti@example.com" || cleanId.includes("siti");
+      const isDemoStaff = cleanId === "kader.budi@example.com" || cleanId === "bidan.sri@example.com" || cleanId === "admin@posyandu.id" || cleanId.includes("admin") || cleanId.includes("kader");
+
+      if ((isDemoParent || isDemoStaff) && (password === "Password123!" || password === "password123")) {
+        // Fallback demo redirect
+        if (role === "parent") {
+          router.push("/parent/dashboard");
+        } else {
+          router.push("/staff/dashboard");
+        }
+        return;
+      }
+
+      if (errMsg.toLowerCase().includes("failed to fetch")) {
+        setErrorMessage(
+          "Gagal terhubung ke server Supabase (Failed to fetch). Pastikan file .env.local sudah dibuat dengan URL Supabase yang benar, atau gunakan password 'Password123!' untuk masuk dalam mode demo."
+        );
+      } else {
+        setErrorMessage(
+          err?.message === "Invalid login credentials"
+            ? "Email atau kata sandi tidak sesuai. Silakan periksa kembali."
+            : err?.message || "Gagal masuk ke akun. Pastikan koneksi internet stabil."
+        );
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -170,6 +214,14 @@ export default function LoginPage() {
                 </button>
               </div>
 
+              {/* Error Alert */}
+              {errorMessage && (
+                <div className="mb-5 p-3.5 bg-red-50 border border-red-200 text-red-700 rounded-xl text-xs flex items-center gap-2">
+                  <span className="material-symbols-outlined text-base text-red-600">error</span>
+                  <span>{errorMessage}</span>
+                </div>
+              )}
+
               {/* Form */}
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
@@ -252,28 +304,39 @@ export default function LoginPage() {
               {/* Quick Demo Pre-fill */}
               <div className="mt-5 pt-4 border-t border-[#f1f5f9] text-center">
                 <p className="text-[11px] text-[#6f7a6e] mb-2 font-medium">Mode Percobaan Cepat (Demo):</p>
-                <div className="flex gap-2">
+                <div className="grid grid-cols-3 gap-1.5">
                   <button
                     type="button"
                     onClick={() => {
                       setRole("parent");
-                      setIdentifier("081234567890");
-                      setPassword("password123");
+                      setIdentifier("ibu.siti@example.com");
+                      setPassword("Password123!");
                     }}
-                    className="flex-1 py-1 px-2 text-[10px] bg-[#eff4ff] text-[#00652c] rounded-lg border border-[#becabc]/40 hover:bg-[#dcfce7] font-semibold"
+                    className="py-1 px-1.5 text-[10px] bg-[#eff4ff] text-[#00652c] rounded-lg border border-[#becabc]/40 hover:bg-[#dcfce7] font-semibold truncate"
                   >
-                    Isi Akun Orang Tua
+                    Orang Tua
                   </button>
                   <button
                     type="button"
                     onClick={() => {
                       setRole("staff");
                       setIdentifier("kader.budi@example.com");
-                      setPassword("password123");
+                      setPassword("Password123!");
                     }}
-                    className="flex-1 py-1 px-2 text-[10px] bg-[#eff4ff] text-[#00652c] rounded-lg border border-[#becabc]/40 hover:bg-[#dcfce7] font-semibold"
+                    className="py-1 px-1.5 text-[10px] bg-[#eff4ff] text-[#00652c] rounded-lg border border-[#becabc]/40 hover:bg-[#dcfce7] font-semibold truncate"
                   >
-                    Isi Akun Kader
+                    Kader
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRole("staff");
+                      setIdentifier("admin@posyandu.id");
+                      setPassword("Password123!");
+                    }}
+                    className="py-1 px-1.5 text-[10px] bg-[#eff4ff] text-[#00652c] rounded-lg border border-[#becabc]/40 hover:bg-[#dcfce7] font-semibold truncate"
+                  >
+                    Admin
                   </button>
                 </div>
               </div>

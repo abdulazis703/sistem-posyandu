@@ -3,23 +3,15 @@
 import React, { useState, useEffect, useRef } from "react";
 
 export function HeaderCalendarWidget() {
-  const [currentDate, setCurrentDate] = useState<Date>(new Date());
-  const [displayDateStr, setDisplayDateStr] = useState<string>("");
-  const [isOpen, setIsOpen] = useState(false);
-  const [viewMonth, setViewMonth] = useState<Date>(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const popoverRef = useRef<HTMLDivElement>(null);
-
-  // Format real-time client date: "Hari, DD MMMM YYYY" (e.g., "Selasa, 3 November 2026")
-  useEffect(() => {
+  const [currentDate] = useState<Date>(() => new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(() => new Date());
+  const [viewMonth, setViewMonth] = useState<Date>(() => {
     const now = new Date();
-    setCurrentDate(now);
-    setSelectedDate(now);
-    setViewMonth(new Date(now.getFullYear(), now.getMonth(), 1));
-
-    const formatted = formatIndonesianDate(now);
-    setDisplayDateStr(formatted);
-  }, []);
+    return new Date(now.getFullYear(), now.getMonth(), 1);
+  });
+  const [displayDateStr] = useState<string>(() => formatIndonesianDate(new Date()));
+  const [isOpen, setIsOpen] = useState(false);
+  const popoverRef = useRef<HTMLDivElement>(null);
 
   // Close on outside click
   useEffect(() => {

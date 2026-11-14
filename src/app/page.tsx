@@ -367,7 +367,7 @@ export default function LandingPage() {
                 </div>
                 <h3 className="text-lg font-bold text-[#14532d] font-heading mb-2">Peringatan Dini Stunting</h3>
                 <p className="text-sm text-gray-600 leading-relaxed">
-                  Status warna berkategori halus ("Perlu Dipantau", "Perlu Ditinjau Petugas") tanpa menimbulkan kepanikan berlebih pada orang tua.
+                  Status warna berkategori halus (&ldquo;Perlu Dipantau&rdquo;, &ldquo;Perlu Ditinjau Petugas&rdquo;) tanpa menimbulkan kepanikan berlebih pada orang tua.
                 </p>
               </div>
               <span className="mt-4 text-xs font-semibold text-amber-700 flex items-center gap-1">Pencegahan Intervensi Cepat →</span>

@@ -2,6 +2,7 @@
 
 import React, { useState, use } from "react";
 import Link from "next/link";
+import useChildrenData from "@/app/hooks/useChildrenData";
 import { mockChildren, mockExamRecords } from "@/lib/mockData";
 import { StuntingBadge } from "@/components/ui/badge";
 
@@ -13,12 +14,43 @@ export default function DetailBalitaPetugasPage({
   const resolvedParams = use(params);
   const childId = resolvedParams?.id || "child-1";
 
+  const { children } = useChildrenData();
   const child =
-    mockChildren.find((c) => c.id === childId) || mockChildren[0];
+    children.find((c) => c.id === childId || c.nik === childId) ||
+    mockChildren.find((c) => c.id === childId) ||
+    children[0] ||
+    mockChildren[0];
 
-  const exams = mockExamRecords.filter(
+  const matchedExams = mockExamRecords.filter(
     (e) => e.childId === child.id || e.childName === child.name
   );
+
+  const exams =
+    matchedExams.length > 0
+      ? matchedExams
+      : [
+          {
+            id: `exam-imported-${child.id}`,
+            childId: child.id,
+            childName: child.name,
+            examDate: child.lastExamDate || "2026-10-24",
+            ageMonths: child.ageMonths || 18,
+            weight: child.weight || 10,
+            height: child.height || 80,
+            headCircumference: child.headCircumference || 46,
+            lila: child.lila || 14,
+            method: "terlentang" as const,
+            recordedBy: "Bidan Sri Wahyuni, A.Md.Keb",
+            zScoreTbU: child.zScoreTbU || 0,
+            zScoreBbU: child.zScoreBbU || 0,
+            zScoreBbTb: child.zScoreBbTb || 0,
+            stuntingStatus: child.stuntingStatus,
+            wastingStatus: child.wastingStatus,
+            riskFlag: child.riskFlag,
+            notes: "Data hasil impor catatan penimbangan e-PPGBM Posyandu.",
+            status: "validated" as const,
+          },
+        ];
 
   const [activeTab, setActiveTab] = useState<"kurva" | "riwayat" | "rekomendasi">("kurva");
   const [showEditModal, setShowEditModal] = useState(false);

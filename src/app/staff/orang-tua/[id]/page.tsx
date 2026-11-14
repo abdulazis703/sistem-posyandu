@@ -2,7 +2,8 @@
 
 import React, { use } from "react";
 import Link from "next/link";
-import { mockParents, mockChildren } from "@/lib/mockData";
+import useChildrenData from "@/app/hooks/useChildrenData";
+import { mockParents } from "@/lib/mockData";
 import { StuntingBadge } from "@/components/ui/badge";
 
 export default function DetailAkunOrangTuaPage({
@@ -13,11 +14,13 @@ export default function DetailAkunOrangTuaPage({
   const resolvedParams = use(params);
   const parentId = resolvedParams?.id || "parent-1";
 
+  const { children } = useChildrenData();
+
   const parent =
     mockParents.find((p) => p.id === parentId) || mockParents[0];
 
-  const assignedChildren = mockChildren.filter(
-    (c) => c.parentId === parent.id || c.parentName === parent.name
+  const assignedChildren = children.filter(
+    (c) => c.parentId === parent.id || c.parentName.toLowerCase().includes(parent.name.toLowerCase())
   );
 
   return (

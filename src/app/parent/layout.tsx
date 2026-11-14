@@ -10,7 +10,7 @@ export default function ParentLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [search, setSearch] = useState("");
+  const [, setSearch] = useState("");
 
   return (
     <div className="min-h-screen bg-slate-50">

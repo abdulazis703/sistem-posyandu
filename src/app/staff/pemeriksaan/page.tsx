@@ -2,11 +2,12 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import useChildrenData from "@/app/hooks/useChildrenData";
 import { mockChildren } from "@/lib/mockData";
-import { StuntingBadge } from "@/components/ui/badge";
 
 export default function CatatPemeriksaanPage() {
-  const [selectedChildId, setSelectedChildId] = useState(mockChildren[0].id);
+  const { children, setChildren } = useChildrenData();
+  const [selectedChildId, setSelectedChildId] = useState("");
   const [examDate, setExamDate] = useState("2026-10-24");
   const [weight, setWeight] = useState("10.8");
   const [height, setHeight] = useState("82.5");
@@ -17,8 +18,9 @@ export default function CatatPemeriksaanPage() {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  const effectiveId = selectedChildId || (children[0]?.id ?? mockChildren[0].id);
   const selectedChild =
-    mockChildren.find((c) => c.id === selectedChildId) || mockChildren[0];
+    children.find((c) => c.id === effectiveId) || children[0] || mockChildren[0];
 
   // Dynamic preview calculation based on input
   const numWeight = parseFloat(weight) || 0;
@@ -28,6 +30,26 @@ export default function CatatPemeriksaanPage() {
   const handleSubmit = (status: "validated" | "draft") => {
     setLoading(true);
     setTimeout(() => {
+      // Update data balita terpilih agar hasil pemeriksaan tersinkron ke dashboard & balita
+      if (numWeight > 0 || numHeight > 0) {
+        setChildren((prev) =>
+          prev.map((c) =>
+            c.id === selectedChild.id
+              ? {
+                  ...c,
+                  weight: numWeight || c.weight,
+                  height: numHeight || c.height,
+                  headCircumference: parseFloat(headCirc) || c.headCircumference,
+                  lila: parseFloat(lila) || c.lila,
+                  lastExamDate: examDate,
+                  stuntingStatus: isStuntedPreview ? "Pendek (Stunted)" : "Normal",
+                  riskFlag: isStuntedPreview ? "MODERATE_RISK" : "NORMAL",
+                  examStatus: status,
+                }
+              : c
+          )
+        );
+      }
       setLoading(false);
       setSubmitted(true);
       setTimeout(() => setSubmitted(false), 3000);
@@ -139,11 +161,11 @@ export default function CatatPemeriksaanPage() {
                 Pilih Balita yang Ditimbang *
               </label>
               <select
-                value={selectedChildId}
+                value={effectiveId}
                 onChange={(e) => setSelectedChildId(e.target.value)}
                 className="w-full h-11 px-3.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none cursor-pointer"
               >
-                {mockChildren.map((c) => (
+                {children.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name} ({c.gender === "L" ? "Laki-laki" : "Perempuan"}, {c.ageMonths} Bulan) - Ibu: {c.parentName}
                   </option>

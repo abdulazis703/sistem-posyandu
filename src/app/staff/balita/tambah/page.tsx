@@ -3,10 +3,24 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { mockParents } from "@/lib/mockData";
+import useChildrenData from "@/app/hooks/useChildrenData";
+import { mockParents, Child } from "@/lib/mockData";
+
+function generateChildId(): string {
+  return `child-${Date.now()}`;
+}
+
+function generateDefaultNik(): string {
+  return `3201${Date.now().toString().slice(-11)}`;
+}
+
+function getTodayIsoDate(): string {
+  return new Date().toISOString().split("T")[0];
+}
 
 export default function TambahBalitaPage() {
   const router = useRouter();
+  const { setChildren } = useChildrenData();
   const [childName, setChildName] = useState("");
   const [nik, setNik] = useState("");
   const [birthDate, setBirthDate] = useState("2023-04-12");
@@ -27,13 +41,39 @@ export default function TambahBalitaPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
+    const newChild: Child = {
+      id: generateChildId(),
+      name: childName.trim() || "Balita Baru",
+      nik: nik.trim() || generateDefaultNik(),
+      gender,
+      birthDate,
+      ageMonths: 12,
+      parentName: selectedParent.name,
+      parentId: selectedParent.id,
+      posyandu,
+      posyanduId: "posyandu-4",
+      lastExamDate: getTodayIsoDate(),
+      weight: parseFloat(birthWeight) || 3.2,
+      height: parseFloat(birthHeight) || 49.5,
+      zScoreTbU: 0.1,
+      zScoreBbU: 0.1,
+      zScoreBbTb: 0.2,
+      stuntingStatus: "Normal",
+      wastingStatus: "Gizi Baik (Normal)",
+      riskFlag: "NORMAL",
+      isPrematur,
+    };
+
+    setChildren((prev) => [newChild, ...prev]);
+
     setTimeout(() => {
       setLoading(false);
       setSuccess(true);
       setTimeout(() => {
         router.push("/staff/balita");
-      }, 1200);
-    }, 800);
+      }, 1000);
+    }, 600);
   };
 
   return (

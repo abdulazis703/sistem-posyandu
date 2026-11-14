@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { mockChildren, mockParents } from "@/lib/mockData";
+import useChildrenData from '@/app/hooks/useChildrenData';
 import { StuntingBadge } from "@/components/ui/badge";
 
 export default function StaffDashboardPage() {
@@ -15,7 +15,25 @@ export default function StaffDashboardPage() {
     { name: "Zahra Fitria", parent: "Hana S.", age: "31 Bulan", rt: "RT 03", phone: "081234567894" },
   ];
 
-  const atRiskChildren = mockChildren.filter((c) => c.riskFlag !== "NORMAL");
+  const { children, hasCustomData, resetChildren } = useChildrenData();
+
+  const totalBalita = children.length;
+  const examinedCount = children.filter((c) => c.weight > 0 || c.lastExamDate).length;
+  const coveragePercent = totalBalita > 0 ? ((examinedCount / totalBalita) * 100).toFixed(1) : "0";
+
+  const normalCount = children.filter((c) => c.stuntingStatus === "Normal").length;
+  const monitoringCount = children.filter((c) => c.riskFlag === "NOTICE" || c.stuntingStatus === "Tinggi").length;
+  const stuntedCount = children.filter((c) => c.stuntingStatus.includes("Pendek") && !c.stuntingStatus.includes("Sangat")).length;
+  const severelyStuntedCount = children.filter((c) => c.stuntingStatus.includes("Sangat Pendek")).length;
+
+  const normalPercent = totalBalita > 0 ? ((normalCount / totalBalita) * 100).toFixed(1) : "0";
+  const monitoringPercent = totalBalita > 0 ? ((monitoringCount / totalBalita) * 100).toFixed(1) : "0";
+  const stuntedPercent = totalBalita > 0 ? ((stuntedCount / totalBalita) * 100).toFixed(1) : "0";
+  const severelyStuntedPercent = totalBalita > 0 ? ((severelyStuntedCount / totalBalita) * 100).toFixed(1) : "0";
+
+  const atRiskChildren = children.filter(
+    (c) => c.riskFlag !== "NORMAL" || c.stuntingStatus.includes("Pendek") || c.wastingStatus.includes("Kurang") || c.wastingStatus.includes("Buruk")
+  );
 
   return (
     <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-6 sm:gap-8">
@@ -39,6 +57,20 @@ export default function StaffDashboardPage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
+          {hasCustomData && (
+            <button
+              onClick={() => {
+                if (confirm("Reset seluruh data balita ke data awal default?")) {
+                  resetChildren();
+                }
+              }}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-700 transition-all text-xs font-semibold shadow-xs border border-slate-200 cursor-pointer"
+              title="Reset data ke default"
+            >
+              <span className="material-symbols-outlined text-[16px]">restart_alt</span>
+              <span>Reset Data</span>
+            </button>
+          )}
           <div className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200/70 shadow-xs text-xs font-semibold">
             <span className="material-symbols-outlined text-[18px] text-emerald-600">location_on</span>
             <span>Posyandu Melati 1 s/d 4</span>
@@ -75,12 +107,12 @@ export default function StaffDashboardPage() {
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex items-baseline gap-2">
-              <span className="font-heading text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">348</span>
+              <span className="font-heading text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">{totalBalita}</span>
               <span className="text-xs text-slate-500 font-medium">Jiwa</span>
             </div>
             <div className="inline-flex items-center gap-1.5 self-start px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-medium">
               <span className="material-symbols-outlined text-[14px]">trending_up</span>
-              <span>+12 anak baru bulan ini</span>
+              <span>{hasCustomData ? "Sinkron Data Impor Terkini" : "+12 anak baru bulan ini"}</span>
             </div>
           </div>
         </div>
@@ -99,17 +131,17 @@ export default function StaffDashboardPage() {
           <div className="flex flex-col gap-2.5">
             <div className="flex items-baseline justify-between">
               <div className="flex items-baseline gap-1.5">
-                <span className="font-heading text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">286</span>
-                <span className="text-sm text-slate-500 font-medium">/ 348</span>
+                <span className="font-heading text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">{examinedCount}</span>
+                <span className="text-sm text-slate-500 font-medium">/ {totalBalita}</span>
               </div>
-              <span className="text-xs font-bold text-emerald-700">82.2%</span>
+              <span className="text-xs font-bold text-emerald-700">{coveragePercent}%</span>
             </div>
             <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
-              <div className="h-full rounded-full bg-emerald-600 transition-all" style={{ width: "82.2%" }}></div>
+              <div className="h-full rounded-full bg-emerald-600 transition-all" style={{ width: `${coveragePercent}%` }}></div>
             </div>
             <div className="inline-flex items-center gap-1.5 self-start px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-medium border border-emerald-200/60">
               <span className="material-symbols-outlined text-[14px]">schedule</span>
-              <span>Target 90% tercapai dlm 6 hari</span>
+              <span>Cakupan tercatat sistem</span>
             </div>
           </div>
         </div>
@@ -127,12 +159,12 @@ export default function StaffDashboardPage() {
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex items-baseline gap-2">
-              <span className="font-heading text-3xl lg:text-4xl font-extrabold text-rose-700 tracking-tight">3</span>
+              <span className="font-heading text-3xl lg:text-4xl font-extrabold text-rose-700 tracking-tight">{atRiskChildren.length}</span>
               <span className="text-xs text-slate-500 font-medium">Balita</span>
             </div>
             <div className="inline-flex items-center gap-1.5 self-start px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 text-xs font-medium border border-rose-200/70">
               <span className="material-symbols-outlined text-[14px]">priority_high</span>
-              <span>2 Sangat Pendek, 1 Gizi Kurang</span>
+              <span>{severelyStuntedCount} Sangat Pendek, {stuntedCount} Pendek</span>
             </div>
           </div>
         </div>
@@ -178,12 +210,16 @@ export default function StaffDashboardPage() {
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-medium text-slate-600">Wilayah:</span>
-                <select className="text-xs bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-slate-800 focus:ring-2 focus:ring-emerald-500">
-                  <option>Semua Posyandu Melati</option>
-                  <option>Posyandu Melati 01</option>
-                  <option>Posyandu Melati 02</option>
-                  <option>Posyandu Melati 03</option>
-                  <option>Posyandu Melati 04</option>
+                <select
+                  value={selectedFilter}
+                  onChange={(e) => setSelectedFilter(e.target.value)}
+                  className="text-xs bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-slate-800 focus:ring-2 focus:ring-emerald-500 cursor-pointer"
+                >
+                  <option value="all">Semua Posyandu Melati</option>
+                  <option value="melati-1">Posyandu Melati 01</option>
+                  <option value="melati-2">Posyandu Melati 02</option>
+                  <option value="melati-3">Posyandu Melati 03</option>
+                  <option value="melati-4">Posyandu Melati 04</option>
                 </select>
               </div>
             </div>
@@ -191,10 +227,10 @@ export default function StaffDashboardPage() {
             {/* Distribution Bar visual */}
             <div className="my-6">
               <div className="flex h-5 w-full rounded-full overflow-hidden shadow-xs gap-0.5 bg-slate-100">
-                <div style={{ width: "78%" }} className="bg-emerald-600" title="Normal (78%)"></div>
-                <div style={{ width: "12%" }} className="bg-amber-500" title="Perlu Dipantau (12%)"></div>
-                <div style={{ width: "7%" }} className="bg-rose-500" title="Pendek/Stunted (7%)"></div>
-                <div style={{ width: "3%" }} className="bg-rose-800" title="Sangat Pendek (3%)"></div>
+                <div style={{ width: `${normalPercent}%` }} className="bg-emerald-600 transition-all" title={`Normal (${normalPercent}%)`}></div>
+                <div style={{ width: `${monitoringPercent}%` }} className="bg-amber-500 transition-all" title={`Perlu Dipantau (${monitoringPercent}%)`}></div>
+                <div style={{ width: `${stuntedPercent}%` }} className="bg-rose-500 transition-all" title={`Pendek/Stunted (${stuntedPercent}%)`}></div>
+                <div style={{ width: `${severelyStuntedPercent}%` }} className="bg-rose-800 transition-all" title={`Sangat Pendek (${severelyStuntedPercent}%)`}></div>
               </div>
 
               {/* Legend & Count */}
@@ -205,9 +241,9 @@ export default function StaffDashboardPage() {
                     <span className="text-xs font-semibold text-slate-800">Normal</span>
                   </div>
                   <p className="font-heading text-xl font-bold text-emerald-700 mt-2">
-                    223 <span className="text-xs font-normal text-slate-500">anak</span>
+                    {normalCount} <span className="text-xs font-normal text-slate-500">anak</span>
                   </p>
-                  <span className="text-xs text-slate-500">78.0% dari sasaran</span>
+                  <span className="text-xs text-slate-500">{normalPercent}% dari sasaran</span>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70">
@@ -216,9 +252,9 @@ export default function StaffDashboardPage() {
                     <span className="text-xs font-semibold text-slate-800">Perlu Dipantau</span>
                   </div>
                   <p className="font-heading text-xl font-bold text-amber-700 mt-2">
-                    34 <span className="text-xs font-normal text-slate-500">anak</span>
+                    {monitoringCount} <span className="text-xs font-normal text-slate-500">anak</span>
                   </p>
-                  <span className="text-xs text-slate-500">12.0% garis mendatar</span>
+                  <span className="text-xs text-slate-500">{monitoringPercent}% garis mendatar</span>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70">
@@ -227,9 +263,9 @@ export default function StaffDashboardPage() {
                     <span className="text-xs font-semibold text-slate-800">Pendek (Stunted)</span>
                   </div>
                   <p className="font-heading text-xl font-bold text-rose-700 mt-2">
-                    20 <span className="text-xs font-normal text-slate-500">anak</span>
+                    {stuntedCount} <span className="text-xs font-normal text-slate-500">anak</span>
                   </p>
-                  <span className="text-xs text-slate-500">Z-Score -2 s/d -3 SD</span>
+                  <span className="text-xs text-slate-500">{stuntedPercent}% Z-Score &lt; -2 SD</span>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70">
@@ -238,9 +274,9 @@ export default function StaffDashboardPage() {
                     <span className="text-xs font-semibold text-slate-800">Sangat Pendek</span>
                   </div>
                   <p className="font-heading text-xl font-bold text-rose-900 mt-2">
-                    9 <span className="text-xs font-normal text-slate-500">anak</span>
+                    {severelyStuntedCount} <span className="text-xs font-normal text-slate-500">anak</span>
                   </p>
-                  <span className="text-xs text-slate-500">Z-Score &lt; -3 SD</span>
+                  <span className="text-xs text-slate-500">{severelyStuntedPercent}% Z-Score &lt; -3 SD</span>
                 </div>
               </div>
             </div>

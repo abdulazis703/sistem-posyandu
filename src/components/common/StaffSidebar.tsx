@@ -2,7 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { signOut } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
 
 const staffNavItems = [
@@ -19,6 +20,17 @@ const staffNavItems = [
 
 export function StaffSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+    } catch (e) {
+      console.warn("Staff logout error:", e);
+    } finally {
+      router.push("/login");
+    }
+  };
 
   return (
     <aside className="hidden lg:flex fixed left-0 top-0 h-screen w-[260px] bg-white z-50 flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)] border-r border-[#e2ebe5]">
@@ -86,15 +98,15 @@ export function StaffSidebar() {
             <span className="text-[11px] text-[#6f7a6e] truncate">Petugas Pembina</span>
           </div>
         </div>
-        <Link
-          href="/login"
-          className="p-1.5 text-[#6f7a6e] hover:text-[#ba1a1a] transition-colors rounded-lg"
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="p-1.5 text-[#6f7a6e] hover:text-[#ba1a1a] transition-colors rounded-lg cursor-pointer"
           title="Keluar"
         >
           <span className="material-symbols-outlined text-[20px]">logout</span>
-        </Link>
+        </button>
       </div>
     </aside>
   );
 }
-

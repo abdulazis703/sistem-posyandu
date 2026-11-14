@@ -2,13 +2,19 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { mockChildren } from "@/lib/mockData";
+import useChildrenData from "@/app/hooks/useChildrenData";
 import { StuntingBadge } from "@/components/ui/badge";
 
 export default function MonitoringTindakLanjutPage() {
+  const { children } = useChildrenData();
   const [activeTab, setActiveTab] = useState<"urgent" | "pmt" | "rujukan">("urgent");
 
-  const atRiskChildren = mockChildren.filter((c) => c.riskFlag !== "NORMAL");
+  const atRiskChildren = children.filter(
+    (c) => c.riskFlag !== "NORMAL" || c.stuntingStatus.includes("Pendek") || c.wastingStatus.includes("Kurang") || c.wastingStatus.includes("Buruk")
+  );
+
+  const pmtCount = Math.max(1, atRiskChildren.filter((c) => c.wastingStatus.includes("Kurang") || c.stuntingStatus.includes("Pendek")).length);
+  const rujukanCount = atRiskChildren.filter((c) => c.riskFlag === "HIGH_RISK" || c.riskFlag === "CRITICAL" || c.stuntingStatus.includes("Sangat")).length;
 
   return (
     <div className="max-w-[1240px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-6 sm:gap-8">
@@ -53,8 +59,8 @@ export default function MonitoringTindakLanjutPage() {
         <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex items-center justify-between">
           <div>
             <span className="text-xs text-slate-500 font-semibold">Dalam Program PMT</span>
-            <p className="font-heading text-3xl lg:text-4xl font-extrabold text-emerald-700 mt-1">12</p>
-            <span className="text-xs text-emerald-800 font-medium">Telur & Biskuit Balita</span>
+            <p className="font-heading text-3xl lg:text-4xl font-extrabold text-emerald-700 mt-1">{pmtCount}</p>
+            <span className="text-xs text-emerald-800 font-medium">Intervensi Gizi & Biskuit</span>
           </div>
           <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-100">
             <span className="material-symbols-outlined text-[24px]">restaurant</span>
@@ -64,7 +70,7 @@ export default function MonitoringTindakLanjutPage() {
         <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex items-center justify-between">
           <div>
             <span className="text-xs text-slate-500 font-semibold">Dirujuk ke Puskesmas</span>
-            <p className="font-heading text-3xl lg:text-4xl font-extrabold text-slate-900 mt-1">4</p>
+            <p className="font-heading text-3xl lg:text-4xl font-extrabold text-slate-900 mt-1">{rujukanCount}</p>
             <span className="text-xs text-slate-500 font-medium">Konsultasi Dokter Anak</span>
           </div>
           <div className="w-12 h-12 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center border border-slate-200/80">
