@@ -1,13 +1,23 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import useChildrenData from "@/app/hooks/useChildrenData";
 import { mockParents, Parent } from "@/lib/mockData";
 
 export default function AkunOrangTuaPage() {
+  const searchParams = useSearchParams();
+  const urlSearch = searchParams.get("search") || "";
   const { children } = useChildrenData();
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(urlSearch);
+
+  useEffect(() => {
+    const q = searchParams.get("search");
+    if (q !== null) {
+      setSearch(q);
+    }
+  }, [searchParams]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newParentName, setNewParentName] = useState("");
   const [newPhone, setNewPhone] = useState("");

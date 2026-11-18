@@ -1,12 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "@/lib/supabase";
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect");
+  const reason = searchParams.get("reason");
+
   const [role, setRole] = useState<"parent" | "staff">("parent");
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
@@ -29,7 +33,9 @@ export default function LoginPage() {
       const result = await signIn(loginEmail, password);
       const userRole = result.role;
 
-      if (userRole === "parent") {
+      if (redirectUrl) {
+        router.push(redirectUrl);
+      } else if (userRole === "parent") {
         router.push("/parent/dashboard");
       } else {
         router.push("/staff/dashboard");
@@ -45,7 +51,9 @@ export default function LoginPage() {
 
       if ((isDemoParent || isDemoStaff) && (password === "Password123!" || password === "password123")) {
         // Fallback demo redirect
-        if (role === "parent") {
+        if (redirectUrl) {
+          router.push(redirectUrl);
+        } else if (role === "parent") {
           router.push("/parent/dashboard");
         } else {
           router.push("/staff/dashboard");
@@ -55,13 +63,13 @@ export default function LoginPage() {
 
       if (errMsg.toLowerCase().includes("failed to fetch")) {
         setErrorMessage(
-          "Gagal terhubung ke server Supabase (Failed to fetch). Pastikan file .env.local sudah dibuat dengan URL Supabase yang benar, atau gunakan password 'Password123!' untuk masuk dalam mode demo."
+          "Gagal terhubung ke server. Pastikan koneksi internet stabil atau coba beberapa saat lagi."
         );
       } else {
         setErrorMessage(
-          err?.message === "Invalid login credentials"
+          errMsg === "Invalid login credentials"
             ? "Email atau kata sandi tidak sesuai. Silakan periksa kembali."
-            : err?.message || "Gagal masuk ke akun. Pastikan koneksi internet stabil."
+            : errMsg || "Gagal masuk ke akun. Pastikan koneksi internet stabil."
         );
       }
     } finally {
@@ -186,16 +194,30 @@ export default function LoginPage() {
                 </p>
               </div>
 
+              {/* Notice jika diarahkan untuk login dulu */}
+              {(reason === "jadwal" || redirectUrl?.includes("pengumuman")) && (
+                <div className="mb-5 p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-950 rounded-xl text-xs flex items-center gap-2.5 shadow-xs">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
+                    <span className="material-symbols-outlined text-[18px]">lock</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="font-bold text-emerald-950">Akses Jadwal & Informasi Posyandu</span>
+                    <span className="text-[11px] text-emerald-800 leading-relaxed">
+                      Silakan masuk ke akun Anda terlebih dahulu untuk membaca rincian jadwal kegiatan dan pengumuman lengkap.
+                    </span>
+                  </div>
+                </div>
+              )}
+
               {/* Role Switcher Tab */}
               <div className="flex p-1 bg-[#f8f9ff] rounded-xl border border-[#e2ebe5] mb-6">
                 <button
                   type="button"
                   onClick={() => setRole("parent")}
-                  className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
-                    role === "parent"
+                  className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 ${role === "parent"
                       ? "bg-[#15803d] text-white shadow-sm"
                       : "text-[#6f7a6e] hover:text-[#0b1c30]"
-                  }`}
+                    }`}
                 >
                   <span className="material-symbols-outlined text-[16px]">family_restroom</span>
                   <span>Orang Tua / Wali</span>
@@ -203,11 +225,10 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setRole("staff")}
-                  className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
-                    role === "staff"
+                  className={`flex-1 py-2 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 ${role === "staff"
                       ? "bg-[#15803d] text-white shadow-sm"
                       : "text-[#6f7a6e] hover:text-[#0b1c30]"
-                  }`}
+                    }`}
                 >
                   <span className="material-symbols-outlined text-[16px]">badge</span>
                   <span>Petugas / Kader</span>
@@ -301,46 +322,6 @@ export default function LoginPage() {
                 </div>
               </form>
 
-              {/* Quick Demo Pre-fill */}
-              <div className="mt-5 pt-4 border-t border-[#f1f5f9] text-center">
-                <p className="text-[11px] text-[#6f7a6e] mb-2 font-medium">Mode Percobaan Cepat (Demo):</p>
-                <div className="grid grid-cols-3 gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setRole("parent");
-                      setIdentifier("ibu.siti@example.com");
-                      setPassword("Password123!");
-                    }}
-                    className="py-1 px-1.5 text-[10px] bg-[#eff4ff] text-[#00652c] rounded-lg border border-[#becabc]/40 hover:bg-[#dcfce7] font-semibold truncate"
-                  >
-                    Orang Tua
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setRole("staff");
-                      setIdentifier("kader.budi@example.com");
-                      setPassword("Password123!");
-                    }}
-                    className="py-1 px-1.5 text-[10px] bg-[#eff4ff] text-[#00652c] rounded-lg border border-[#becabc]/40 hover:bg-[#dcfce7] font-semibold truncate"
-                  >
-                    Kader
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setRole("staff");
-                      setIdentifier("admin@posyandu.id");
-                      setPassword("Password123!");
-                    }}
-                    className="py-1 px-1.5 text-[10px] bg-[#eff4ff] text-[#00652c] rounded-lg border border-[#becabc]/40 hover:bg-[#dcfce7] font-semibold truncate"
-                  >
-                    Admin
-                  </button>
-                </div>
-              </div>
-
               {/* Registration Link */}
               <div className="mt-5 text-center">
                 <p className="text-xs text-[#3f493f]">
@@ -360,6 +341,14 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 text-xs text-slate-500">Memuat halaman login...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 }
 

@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Child } from "@/lib/mockData";
 import { StuntingBadge } from "@/components/ui/badge";
 import useChildrenData from "@/app/hooks/useChildrenData";
 import { importChildrenBulk } from "@/lib/supabase/dataService";
+import { calculateDetailedAge } from "@/lib/ageHelper";
 
 interface SheetJSWorksheet {
   [cell: string]: unknown;
@@ -22,10 +24,19 @@ interface SheetJSStatic {
 }
 
 export default function DataBalitaPage() {
+  const searchParams = useSearchParams();
+  const urlSearch = searchParams.get("search") || "";
   const { children, setChildren, resetChildren, hasCustomData } = useChildrenData();
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(urlSearch);
   const [selectedPosyandu, setSelectedPosyandu] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
+
+  useEffect(() => {
+    const q = searchParams.get("search");
+    if (q !== null) {
+      setSearch(q);
+    }
+  }, [searchParams]);
 
   const handleResetData = () => {
     if (confirm("Kembalikan data ke daftar awal default? Data yang diimpor akan dihapus dan disinkronkan ke seluruh sistem.")) {
@@ -356,7 +367,7 @@ export default function DataBalitaPage() {
 
       // Masukkan seluruh anak hasil import ke urutan paling atas tabel & simpan persisten
       const result = await importChildrenBulk(newChildren);
-      await reload();
+      setChildren((prev) => [...newChildren, ...prev]);
 
       setImportStatus({
         type: "success",
@@ -434,13 +445,6 @@ export default function DataBalitaPage() {
               <span>Reset Data</span>
             </button>
           )}
-          <button
-            onClick={() => setIsImportOpen(true)}
-            className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-emerald-50 text-emerald-800 hover:bg-emerald-100 text-xs font-semibold transition-all border border-emerald-200/80 shadow-xs cursor-pointer"
-          >
-            <span className="material-symbols-outlined text-[18px] text-emerald-700">upload_file</span>
-            <span>Import Excel / CSV</span>
-          </button>
           <button
             onClick={() => alert("Mengekspor data seluruh balita ke Excel/CSV...")}
             className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-white text-slate-700 hover:text-emerald-700 text-xs font-semibold hover:bg-slate-50 transition-all border border-slate-200/90 shadow-xs cursor-pointer"
@@ -604,12 +608,28 @@ export default function DataBalitaPage() {
                       {child.gender === "L" ? "Laki-laki" : "Perempuan"}
                     </span>
                   </td>
-                  <td className="py-3.5 px-4 font-semibold text-slate-900">
-                    {child.ageMonths} Bulan
+                  <td className="py-3.5 px-4 text-slate-900">
+                    {(() => {
+                      const ageDetail = calculateDetailedAge(child.birthDate);
+                      return (
+                        <div>
+                          <p className="font-bold text-slate-900 text-xs sm:text-sm">
+                            {ageDetail.textBadge}
+                          </p>
+                          <span className="text-[11px] text-emerald-800 font-medium block">
+                            {ageDetail.textLong}
+                          </span>
+                        </div>
+                      );
+                    })()}
                   </td>
                   <td className="py-3.5 px-4 text-slate-700">
-                    <p className="font-medium text-slate-800">{child.parentName}</p>
-                    <span className="text-xs text-emerald-700 font-medium">Terhubung Otomatis</span>
+                    <p className="font-medium text-slate-800">{child.motherName || child.parentName}</p>
+                    {child.fatherName ? (
+                      <span className="text-[11px] text-slate-500 block">Ayah: {child.fatherName}</span>
+                    ) : (
+                      <span className="text-[11px] text-emerald-700 font-medium block">Terhubung e-PPGBM</span>
+                    )}
                   </td>
                   <td className="py-3.5 px-4 text-slate-700">
                     {child.posyandu}

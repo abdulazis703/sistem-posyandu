@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, Suspense } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { mockAnnouncements } from "@/lib/mockData";
@@ -22,6 +22,13 @@ function PengumumanJadwalContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const tabParam = searchParams.get("tab");
+
+  useEffect(() => {
+    // Wajib login terlebih dahulu untuk mengakses rincian jadwal
+    const targetUrl = tabParam ? `/parent/pengumuman?tab=${tabParam}` : `/parent/pengumuman`;
+    router.replace(`/login?redirect=${encodeURIComponent(targetUrl)}&reason=jadwal`);
+  }, [router, tabParam]);
+
   const [selectedFilter, setSelectedFilter] = useState<FilterTabKey | null>(null);
   const activeFilter = selectedFilter ?? getFilterFromParam(tabParam);
 
@@ -95,11 +102,10 @@ function PengumumanJadwalContent() {
                 <button
                   key={tab.key}
                   onClick={() => handleTabChange(tab.key)}
-                  className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-                    activeFilter === tab.key
+                  className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${activeFilter === tab.key
                       ? "bg-emerald-600 text-white shadow-xs"
                       : "bg-white text-slate-700 border border-slate-200/90 hover:bg-slate-50"
-                  }`}
+                    }`}
                 >
                   <span className="material-symbols-outlined text-[16px]">{tab.icon}</span>
                   <span>{tab.label}</span>

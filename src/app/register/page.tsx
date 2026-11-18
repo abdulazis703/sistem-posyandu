@@ -8,6 +8,7 @@ import { signUpParent } from "@/lib/supabase";
 export default function RegisterPage() {
   const router = useRouter();
   const [fullName, setFullName] = useState("");
+  const [nik, setNik] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [posyandu, setPosyandu] = useState("Posyandu Melati 01 (RW 01)");
@@ -21,6 +22,11 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
+
+    if (!nik || nik.trim().length !== 16 || !/^\d{16}$/.test(nik.trim())) {
+      setErrorMessage("NIK Wajib diisi 16 digit angka sesuai KTP/KK.");
+      return;
+    }
 
     if (password !== confirmPassword) {
       setErrorMessage("Konfirmasi kata sandi tidak cocok.");
@@ -36,6 +42,7 @@ export default function RegisterPage() {
     try {
       await signUpParent({
         fullName,
+        nik: nik.trim(),
         phone,
         email,
         password,
@@ -213,6 +220,22 @@ export default function RegisterPage() {
                       onChange={(e) => setFullName(e.target.value)}
                       placeholder="Contoh: Siti Aminah"
                       className="w-full h-11 px-3.5 bg-white border border-[#cbd5e1] rounded-xl text-xs text-[#0b1c30] focus:outline-none focus:border-[#15803d] focus:ring-2 focus:ring-[#15803d]/20 transition-all"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-[#0b1c30] mb-1.5 flex items-center justify-between">
+                      <span>Nomor Induk Kependudukan (NIK) *</span>
+                      <span className="text-[11px] font-normal text-emerald-700">Wajib 16 Digit KTP/KK</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      maxLength={16}
+                      value={nik}
+                      onChange={(e) => setNik(e.target.value.replace(/\D/g, ""))}
+                      placeholder="Contoh: 3201294829340001 (16 digit)"
+                      className="w-full h-11 px-3.5 bg-white border border-[#cbd5e1] rounded-xl text-xs text-[#0b1c30] tracking-wider font-mono focus:outline-none focus:border-[#15803d] focus:ring-2 focus:ring-[#15803d]/20 transition-all"
                     />
                   </div>
 

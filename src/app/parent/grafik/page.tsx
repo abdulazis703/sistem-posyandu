@@ -5,9 +5,13 @@ import Link from "next/link";
 import useChildrenData from "@/app/hooks/useChildrenData";
 import { mockChildren } from "@/lib/mockData";
 import { StuntingBadge } from "@/components/ui/badge";
+import { ImtGrowthChart } from "@/components/growth/ImtGrowthChart";
+import { calculateImt, assessImt } from "@/lib/imtStandards";
+import { calculateDetailedAge } from "@/lib/ageHelper";
 
 export default function GrafikPertumbuhanParentPage() {
   const [selectedChildIndex, setSelectedChildIndex] = useState(0);
+  const [activeCurveTab, setActiveCurveTab] = useState<"imt" | "bb" | "tb">("imt");
   const { children } = useChildrenData();
 
   const matched = children.filter(
@@ -17,6 +21,13 @@ export default function GrafikPertumbuhanParentPage() {
 
   const activeChild = myChildren[selectedChildIndex] || myChildren[0];
 
+  const childImt = calculateImt(activeChild.weight, activeChild.height);
+  const childImtAssessment = assessImt(
+    childImt,
+    activeChild.ageMonths || 18,
+    activeChild.gender || "L"
+  );
+
   return (
     <div className="w-full max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-6 sm:gap-8">
       {/* Top Utility Bar: Child Switcher & PDF Action */}
@@ -24,7 +35,7 @@ export default function GrafikPertumbuhanParentPage() {
         <div className="flex items-center gap-2 text-xs text-slate-500">
           <Link href="/parent/dashboard" className="hover:text-emerald-700">Dashboard</Link>
           <span>/</span>
-          <span className="text-slate-800 font-semibold">Grafik KMS & Pertumbuhan</span>
+          <span className="text-slate-800 font-semibold">Grafik Pertumbuhan & IMT</span>
         </div>
 
         <div className="flex flex-wrap sm:flex-nowrap items-center gap-3">
@@ -45,7 +56,7 @@ export default function GrafikPertumbuhanParentPage() {
           </div>
 
           <button
-            onClick={() => alert("Mengunduh Buku KIA / KMS Digital format PDF...")}
+            onClick={() => alert("Mengunduh Buku KIA / KMS & Grafik IMT Digital format PDF...")}
             className="px-4 py-2 bg-white border border-slate-200/90 rounded-xl text-xs font-semibold text-slate-700 hover:text-emerald-700 hover:bg-slate-50 shadow-xs transition-all flex items-center gap-2 cursor-pointer"
           >
             <span className="material-symbols-outlined text-[18px] text-slate-500">menu_book</span>
@@ -69,11 +80,16 @@ export default function GrafikPertumbuhanParentPage() {
                 {activeChild.gender === "L" ? "Laki-laki" : "Perempuan"}
               </span>
               <StuntingBadge status={activeChild.stuntingStatus} />
+              <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${childImtAssessment.badgeColorClass}`}>
+                IMT: {childImtAssessment.category}
+              </span>
             </div>
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5 text-xs text-slate-500">
               <span>NIK: <strong className="text-slate-800 font-semibold">{activeChild.nik}</strong></span>
               <span>•</span>
-              <span>Usia: <strong className="text-slate-800 font-semibold">{activeChild.ageMonths} Bulan</strong></span>
+              <span>
+                Umur Presisi: <strong className="text-emerald-800 font-bold">{calculateDetailedAge(activeChild.birthDate).textLong}</strong> ({activeChild.ageMonths} Bulan)
+              </span>
               <span>•</span>
               <span>Lahir: <strong className="text-slate-800 font-semibold">{activeChild.birthDate}</strong></span>
               <span>•</span>
@@ -91,9 +107,10 @@ export default function GrafikPertumbuhanParentPage() {
         </div>
       </div>
 
-      {/* 4 Biometric Metric Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-        <div className="p-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
+      {/* 5 Biometric Metric Cards (Including IMT) */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        {/* Card 1: BB */}
+        <div className="p-4 sm:p-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
           <span className="text-xs text-slate-500 block font-medium">Berat Badan</span>
           <p className="font-heading text-2xl lg:text-3xl font-extrabold text-slate-900 mt-1">
             {activeChild.weight} <span className="text-xs font-normal text-slate-500">kg</span>
@@ -103,7 +120,8 @@ export default function GrafikPertumbuhanParentPage() {
           </span>
         </div>
 
-        <div className="p-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
+        {/* Card 2: TB */}
+        <div className="p-4 sm:p-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
           <span className="text-xs text-slate-500 block font-medium">Panjang / Tinggi</span>
           <p className="font-heading text-2xl lg:text-3xl font-extrabold text-slate-900 mt-1">
             {activeChild.height} <span className="text-xs font-normal text-slate-500">cm</span>
@@ -113,7 +131,22 @@ export default function GrafikPertumbuhanParentPage() {
           </span>
         </div>
 
-        <div className="p-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
+        {/* Card 3: IMT (Baru & Disorot) */}
+        <div className="p-4 sm:p-5 bg-emerald-50/60 rounded-2xl border border-emerald-200/80 shadow-xs">
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-emerald-900 block font-bold">Indeks Massa Tubuh</span>
+            <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
+          </div>
+          <p className="font-heading text-2xl lg:text-3xl font-extrabold text-emerald-900 mt-1">
+            {childImt} <span className="text-xs font-normal text-emerald-700">kg/m²</span>
+          </p>
+          <span className="text-xs text-emerald-800 font-bold mt-1 block">
+            {childImtAssessment.category}
+          </span>
+        </div>
+
+        {/* Card 4: LK */}
+        <div className="p-4 sm:p-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
           <span className="text-xs text-slate-500 block font-medium">Lingkar Kepala</span>
           <p className="font-heading text-2xl lg:text-3xl font-extrabold text-slate-900 mt-1">
             {activeChild.headCircumference || 46.5} <span className="text-xs font-normal text-slate-500">cm</span>
@@ -123,7 +156,8 @@ export default function GrafikPertumbuhanParentPage() {
           </span>
         </div>
 
-        <div className="p-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
+        {/* Card 5: LiLA */}
+        <div className="p-4 sm:p-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs col-span-2 sm:col-span-1">
           <span className="text-xs text-slate-500 block font-medium">Lingkar Lengan (LiLA)</span>
           <p className="font-heading text-2xl lg:text-3xl font-extrabold text-slate-900 mt-1">
             {activeChild.lila || 14.5} <span className="text-xs font-normal text-slate-500">cm</span>
@@ -134,99 +168,187 @@ export default function GrafikPertumbuhanParentPage() {
         </div>
       </div>
 
-      {/* Main Growth Curve KMS Chart Container */}
-      <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/80 shadow-xs space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
-          <div>
-            <h3 className="font-heading text-base font-bold text-slate-900">
-              Kurva Pertumbuhan KMS Digital (Standar WHO / Kemenkes RI)
-            </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Pita hijau menunjukkan lintasan pertumbuhan ideal anak usia 0 - 24 bulan.
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 text-xs text-emerald-800 font-medium bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200/60">
-              <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
-              Status: Normal / Sesuai Rujukan
-            </span>
-          </div>
-        </div>
+      {/* Curve Navigation Selector Tabs */}
+      <div className="flex border-b border-slate-200 gap-2 sm:gap-4 overflow-x-auto pb-0.5">
+        <button
+          onClick={() => setActiveCurveTab("imt")}
+          className={`pb-3 px-1 text-xs sm:text-sm font-bold transition-all border-b-2 flex items-center gap-2 whitespace-nowrap cursor-pointer ${
+            activeCurveTab === "imt"
+              ? "border-emerald-600 text-emerald-800"
+              : "border-transparent text-slate-500 hover:text-slate-800"
+          }`}
+        >
+          <span className="material-symbols-outlined text-[18px]">query_stats</span>
+          <span>Grafik Indeks Massa Tubuh (IMT/U)</span>
+          <span className="px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
+            Interaktif
+          </span>
+        </button>
 
-        {/* KMS SVG Graphic */}
-        <div className="bg-slate-50/70 rounded-2xl p-4 sm:p-6 border border-slate-200/70">
-          <svg viewBox="0 0 680 230" className="w-full h-64 overflow-visible" fill="none">
-            <line x1="40" y1="30" x2="660" y2="30" stroke="#E2E8F0" strokeDasharray="3 3" />
-            <line x1="40" y1="80" x2="660" y2="80" stroke="#E2E8F0" strokeDasharray="3 3" />
-            <line x1="40" y1="130" x2="660" y2="130" stroke="#E2E8F0" strokeDasharray="3 3" />
-            <line x1="40" y1="180" x2="660" y2="180" stroke="#CBD5E1" />
+        <button
+          onClick={() => setActiveCurveTab("bb")}
+          className={`pb-3 px-1 text-xs sm:text-sm font-bold transition-all border-b-2 flex items-center gap-2 whitespace-nowrap cursor-pointer ${
+            activeCurveTab === "bb"
+              ? "border-emerald-600 text-emerald-800"
+              : "border-transparent text-slate-500 hover:text-slate-800"
+          }`}
+        >
+          <span className="material-symbols-outlined text-[18px]">monitor_weight</span>
+          <span>Kurva Berat Badan (BB/U KMS)</span>
+        </button>
 
-            {/* KMS WHO Standard Growth Bands */}
-            <path d="M40,210 Q220,185 360,170 T660,140 L660,165 T360,195 Q220,205 40,225 Z" fill="#FEE2E2" opacity="0.7" />
-            <path d="M40,195 Q220,170 360,150 T660,115 L660,140 T360,170 Q220,185 40,210 Z" fill="#FEF3C7" opacity="0.8" />
-            <path d="M40,160 Q220,120 360,90 T660,40 L660,115 T360,150 Q220,170 40,195 Z" fill="#D1FAE5" opacity="0.85" />
-
-            {/* Trajectory Plot Line */}
-            <path
-              d="M40,215 Q140,195 240,170 T440,125 T640,75"
-              stroke="#059669"
-              strokeWidth="3.5"
-              strokeLinecap="round"
-              fill="none"
-            />
-
-            {/* Data Points */}
-            {[
-              { cx: 40, cy: 215, val: "3.2 kg" },
-              { cx: 140, cy: 195, val: "5.1 kg" },
-              { cx: 240, cy: 170, val: "7.0 kg" },
-              { cx: 340, cy: 145, val: "8.4 kg" },
-              { cx: 440, cy: 125, val: "9.6 kg" },
-              { cx: 540, cy: 100, val: "10.8 kg" },
-            ].map((p, i) => (
-              <g key={i}>
-                <circle cx={p.cx} cy={p.cy} r="6" fill="#059669" stroke="#FFFFFF" strokeWidth="2.5" />
-                <text x={p.cx} y={p.cy - 12} textAnchor="middle" fill="#0F172A" fontSize="11" fontWeight="bold">
-                  {p.val}
-                </text>
-              </g>
-            ))}
-
-            {/* Labels */}
-            <text x="40" y="228" fill="#64748B" fontSize="10">0 Bln</text>
-            <text x="140" y="228" fill="#64748B" fontSize="10">3 Bln</text>
-            <text x="240" y="228" fill="#64748B" fontSize="10">6 Bln</text>
-            <text x="340" y="228" fill="#64748B" fontSize="10">9 Bln</text>
-            <text x="440" y="228" fill="#64748B" fontSize="10">12 Bln</text>
-            <text x="540" y="228" fill="#64748B" fontSize="10">18 Bln</text>
-            <text x="640" y="228" fill="#64748B" fontSize="10">24 Bln</text>
-          </svg>
-        </div>
-
-        {/* Legend */}
-        <div className="flex flex-wrap items-center justify-between gap-4 pt-2 text-xs text-slate-500">
-          <div className="flex flex-wrap items-center gap-4">
-            <span className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-full bg-emerald-200"></span>
-              <span>Gizi Normal / Sesuai Usia</span>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-full bg-amber-200"></span>
-              <span>Garis Pertumbuhan Waspada</span>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-full bg-rose-200"></span>
-              <span>Di Bawah Garis Merah (BGM)</span>
-            </span>
-            <span className="flex items-center gap-1.5 font-semibold text-emerald-800">
-              <span className="w-3 h-1 bg-emerald-600 rounded-full"></span>
-              <span>Plot Pertumbuhan Anak</span>
-            </span>
-          </div>
-
-          <span>Sumber: Buku Kesehatan Ibu dan Anak (KIA) Kemenkes RI</span>
-        </div>
+        <button
+          onClick={() => setActiveCurveTab("tb")}
+          className={`pb-3 px-1 text-xs sm:text-sm font-bold transition-all border-b-2 flex items-center gap-2 whitespace-nowrap cursor-pointer ${
+            activeCurveTab === "tb"
+              ? "border-emerald-600 text-emerald-800"
+              : "border-transparent text-slate-500 hover:text-slate-800"
+          }`}
+        >
+          <span className="material-symbols-outlined text-[18px]">straighten</span>
+          <span>Kurva Tinggi Badan (TB/U Stunting)</span>
+        </button>
       </div>
+
+      {/* Tab Content Display */}
+      {activeCurveTab === "imt" ? (
+        /* Komponen Visualisasi IMT Balita Interaktif */
+        <ImtGrowthChart child={activeChild} role="parent" />
+      ) : activeCurveTab === "bb" ? (
+        /* KMS Berat Badan Tradisional */
+        <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/80 shadow-xs space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+            <div>
+              <h3 className="font-heading text-base font-bold text-slate-900">
+                Kurva Berat Badan menurut Umur (BB/U) — KMS Kemenkes RI
+              </h3>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Pita hijau menunjukkan lintasan penimbangan berat badan anak usia 0 - 24 bulan.
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="inline-flex items-center gap-1.5 text-xs text-emerald-800 font-medium bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200/60">
+                <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
+                Status BB: Normal / Naik Sesuai Garis (N)
+              </span>
+            </div>
+          </div>
+
+          <div className="bg-slate-50/70 rounded-2xl p-4 sm:p-6 border border-slate-200/70 overflow-x-auto">
+            <svg viewBox="0 0 680 230" className="w-full h-64 overflow-visible min-w-[580px]" fill="none">
+              <line x1="40" y1="30" x2="660" y2="30" stroke="#E2E8F0" strokeDasharray="3 3" />
+              <line x1="40" y1="80" x2="660" y2="80" stroke="#E2E8F0" strokeDasharray="3 3" />
+              <line x1="40" y1="130" x2="660" y2="130" stroke="#E2E8F0" strokeDasharray="3 3" />
+              <line x1="40" y1="180" x2="660" y2="180" stroke="#CBD5E1" />
+
+              {/* KMS WHO Standard Growth Bands */}
+              <path d="M40,210 Q220,185 360,170 T660,140 L660,165 T360,195 Q220,205 40,225 Z" fill="#FEE2E2" opacity="0.7" />
+              <path d="M40,195 Q220,170 360,150 T660,115 L660,140 T360,170 Q220,185 40,210 Z" fill="#FEF3C7" opacity="0.8" />
+              <path d="M40,160 Q220,120 360,90 T660,40 L660,115 T360,150 Q220,170 40,195 Z" fill="#D1FAE5" opacity="0.85" />
+
+              {/* Trajectory Plot Line */}
+              <path
+                d="M40,215 Q140,195 240,170 T440,125 T640,75"
+                stroke="#059669"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                fill="none"
+              />
+
+              {[
+                { cx: 40, cy: 215, val: "3.2 kg" },
+                { cx: 140, cy: 195, val: "5.1 kg" },
+                { cx: 240, cy: 170, val: "7.0 kg" },
+                { cx: 340, cy: 145, val: "8.4 kg" },
+                { cx: 440, cy: 125, val: "9.6 kg" },
+                { cx: 540, cy: 100, val: "10.8 kg" },
+              ].map((p, i) => (
+                <g key={i}>
+                  <circle cx={p.cx} cy={p.cy} r="6" fill="#059669" stroke="#FFFFFF" strokeWidth="2.5" />
+                  <text x={p.cx} y={p.cy - 12} textAnchor="middle" fill="#0F172A" fontSize="11" fontWeight="bold">
+                    {p.val}
+                  </text>
+                </g>
+              ))}
+
+              <text x="40" y="228" fill="#64748B" fontSize="10">0 Bln</text>
+              <text x="140" y="228" fill="#64748B" fontSize="10">3 Bln</text>
+              <text x="240" y="228" fill="#64748B" fontSize="10">6 Bln</text>
+              <text x="340" y="228" fill="#64748B" fontSize="10">9 Bln</text>
+              <text x="440" y="228" fill="#64748B" fontSize="10">12 Bln</text>
+              <text x="540" y="228" fill="#64748B" fontSize="10">18 Bln</text>
+              <text x="640" y="228" fill="#64748B" fontSize="10">24 Bln</text>
+            </svg>
+          </div>
+        </div>
+      ) : (
+        /* Kurva Tinggi Badan (TB/U) */
+        <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/80 shadow-xs space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+            <div>
+              <h3 className="font-heading text-base font-bold text-slate-900">
+                Kurva Panjang / Tinggi Badan menurut Umur (TB/U) — Standar WHO
+              </h3>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Area hijau menandakan pita deviasi batas tinggi badan normal (-2 SD s/d +2 SD).
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="inline-flex items-center gap-1.5 text-xs text-emerald-800 font-medium bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200/60">
+                <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
+                Status: {activeChild.stuntingStatus} ({activeChild.height} cm)
+              </span>
+            </div>
+          </div>
+
+          <div className="bg-slate-50/70 rounded-2xl p-4 sm:p-6 border border-slate-200/70 overflow-x-auto">
+            <svg viewBox="0 0 680 230" className="w-full h-64 overflow-visible min-w-[580px]" fill="none">
+              <line x1="40" y1="30" x2="660" y2="30" stroke="#E2E8F0" strokeDasharray="3 3" />
+              <line x1="40" y1="80" x2="660" y2="80" stroke="#E2E8F0" strokeDasharray="3 3" />
+              <line x1="40" y1="130" x2="660" y2="130" stroke="#E2E8F0" strokeDasharray="3 3" />
+              <line x1="40" y1="180" x2="660" y2="180" stroke="#CBD5E1" />
+
+              {/* Band Normal TB/U */}
+              <path d="M40,170 Q220,130 380,85 T660,45 L660,135 Q400,165 220,185 T40,205 Z" fill="#D1FAE5" opacity="0.85" />
+              <path d="M40,170 Q220,130 380,85 T660,45" stroke="#86EFAC" strokeWidth="1.5" strokeDasharray="3 2" />
+              <path d="M40,205 Q220,185 400,165 T660,135" stroke="#86EFAC" strokeWidth="1.5" strokeDasharray="3 2" />
+
+              {/* Plot Anak */}
+              <path
+                d="M40,190 L140,175 L240,155 L340,135 L440,118 L540,98"
+                stroke="#059669"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                fill="none"
+              />
+
+              {[
+                { cx: 40, cy: 190, val: "49 cm" },
+                { cx: 140, cy: 175, val: "61 cm" },
+                { cx: 240, cy: 155, val: "68 cm" },
+                { cx: 340, cy: 135, val: "74 cm" },
+                { cx: 440, cy: 118, val: "78 cm" },
+                { cx: 540, cy: 98, val: `${activeChild.height} cm` },
+              ].map((p, i) => (
+                <g key={i}>
+                  <circle cx={p.cx} cy={p.cy} r="6" fill="#059669" stroke="#FFFFFF" strokeWidth="2.5" />
+                  <text x={p.cx} y={p.cy - 12} textAnchor="middle" fill="#0F172A" fontSize="11" fontWeight="bold">
+                    {p.val}
+                  </text>
+                </g>
+              ))}
+
+              <text x="40" y="228" fill="#64748B" fontSize="10">0 Bln</text>
+              <text x="140" y="228" fill="#64748B" fontSize="10">3 Bln</text>
+              <text x="240" y="228" fill="#64748B" fontSize="10">6 Bln</text>
+              <text x="340" y="228" fill="#64748B" fontSize="10">9 Bln</text>
+              <text x="440" y="228" fill="#64748B" fontSize="10">12 Bln</text>
+              <text x="540" y="228" fill="#64748B" fontSize="10">18 Bln</text>
+              <text x="640" y="228" fill="#64748B" fontSize="10">24 Bln</text>
+            </svg>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

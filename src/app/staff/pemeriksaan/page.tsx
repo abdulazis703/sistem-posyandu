@@ -1,26 +1,35 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import useChildrenData from "@/app/hooks/useChildrenData";
-import { mockChildren } from "@/lib/mockData";
+import { mockChildren, mockExamRecords, ExamRecord } from "@/lib/mockData";
+import { calculateDetailedAge } from "@/lib/ageHelper";
+import { StuntingBadge } from "@/components/ui/badge";
 
 export default function CatatPemeriksaanPage() {
-  const { children, setChildren } = useChildrenData();
-  const [selectedChildId, setSelectedChildId] = useState("");
+  const [selectedChildId, setSelectedChildId] = useState(mockChildren[0].id);
   const [examDate, setExamDate] = useState("2026-10-24");
   const [weight, setWeight] = useState("10.8");
   const [height, setHeight] = useState("82.5");
   const [headCirc, setHeadCirc] = useState("46.5");
   const [lila, setLila] = useState("14.5");
   const [method, setMethod] = useState<"terlentang" | "berdiri">("terlentang");
+  const [companionName, setCompanionName] = useState("Sari Rahmawati");
+  const [companionRelation, setCompanionRelation] = useState("Ibu Kandung");
+  const [companionPhone, setCompanionPhone] = useState("081234567890");
   const [notes, setNotes] = useState("Anak aktif, nafsu makan baik.");
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const effectiveId = selectedChildId || (children[0]?.id ?? mockChildren[0].id);
   const selectedChild =
-    children.find((c) => c.id === effectiveId) || children[0] || mockChildren[0];
+    mockChildren.find((c) => c.id === selectedChildId) || mockChildren[0];
+
+  useEffect(() => {
+    if (selectedChild) {
+      setCompanionName(selectedChild.motherName || selectedChild.parentName || "");
+      setCompanionPhone(selectedChild.motherPhone || "");
+    }
+  }, [selectedChild?.id]);
 
   // Dynamic preview calculation based on input
   const numWeight = parseFloat(weight) || 0;
@@ -30,26 +39,42 @@ export default function CatatPemeriksaanPage() {
   const handleSubmit = (status: "validated" | "draft") => {
     setLoading(true);
     setTimeout(() => {
-      // Update data balita terpilih agar hasil pemeriksaan tersinkron ke dashboard & balita
-      if (numWeight > 0 || numHeight > 0) {
-        setChildren((prev) =>
-          prev.map((c) =>
-            c.id === selectedChild.id
-              ? {
-                  ...c,
-                  weight: numWeight || c.weight,
-                  height: numHeight || c.height,
-                  headCircumference: parseFloat(headCirc) || c.headCircumference,
-                  lila: parseFloat(lila) || c.lila,
-                  lastExamDate: examDate,
-                  stuntingStatus: isStuntedPreview ? "Pendek (Stunted)" : "Normal",
-                  riskFlag: isStuntedPreview ? "MODERATE_RISK" : "NORMAL",
-                  examStatus: status,
-                }
-              : c
-          )
-        );
+      // Catat ke riwayat pemeriksaan balita dengan data pengantar
+      const newRecord: ExamRecord = {
+        id: `exam-${Date.now()}`,
+        childId: selectedChild.id,
+        childName: selectedChild.name,
+        examDate,
+        ageMonths: selectedChild.ageMonths,
+        weight: numWeight || selectedChild.weight,
+        height: numHeight || selectedChild.height,
+        headCircumference: parseFloat(headCirc) || 46,
+        lila: parseFloat(lila) || 14.5,
+        method,
+        recordedBy: "Bidan Sri Wahyuni, A.Md.Keb",
+        companionName: companionName.trim() || selectedChild.parentName,
+        companionRelation: companionRelation,
+        companionPhone: companionPhone.trim(),
+        zScoreTbU: isStuntedPreview ? -2.45 : -0.8,
+        zScoreBbU: 0.15,
+        zScoreBbTb: 0.4,
+        stuntingStatus: isStuntedPreview ? "Pendek (Stunted)" : "Normal",
+        wastingStatus: "Gizi Baik (Normal)",
+        riskFlag: isStuntedPreview ? "MODERATE_RISK" : "NORMAL",
+        notes: notes.trim(),
+        status,
+      };
+
+      mockExamRecords.unshift(newRecord);
+
+      try {
+        if (typeof window !== "undefined") {
+          localStorage.setItem("tumbuhku_exam_records", JSON.stringify(mockExamRecords));
+        }
+      } catch (err) {
+        console.warn("Gagal menyimpan riwayat pemeriksaan:", err);
       }
+
       setLoading(false);
       setSubmitted(true);
       setTimeout(() => setSubmitted(false), 3000);
@@ -161,11 +186,11 @@ export default function CatatPemeriksaanPage() {
                 Pilih Balita yang Ditimbang *
               </label>
               <select
-                value={effectiveId}
+                value={selectedChildId}
                 onChange={(e) => setSelectedChildId(e.target.value)}
                 className="w-full h-11 px-3.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none cursor-pointer"
               >
-                {children.map((c) => (
+                {mockChildren.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name} ({c.gender === "L" ? "Laki-laki" : "Perempuan"}, {c.ageMonths} Bulan) - Ibu: {c.parentName}
                   </option>
@@ -181,9 +206,18 @@ export default function CatatPemeriksaanPage() {
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-slate-900">{selectedChild.name}</h4>
-                  <p className="text-xs text-slate-500">
-                    NIK: {selectedChild.nik} • Lahir: {selectedChild.birthDate} ({selectedChild.ageMonths} Bulan)
-                  </p>
+                  <div className="text-xs text-slate-500 space-y-0.5">
+                    <p>
+                      NIK: <strong className="text-slate-800">{selectedChild.nik}</strong> • Lahir: {selectedChild.birthDate}
+                    </p>
+                    <p>
+                      Umur Otomatis: <strong className="text-emerald-800 font-bold">{calculateDetailedAge(selectedChild.birthDate).textLong}</strong>
+                    </p>
+                    <p className="text-[11px] text-slate-600">
+                      Ibu: <strong>{selectedChild.motherName || selectedChild.parentName}</strong>
+                      {selectedChild.fatherName && <span> • Bapak: <strong>{selectedChild.fatherName}</strong></span>}
+                    </p>
+                  </div>
                 </div>
               </div>
               <span className="text-xs font-semibold text-emerald-800 bg-white px-3 py-1 rounded-full border border-emerald-200/70 shadow-xs">
@@ -213,22 +247,20 @@ export default function CatatPemeriksaanPage() {
                   <button
                     type="button"
                     onClick={() => setMethod("terlentang")}
-                    className={`h-full rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
-                      method === "terlentang"
-                        ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
-                        : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
-                    }`}
+                    className={`h-full rounded-xl text-xs font-semibold border transition-all cursor-pointer ${method === "terlentang"
+                      ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
+                      : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                      }`}
                   >
                     Terlentang (&lt; 24 bln)
                   </button>
                   <button
                     type="button"
                     onClick={() => setMethod("berdiri")}
-                    className={`h-full rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
-                      method === "berdiri"
-                        ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
-                        : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
-                    }`}
+                    className={`h-full rounded-xl text-xs font-semibold border transition-all cursor-pointer ${method === "berdiri"
+                      ? "bg-emerald-600 text-white border-emerald-600 shadow-xs"
+                      : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                      }`}
                   >
                     Berdiri (≥ 24 bln)
                   </button>
@@ -310,6 +342,72 @@ export default function CatatPemeriksaanPage() {
               </div>
             </div>
 
+            {/* Step 5: Identitas Pengantar Balita (Fitur Khusus Sesi Posyandu) */}
+            <div className="p-4 rounded-xl bg-slate-50/90 border border-slate-200/90 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[18px] text-emerald-700">supervisor_account</span>
+                  Pencatatan Identitas Pengantar Balita *
+                </span>
+                <span className="text-[11px] text-emerald-800 font-semibold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                  Tersimpan di Riwayat Kunjungan
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                    Nama Pengantar *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={companionName}
+                    onChange={(e) => setCompanionName(e.target.value)}
+                    placeholder="Contoh: Siti Aminah"
+                    className="w-full h-10 px-3 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                    Hubungan dengan Balita *
+                  </label>
+                  <select
+                    value={companionRelation}
+                    onChange={(e) => setCompanionRelation(e.target.value)}
+                    className="w-full h-10 px-2.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
+                  >
+                    <option value="Ibu Kandung">Ibu Kandung</option>
+                    <option value="Bapak Kandung">Bapak Kandung</option>
+                    <option value="Nenek">Nenek</option>
+                    <option value="Kakek">Kakek</option>
+                    <option value="Bibi">Bibi</option>
+                    <option value="Paman">Paman</option>
+                    <option value="Baby Sitter">Baby Sitter / Pengasuh</option>
+                    <option value="Ibu Asuh">Ibu Asuh</option>
+                    <option value="Ibu Tiri">Ibu Tiri</option>
+                    <option value="Bapak Tiri">Bapak Tiri</option>
+                    <option value="Wali">Wali</option>
+                    <option value="Lainnya">Lainnya</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                    No. WhatsApp Pengantar
+                  </label>
+                  <input
+                    type="tel"
+                    value={companionPhone}
+                    onChange={(e) => setCompanionPhone(e.target.value)}
+                    placeholder="Contoh: 081234567890"
+                    className="w-full h-10 px-3 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                </div>
+              </div>
+            </div>
+
             {/* Notes */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1.5">
@@ -372,6 +470,21 @@ export default function CatatPemeriksaanPage() {
 
             {/* Calculated Z-Scores */}
             <div className="space-y-3">
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between">
+                <div>
+                  <span className="text-xs font-semibold text-slate-900 block">Pengantar Kunjungan Ini</span>
+                  <span className="text-xs text-slate-500">Hubungan Keluarga</span>
+                </div>
+                <div className="text-right">
+                  <span className="text-xs font-bold text-slate-900 block">
+                    {companionName || selectedChild.parentName}
+                  </span>
+                  <span className="text-xs font-semibold text-emerald-800">
+                    {companionRelation}
+                  </span>
+                </div>
+              </div>
+
               <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between">
                 <div>
                   <span className="text-xs font-semibold text-slate-900 block">TB/U (Tinggi Badan/Umur)</span>

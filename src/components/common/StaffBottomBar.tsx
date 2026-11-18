@@ -20,12 +20,6 @@ const moreMenuItems: DrawerItem[] = [
     icon: "group",
   },
   {
-    href: "/staff/ringkasan",
-    label: "Posyandu & Wilayah",
-    desc: "Cakupan RW & pos layanan",
-    icon: "location_city",
-  },
-  {
     href: "/staff/laporan",
     label: "Laporan Rekapitulasi",
     desc: "Ekspor SKDN & data bulanan",

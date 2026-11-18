@@ -83,11 +83,10 @@ export default function MonitoringTindakLanjutPage() {
       <div className="flex border-b border-slate-200 gap-6">
         <button
           onClick={() => setActiveTab("urgent")}
-          className={`pb-3 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer ${
-            activeTab === "urgent"
+          className={`pb-3 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer ${activeTab === "urgent"
               ? "border-rose-600 text-rose-700"
               : "border-transparent text-slate-500 hover:text-slate-800"
-          }`}
+            }`}
         >
           <span className="material-symbols-outlined text-[18px]">warning</span>
           <span>Perlu Konfirmasi Klinis ({atRiskChildren.length})</span>
@@ -95,11 +94,10 @@ export default function MonitoringTindakLanjutPage() {
 
         <button
           onClick={() => setActiveTab("pmt")}
-          className={`pb-3 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer ${
-            activeTab === "pmt"
+          className={`pb-3 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer ${activeTab === "pmt"
               ? "border-emerald-600 text-emerald-700"
               : "border-transparent text-slate-500 hover:text-slate-800"
-          }`}
+            }`}
         >
           <span className="material-symbols-outlined text-[18px]">lunch_dining</span>
           <span>Intervensi PMT Berjalan</span>

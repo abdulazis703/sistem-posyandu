@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { HeaderCalendarWidget } from "./HeaderCalendarWidget";
 import { HeaderNotificationWidget } from "./HeaderNotificationWidget";
+import { HeaderRealtimeSearch } from "./HeaderRealtimeSearch";
 
 interface StaffHeaderProps {
   title?: string;
@@ -12,7 +13,7 @@ interface StaffHeaderProps {
 
 export function StaffHeader({ onSearch }: StaffHeaderProps) {
   return (
-    <header className="fixed top-0 left-0 lg:left-[260px] right-0 h-16 bg-white/90 backdrop-blur-md z-40 flex items-center justify-between px-4 lg:px-8 border-b border-[#e2ebe5] shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+    <header className="fixed top-0 left-0 lg:left-[var(--sidebar-width,260px)] right-0 h-16 bg-white/90 backdrop-blur-md z-40 flex items-center justify-between px-4 lg:px-8 border-b border-[#e2ebe5] shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-[left] duration-300">
       {/* Left: Mobile Branding or Desktop Scope Badge */}
       <div className="flex items-center gap-3">
         {/* Mobile Logo (< lg) */}
@@ -40,20 +41,12 @@ export function StaffHeader({ onSearch }: StaffHeaderProps) {
         </div>
       </div>
 
-      {/* Search Input (Hidden on extra small screens) */}
-      <div className="hidden sm:flex flex-1 max-w-xs md:max-w-md mx-3 lg:mx-6">
-        <div className="relative flex items-center w-full">
-          <span className="material-symbols-outlined absolute left-3 text-[18px] text-[#6f7a6e] pointer-events-none">
-            search
-          </span>
-          <input
-            onChange={(e) => onSearch && onSearch(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 bg-[#f8f9ff] border border-[#e2ebe5] rounded-xl text-xs text-[#0b1c30] placeholder:text-[#6f7a6e] focus:outline-none focus:ring-2 focus:ring-[#15803d]"
-            placeholder="Cari balita, NIK, orang tua..."
-            type="text"
-          />
-        </div>
-      </div>
+      {/* Real-time Interactive Search Bar */}
+      <HeaderRealtimeSearch
+        role="staff"
+        placeholder="Cari balita binaan, NIK, orang tua, jadwal..."
+        onSearch={onSearch}
+      />
 
       {/* Right Actions */}
       <div className="flex items-center gap-2 sm:gap-3 shrink-0 ml-auto">

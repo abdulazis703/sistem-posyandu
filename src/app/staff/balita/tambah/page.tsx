@@ -3,24 +3,11 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import useChildrenData from "@/app/hooks/useChildrenData";
-import { mockParents, Child } from "@/lib/mockData";
-
-function generateChildId(): string {
-  return `child-${Date.now()}`;
-}
-
-function generateDefaultNik(): string {
-  return `3201${Date.now().toString().slice(-11)}`;
-}
-
-function getTodayIsoDate(): string {
-  return new Date().toISOString().split("T")[0];
-}
+import { mockParents } from "@/lib/mockData";
+import { calculateDetailedAge } from "@/lib/ageHelper";
 
 export default function TambahBalitaPage() {
   const router = useRouter();
-  const { setChildren } = useChildrenData();
   const [childName, setChildName] = useState("");
   const [nik, setNik] = useState("");
   const [birthDate, setBirthDate] = useState("2023-04-12");
@@ -30,10 +17,28 @@ export default function TambahBalitaPage() {
   const [birthHeight, setBirthHeight] = useState("49.5");
   const [isPrematur, setIsPrematur] = useState(false);
   const [gestationalWeeks, setGestationalWeeks] = useState(36);
+
+  // Relasi Dua Orang Tua (Ibu dan Bapak)
+  const [motherName, setMotherName] = useState("Sari Rahmawati");
+  const [motherNik, setMotherNik] = useState("3201294829340001");
+  const [motherPhone, setMotherPhone] = useState("081234567890");
+
+  const [fatherName, setFatherName] = useState("Ahmad Fauzi");
+  const [fatherNik, setFatherNik] = useState("3201294829340008");
+  const [fatherPhone, setFatherPhone] = useState("081298765431");
+
+  // Hubungan Keluarga & Pihak yang Bertanggung Jawab / Pengasuh
+  const [primaryRelation, setPrimaryRelation] = useState("Ibu Kandung");
+  const [caregiverName, setCaregiverName] = useState("");
+  const [caregiverRelation, setCaregiverRelation] = useState("Nenek");
+  const [caregiverPhone, setCaregiverPhone] = useState("");
+
   const [selectedParentId, setSelectedParentId] = useState(mockParents[0].id);
-  const [relation, setRelation] = useState("ibu");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  // Perhitungan umur otomatis secara presisi (Tahun, Bulan, Hari)
+  const computedAge = calculateDetailedAge(birthDate);
 
   const selectedParent =
     mockParents.find((p) => p.id === selectedParentId) || mockParents[0];
@@ -41,39 +46,13 @@ export default function TambahBalitaPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
-    const newChild: Child = {
-      id: generateChildId(),
-      name: childName.trim() || "Balita Baru",
-      nik: nik.trim() || generateDefaultNik(),
-      gender,
-      birthDate,
-      ageMonths: 12,
-      parentName: selectedParent.name,
-      parentId: selectedParent.id,
-      posyandu,
-      posyanduId: "posyandu-4",
-      lastExamDate: getTodayIsoDate(),
-      weight: parseFloat(birthWeight) || 3.2,
-      height: parseFloat(birthHeight) || 49.5,
-      zScoreTbU: 0.1,
-      zScoreBbU: 0.1,
-      zScoreBbTb: 0.2,
-      stuntingStatus: "Normal",
-      wastingStatus: "Gizi Baik (Normal)",
-      riskFlag: "NORMAL",
-      isPrematur,
-    };
-
-    setChildren((prev) => [newChild, ...prev]);
-
     setTimeout(() => {
       setLoading(false);
       setSuccess(true);
       setTimeout(() => {
         router.push("/staff/balita");
-      }, 1000);
-    }, 600);
+      }, 1200);
+    }, 800);
   };
 
   return (
@@ -106,14 +85,14 @@ export default function TambahBalitaPage() {
           <div>
             <div className="flex items-center gap-2">
               <h1 className="font-heading text-xl lg:text-2xl font-bold text-slate-900 tracking-tight">
-                Tambah Data Balita Baru
+                Tambah Data Balita & Hubungan Keluarga
               </h1>
               <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-medium border border-emerald-200/60">
                 Formulir e-KMS
               </span>
             </div>
             <p className="text-xs sm:text-sm text-slate-500 mt-1">
-              Daftarkan identitas balita baru ke sistem Posyandu dan tetapkan akun orang tua yang bertanggung jawab.
+              Daftarkan identitas balita baru, hubungkan ke dua orang tua (ibu & bapak), serta tetapkan pihak penanggung jawab pengantar.
             </p>
           </div>
         </div>
@@ -127,12 +106,12 @@ export default function TambahBalitaPage() {
       </div>
 
       {success && (
-        <div className="p-4 bg-[#dcfce7] border border-[#86efac] rounded-xl flex items-center gap-3 text-[#14532d]">
+        <div className="p-4 bg-[#dcfce7] border border-[#86efac] rounded-xl flex items-center gap-3 text-[#14532d] animate-in fade-in">
           <span className="material-symbols-outlined text-[24px]">check_circle</span>
           <div>
             <p className="font-bold text-sm">Balita berhasil didaftarkan!</p>
             <p className="text-xs">
-              Data otomatis terhubung ke akun <strong>{selectedParent.name}</strong> dan tampil di dashboard orang tua.
+              Data terhubung ke Ibu <strong>{motherName}</strong> dan Bapak <strong>{fatherName}</strong> serta sinkron ke sistem e-PPGBM.
             </p>
           </div>
         </div>
@@ -176,64 +155,80 @@ export default function TambahBalitaPage() {
                 <label className="text-xs font-semibold text-[#0b1c30]">
                   NIK Balita (16 Digit) <span className="text-[#ba1a1a]">*</span>
                 </label>
-                <span className="text-[11px] text-[#6f7a6e]">Bisa gunakan no. KK jika belum ada</span>
+                <span className="text-[11px] text-[#6f7a6e]">Bisa gunakan no. KK jika belum ada NIK</span>
               </div>
               <input
                 type="text"
                 required
                 maxLength={16}
                 value={nik}
-                onChange={(e) => setNik(e.target.value)}
+                onChange={(e) => setNik(e.target.value.replace(/\D/g, ""))}
                 placeholder="Contoh: 320129482934021"
                 className="w-full h-11 px-3.5 bg-[#f8f9ff] border border-[#cbd5e1] rounded-xl text-xs text-[#0b1c30] font-mono focus:ring-2 focus:ring-[#15803d] focus:outline-none"
               />
             </div>
 
-            {/* Tanggal Lahir & Gender */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-[#0b1c30] mb-1">
-                  Tanggal Lahir <span className="text-[#ba1a1a]">*</span>
-                </label>
-                <input
-                  type="date"
-                  required
-                  value={birthDate}
-                  onChange={(e) => setBirthDate(e.target.value)}
-                  className="w-full h-11 px-3.5 bg-[#f8f9ff] border border-[#cbd5e1] rounded-xl text-xs text-[#0b1c30] focus:ring-2 focus:ring-[#15803d] focus:outline-none"
-                />
+            {/* Tanggal Lahir & Perhitungan Umur Otomatis */}
+            <div className="space-y-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-[#0b1c30] mb-1">
+                    Tanggal Lahir <span className="text-[#ba1a1a]">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    required
+                    value={birthDate}
+                    onChange={(e) => setBirthDate(e.target.value)}
+                    className="w-full h-11 px-3.5 bg-[#f8f9ff] border border-[#cbd5e1] rounded-xl text-xs text-[#0b1c30] focus:ring-2 focus:ring-[#15803d] focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-[#0b1c30] mb-1">
+                    Jenis Kelamin <span className="text-[#ba1a1a]">*</span>
+                  </label>
+                  <div className="grid grid-cols-2 gap-2 p-1 bg-[#f8f9ff] rounded-xl border border-[#cbd5e1] h-11 items-center">
+                    <button
+                      type="button"
+                      onClick={() => setGender("L")}
+                      className={`h-9 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1 ${
+                        gender === "L"
+                          ? "bg-[#15803d] text-white shadow-sm"
+                          : "text-[#6f7a6e] hover:text-[#0b1c30]"
+                      }`}
+                    >
+                      <span>👦 Laki-laki</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setGender("P")}
+                      className={`h-9 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1 ${
+                        gender === "P"
+                          ? "bg-[#15803d] text-white shadow-sm"
+                          : "text-[#6f7a6e] hover:text-[#0b1c30]"
+                      }`}
+                    >
+                      <span>👧 Perempuan</span>
+                    </button>
+                  </div>
+                </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-[#0b1c30] mb-1">
-                  Jenis Kelamin <span className="text-[#ba1a1a]">*</span>
-                </label>
-                <div className="grid grid-cols-2 gap-2 p-1 bg-[#f8f9ff] rounded-xl border border-[#cbd5e1] h-11 items-center">
-                  <button
-                    type="button"
-                    onClick={() => setGender("L")}
-                    className={`h-9 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1 ${
-                      gender === "L"
-                        ? "bg-[#15803d] text-white shadow-sm"
-                        : "text-[#6f7a6e] hover:text-[#0b1c30]"
-                    }`}
-                  >
-                    <span>👦</span>
-                    <span>Laki-laki</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setGender("P")}
-                    className={`h-9 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1 ${
-                      gender === "P"
-                        ? "bg-[#15803d] text-white shadow-sm"
-                        : "text-[#6f7a6e] hover:text-[#0b1c30]"
-                    }`}
-                  >
-                    <span>👧</span>
-                    <span>Perempuan</span>
-                  </button>
+              {/* Banner Perhitungan Umur Otomatis (Tahun, Bulan, Hari) */}
+              <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2">
+                  <span className="material-symbols-outlined text-[18px] text-emerald-700">schedule</span>
+                  <div>
+                    <span className="text-slate-500 block text-[11px]">Umur Dihitung Otomatis:</span>
+                    <strong className="text-emerald-950 font-bold text-sm">
+                      {computedAge.textLong}
+                    </strong>
+                  </div>
                 </div>
+                <span className="px-2.5 py-1 rounded-md bg-white text-emerald-800 font-bold border border-emerald-200/80 shadow-2xs">
+                  {computedAge.totalMonths} Bulan
+                </span>
               </div>
             </div>
 
@@ -333,83 +328,129 @@ export default function TambahBalitaPage() {
           </div>
         </div>
 
-        {/* Right Column (5 cols): Penetapan Akun Orang Tua */}
+        {/* Right Column (5 cols): Relasi Dua Orang Tua & Pihak Bertanggung Jawab */}
         <div className="lg:col-span-5 flex flex-col gap-6">
-          <div className="bg-[#eff4ff] rounded-2xl p-6 border border-[#becabc]/40 shadow-sm flex flex-col gap-4">
-            <div className="flex items-center justify-between pb-2 border-b border-[#becabc]/30">
+          {/* Box Relasi Dua Orang Tua */}
+          <div className="bg-white rounded-2xl p-6 border border-[#e2ebe5] shadow-sm flex flex-col gap-4">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-[#15803d] text-white flex items-center justify-center">
-                  <span className="material-symbols-outlined text-[18px]">family_restroom</span>
-                </div>
+                <span className="material-symbols-outlined text-[#15803d] text-[20px]">wc</span>
                 <h3 className="font-heading text-sm font-bold text-[#0b1c30]">
-                  Tetapkan Akun Orang Tua
+                  Relasi Dua Orang Tua (Ibu & Bapak)
                 </h3>
               </div>
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#15803d] text-white text-[10px] font-bold">
-                Otomatis Sync
+              <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">
+                Wajib Terhubung
               </span>
             </div>
 
-            <p className="text-xs text-[#3f493f] leading-relaxed">
-              Pilih akun orang tua yang bertanggung jawab. Balita akan langsung muncul di akun orang tua tanpa perlu persetujuan atau kode undangan.
-            </p>
-
-            {/* Parent Selection */}
-            <div>
-              <label className="block text-xs font-semibold text-[#0b1c30] mb-1.5">
-                Pilih Orang Tua Terdaftar:
-              </label>
-              <select
-                value={selectedParentId}
-                onChange={(e) => setSelectedParentId(e.target.value)}
-                className="w-full h-11 px-3 bg-white border border-[#cbd5e1] rounded-xl text-xs text-[#0b1c30] focus:ring-2 focus:ring-[#15803d]"
-              >
-                {mockParents.map((parent) => (
-                  <option key={parent.id} value={parent.id}>
-                    {parent.name} ({parent.phone}) - {parent.address.slice(0, 25)}...
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Selected Parent Detail Card */}
-            <div className="bg-white p-4 rounded-xl border border-[#e2ebe5] shadow-xs space-y-2">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#b1f2be] text-[#00210d] font-bold flex items-center justify-center text-xs shrink-0">
-                  {selectedParent.name.slice(0, 2).toUpperCase()}
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-[#0b1c30]">{selectedParent.name}</p>
-                  <p className="text-[11px] text-[#6f7a6e]">{selectedParent.phone}</p>
-                </div>
-              </div>
-              <div className="text-[11px] text-[#3f493f] pt-1 border-t border-[#f1f5f9]">
-                <p><strong>Alamat:</strong> {selectedParent.address}</p>
-                <p><strong>Jumlah Balita:</strong> {selectedParent.childrenCount} anak terdaftar</p>
+            {/* Data Ibu Kandung */}
+            <div className="p-3.5 bg-slate-50/80 rounded-xl border border-slate-200/80 space-y-2.5 text-xs">
+              <span className="font-bold text-slate-800 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
+                Data Ibu Kandung:
+              </span>
+              <input
+                type="text"
+                required
+                value={motherName}
+                onChange={(e) => setMotherName(e.target.value)}
+                placeholder="Nama Lengkap Ibu"
+                className="w-full h-10 px-3 bg-white border border-slate-200 rounded-lg text-xs"
+              />
+              <div className="grid grid-cols-2 gap-2">
+                <input
+                  type="text"
+                  maxLength={16}
+                  value={motherNik}
+                  onChange={(e) => setMotherNik(e.target.value.replace(/\D/g, ""))}
+                  placeholder="NIK Ibu (16 Digit)"
+                  className="w-full h-10 px-3 bg-white border border-slate-200 rounded-lg text-xs font-mono"
+                />
+                <input
+                  type="tel"
+                  value={motherPhone}
+                  onChange={(e) => setMotherPhone(e.target.value)}
+                  placeholder="No. WA Ibu"
+                  className="w-full h-10 px-3 bg-white border border-slate-200 rounded-lg text-xs"
+                />
               </div>
             </div>
 
-            {/* Hubungan Keluarga */}
-            <div>
-              <label className="block text-xs font-semibold text-[#0b1c30] mb-1.5">
-                Hubungan dengan Balita:
-              </label>
-              <div className="grid grid-cols-3 gap-2">
-                {["ibu", "ayah", "wali"].map((rel) => (
-                  <button
-                    key={rel}
-                    type="button"
-                    onClick={() => setRelation(rel)}
-                    className={`py-2 text-xs font-semibold rounded-lg capitalize transition-all ${
-                      relation === rel
-                        ? "bg-[#15803d] text-white shadow-sm"
-                        : "bg-white text-[#3f493f] border border-[#cbd5e1]"
-                    }`}
-                  >
-                    {rel === "ibu" ? "Ibu Kandung" : rel === "ayah" ? "Ayah Kandung" : "Wali Sah"}
-                  </button>
-                ))}
+            {/* Data Bapak Kandung */}
+            <div className="p-3.5 bg-slate-50/80 rounded-xl border border-slate-200/80 space-y-2.5 text-xs">
+              <span className="font-bold text-slate-800 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-blue-600"></span>
+                Data Bapak Kandung:
+              </span>
+              <input
+                type="text"
+                required
+                value={fatherName}
+                onChange={(e) => setFatherName(e.target.value)}
+                placeholder="Nama Lengkap Bapak"
+                className="w-full h-10 px-3 bg-white border border-slate-200 rounded-lg text-xs"
+              />
+              <div className="grid grid-cols-2 gap-2">
+                <input
+                  type="text"
+                  maxLength={16}
+                  value={fatherNik}
+                  onChange={(e) => setFatherNik(e.target.value.replace(/\D/g, ""))}
+                  placeholder="NIK Bapak (16 Digit)"
+                  className="w-full h-10 px-3 bg-white border border-slate-200 rounded-lg text-xs font-mono"
+                />
+                <input
+                  type="tel"
+                  value={fatherPhone}
+                  onChange={(e) => setFatherPhone(e.target.value)}
+                  placeholder="No. WA Bapak"
+                  className="w-full h-10 px-3 bg-white border border-slate-200 rounded-lg text-xs"
+                />
               </div>
+            </div>
+
+            {/* Hubungan Keluarga Lain / Pihak Pengasuh Bertanggung Jawab */}
+            <div className="p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/70 space-y-2.5 text-xs">
+              <span className="font-bold text-amber-900 flex items-center gap-1.5">
+                <span className="material-symbols-outlined text-[16px] text-amber-700">supervisor_account</span>
+                Pihak Lain yang Bertanggung Jawab / Pengasuh:
+              </span>
+              <p className="text-[11px] text-amber-800">
+                Wali, baby sitter, ibu asuh, ibu tiri, bibi, paman, atau nenek yang sering mengantar balita ke Posyandu.
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                <select
+                  value={caregiverRelation}
+                  onChange={(e) => setCaregiverRelation(e.target.value)}
+                  className="w-full h-10 px-2.5 bg-white border border-amber-200 rounded-lg text-xs"
+                >
+                  <option value="Nenek">Nenek</option>
+                  <option value="Kakek">Kakek</option>
+                  <option value="Bibi">Bibi</option>
+                  <option value="Paman">Paman</option>
+                  <option value="Baby Sitter">Baby Sitter / Pengasuh</option>
+                  <option value="Ibu Asuh">Ibu Asuh</option>
+                  <option value="Ibu Tiri">Ibu Tiri</option>
+                  <option value="Bapak Tiri">Bapak Tiri</option>
+                  <option value="Wali">Wali</option>
+                  <option value="Lainnya">Lainnya</option>
+                </select>
+                <input
+                  type="text"
+                  value={caregiverName}
+                  onChange={(e) => setCaregiverName(e.target.value)}
+                  placeholder="Nama Pengasuh / Wali"
+                  className="w-full h-10 px-3 bg-white border border-amber-200 rounded-lg text-xs"
+                />
+              </div>
+              <input
+                type="tel"
+                value={caregiverPhone}
+                onChange={(e) => setCaregiverPhone(e.target.value)}
+                placeholder="No. HP / WA Pengasuh / Pengantar"
+                className="w-full h-10 px-3 bg-white border border-amber-200 rounded-lg text-xs"
+              />
             </div>
 
             {/* Submit Button */}
@@ -417,14 +458,14 @@ export default function TambahBalitaPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full h-11 bg-[#15803d] hover:bg-[#14532d] text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                className="w-full h-11 bg-[#15803d] hover:bg-[#14532d] text-white font-semibold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
               >
                 {loading ? (
                   <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                 ) : (
                   <>
                     <span className="material-symbols-outlined text-[18px]">save</span>
-                    <span>Simpan & Hubungkan ke Akun Orang Tua</span>
+                    <span>Simpan & Hubungkan Dua Orang Tua</span>
                   </>
                 )}
               </button>
@@ -435,4 +476,3 @@ export default function TambahBalitaPage() {
     </div>
   );
 }
-

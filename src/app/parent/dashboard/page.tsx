@@ -5,6 +5,7 @@ import Link from "next/link";
 import useChildrenData from "@/app/hooks/useChildrenData";
 import { mockChildren } from "@/lib/mockData";
 import { StuntingBadge } from "@/components/ui/badge";
+import { calculateDetailedAge } from "@/lib/ageHelper";
 
 export default function ParentDashboardPage() {
   const { children } = useChildrenData();
@@ -169,7 +170,7 @@ export default function ParentDashboardPage() {
                         {child.name}
                       </h3>
                       <p className="text-xs text-slate-500">
-                        {child.ageMonths} Bulan • {child.gender === "L" ? "Laki-laki" : "Perempuan"}
+                        {calculateDetailedAge(child.birthDate).textLong} ({child.ageMonths} Bulan) • {child.gender === "L" ? "Laki-laki" : "Perempuan"}
                       </p>
                     </div>
                   </div>

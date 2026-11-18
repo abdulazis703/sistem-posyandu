@@ -51,6 +51,7 @@ export async function signUpParent(params: {
   email?: string;
   password: string;
   posyanduName?: string;
+  nik?: string;
 }) {
   const finalEmail = params.email?.trim() || `${params.phone.replace(/[^0-9]/g, "")}@posyandu.parent.local`;
 
@@ -63,6 +64,7 @@ export async function signUpParent(params: {
         full_name: params.fullName,
         phone: params.phone,
         posyandu: params.posyanduName,
+        nik: params.nik,
       },
     },
   });

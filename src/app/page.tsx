@@ -1,9 +1,39 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { mockAnnouncements } from "@/lib/mockData";
 
 export default function LandingPage() {
+  const [announcementFilter, setAnnouncementFilter] = useState("all");
+  const [activeSection, setActiveSection] = useState("beranda");
+
+  // Scroll spy untuk sinkronisasi warna menu aktif saat pengguna scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ["beranda", "jadwal-kegiatan", "fitur", "cara-kerja", "kontak"];
+      const scrollPos = window.scrollY + 140;
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sections[i]);
+        if (el && el.offsetTop <= scrollPos) {
+          setActiveSection(sections[i]);
+          break;
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const filteredAnnouncements = mockAnnouncements.filter((item) => {
+    if (announcementFilter === "all") return true;
+    if (announcementFilter === "jadwal") return item.category === "Jadwal Posyandu";
+    if (announcementFilter === "imunisasi") return item.category === "Imunisasi";
+    if (announcementFilter === "edukasi") return item.category === "Edukasi Gizi" || item.category === "Pemberitahuan";
+    return true;
+  });
   return (
     <div className="min-h-screen flex flex-col antialiased bg-[#f7faf8] text-[#1f2937]">
       {/* 1. STICKY NAVBAR */}
@@ -37,18 +67,61 @@ export default function LandingPage() {
           </Link>
 
           {/* Navigation Links */}
-          <nav className="hidden md:flex items-center gap-8 text-[15px] font-medium text-gray-600">
-            <a href="#beranda" className="text-[#15803d] font-semibold hover:text-[#166534] transition-colors">
+          <nav className="hidden md:flex items-center gap-8 text-[15px]">
+            <a
+              href="#beranda"
+              onClick={() => setActiveSection("beranda")}
+              className={`transition-all py-1 ${
+                activeSection === "beranda"
+                  ? "text-[#15803d] font-bold border-b-2 border-[#15803d]"
+                  : "text-gray-600 font-medium hover:text-[#15803d]"
+              }`}
+            >
               Beranda
             </a>
-            <a href="#fitur" className="hover:text-[#15803d] transition-colors">
+            <a
+              href="#jadwal-kegiatan"
+              onClick={() => setActiveSection("jadwal-kegiatan")}
+              className={`transition-all py-1 ${
+                activeSection === "jadwal-kegiatan"
+                  ? "text-[#15803d] font-bold border-b-2 border-[#15803d]"
+                  : "text-gray-600 font-medium hover:text-[#15803d]"
+              }`}
+            >
+              Jadwal & Pengumuman
+            </a>
+            <a
+              href="#fitur"
+              onClick={() => setActiveSection("fitur")}
+              className={`transition-all py-1 ${
+                activeSection === "fitur"
+                  ? "text-[#15803d] font-bold border-b-2 border-[#15803d]"
+                  : "text-gray-600 font-medium hover:text-[#15803d]"
+              }`}
+            >
               Fitur Utama
             </a>
-            <a href="#cara-kerja" className="hover:text-[#15803d] transition-colors">
+            <a
+              href="#cara-kerja"
+              onClick={() => setActiveSection("cara-kerja")}
+              className={`transition-all py-1 ${
+                activeSection === "cara-kerja"
+                  ? "text-[#15803d] font-bold border-b-2 border-[#15803d]"
+                  : "text-gray-600 font-medium hover:text-[#15803d]"
+              }`}
+            >
               Cara Kerja
             </a>
-            <a href="#kontak" className="hover:text-[#15803d] transition-colors">
-              Kontak & Bantuan
+            <a
+              href="#kontak"
+              onClick={() => setActiveSection("kontak")}
+              className={`transition-all py-1 ${
+                activeSection === "kontak"
+                  ? "text-[#15803d] font-bold border-b-2 border-[#15803d]"
+                  : "text-gray-600 font-medium hover:text-[#15803d]"
+              }`}
+            >
+              Kontak
             </a>
           </nav>
 
@@ -410,6 +483,156 @@ export default function LandingPage() {
                 </p>
               </div>
               <span className="mt-4 text-xs font-semibold text-[#15803d] flex items-center gap-1">Otomasi Rekapitulasi RW/Desa →</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* JADWAL KEGIATAN & PENGUMUMAN PUBLIK (SEBELUM LOGIN) */}
+      <section id="jadwal-kegiatan" className="py-20 bg-white border-t border-[#e2ebe5]">
+        <div className="max-w-[1240px] mx-auto px-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+            <div className="max-w-2xl">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#dcfce7] text-[#166534] text-xs font-semibold rounded-full uppercase tracking-wider mb-2 border border-emerald-200">
+                <span className="material-symbols-outlined text-[15px]">event</span>
+                Informasi & Jadwal Publik
+              </span>
+              <h2 className="text-3xl md:text-4xl font-extrabold text-[#14532d] font-heading tracking-tight">
+                Jadwal Kegiatan & Berita Posyandu Terkini
+              </h2>
+              <p className="text-gray-600 mt-2 text-sm sm:text-base leading-relaxed">
+                Warga dan orang tua dapat memantau ringkasan jadwal penimbangan posyandu, pekan imunisasi balita, dan edukasi gizi. Masuk ke akun Anda untuk membaca rincian lengkap.
+              </p>
+            </div>
+
+            {/* Filter Buttons */}
+            <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl overflow-x-auto">
+              {[
+                { key: "all", label: "Semua" },
+                { key: "jadwal", label: "Jadwal Posyandu" },
+                { key: "imunisasi", label: "Imunisasi" },
+                { key: "edukasi", label: "Edukasi Gizi" },
+              ].map((f) => (
+                <button
+                  key={f.key}
+                  onClick={() => setAnnouncementFilter(f.key)}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                    announcementFilter === f.key
+                      ? "bg-white text-emerald-800 shadow-xs"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {filteredAnnouncements.map((item) => (
+              <div
+                key={item.id}
+                className="bg-[#f8faf9] rounded-2xl p-6 border border-[#e2ebe5] hover:border-emerald-300 hover:shadow-md transition-all flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span
+                      className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${
+                        item.category === "Jadwal Posyandu"
+                          ? "bg-emerald-100 text-emerald-800"
+                          : item.category === "Imunisasi"
+                          ? "bg-blue-100 text-blue-800"
+                          : "bg-amber-100 text-amber-800"
+                      }`}
+                    >
+                      {item.category}
+                    </span>
+
+                    {item.isImportant && (
+                      <span className="flex items-center gap-1 text-[11px] font-bold text-rose-600">
+                        <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
+                        Penting
+                      </span>
+                    )}
+                  </div>
+
+                  <h3 className="font-heading font-bold text-[#0b1c30] text-base leading-snug line-clamp-2 mb-2">
+                    {item.title}
+                  </h3>
+
+                  <p className="text-xs text-gray-600 line-clamp-3 leading-relaxed mb-4">
+                    {item.content}
+                  </p>
+                </div>
+
+                <div className="pt-4 border-t border-gray-200/70 space-y-2 text-xs text-gray-500">
+                  {item.eventDate && (
+                    <div className="flex items-center gap-1.5 font-medium text-emerald-800">
+                      <span className="material-symbols-outlined text-[16px] text-emerald-600">calendar_month</span>
+                      <span>{item.eventDate}</span>
+                    </div>
+                  )}
+
+                  {item.location && (
+                    <div className="flex items-center gap-1.5 text-gray-600">
+                      <span className="material-symbols-outlined text-[16px] text-gray-400">location_on</span>
+                      <span className="truncate">{item.location}</span>
+                    </div>
+                  )}
+
+                  <div className="pt-2 flex items-center justify-between">
+                    <span className="text-[11px] text-gray-400">{item.publishedBy}</span>
+                    <Link
+                      href={`/login?redirect=/parent/pengumuman&reason=jadwal&tab=${
+                        item.category === "Jadwal Posyandu"
+                          ? "jadwal-posyandu"
+                          : item.category === "Imunisasi"
+                          ? "jadwal-imunisasi"
+                          : "edukasi-gizi"
+                      }`}
+                      title="Masuk untuk membaca info lengkap"
+                      className="text-xs font-bold text-emerald-700 hover:text-emerald-900 inline-flex items-center gap-1 group/btn"
+                    >
+                      <span>Baca Info</span>
+                      <span className="material-symbols-outlined text-[14px] group-hover/btn:translate-x-0.5 transition-transform">arrow_forward</span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Quick Info Strip */}
+          <div className="mt-10 p-5 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0">
+                <span className="material-symbols-outlined text-[20px]">notifications_active</span>
+              </div>
+              <div>
+                <p className="font-heading text-sm font-bold text-emerald-950">
+                  Ingin menerima pengingat otomatis jadwal penimbangan wilayah Anda?
+                </p>
+                <p className="text-xs text-emerald-800">
+                  Daftarkan balita Anda atau masuk dengan akun orang tua untuk mengaktifkan notifikasi SMS & WhatsApp.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <Link
+                href="/register"
+                className="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-semibold shadow-xs transition-all"
+              >
+                Daftar Akun Gratis
+              </Link>
+              <Link
+                href="/login?redirect=/parent/pengumuman&reason=jadwal"
+                className="px-4 py-2 bg-white border border-emerald-300 text-emerald-800 hover:bg-emerald-100 rounded-xl text-xs font-semibold shadow-xs transition-all flex items-center gap-1.5"
+              >
+                <span className="material-symbols-outlined text-[15px] text-emerald-700">lock</span>
+                <span>Lihat Semua Jadwal</span>
+              </Link>
             </div>
           </div>
         </div>

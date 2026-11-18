@@ -9,7 +9,7 @@ export function HeaderCalendarWidget() {
     const now = new Date();
     return new Date(now.getFullYear(), now.getMonth(), 1);
   });
-  const [displayDateStr] = useState<string>(() => formatIndonesianDate(new Date()));
+  const [displayDateStr, setDisplayDateStr] = useState<string>(() => formatIndonesianDate(new Date()));
   const [isOpen, setIsOpen] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
 

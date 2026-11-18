@@ -5,6 +5,7 @@ import Link from "next/link";
 import useChildrenData from "@/app/hooks/useChildrenData";
 import { mockParents } from "@/lib/mockData";
 import { StuntingBadge } from "@/components/ui/badge";
+import { calculateDetailedAge } from "@/lib/ageHelper";
 
 export default function DetailAkunOrangTuaPage({
   params,
@@ -52,12 +53,15 @@ export default function DetailAkunOrangTuaPage({
               <h1 className="font-heading text-xl lg:text-2xl font-bold text-slate-900">
                 {parent.name}
               </h1>
-              <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-medium border border-emerald-200/60">
-                Akun Aktif
+              <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold border border-emerald-200/60">
+                {parent.roleInFamily || "Ibu Kandung"}
               </span>
             </div>
             <p className="text-xs text-slate-500 mt-1">
               Terdaftar sejak {parent.joinDate} • Wilayah {parent.posyandu}
+              {parent.spouseName && (
+                <span> • Pasangan: <strong className="text-slate-800">{parent.spouseName}</strong></span>
+              )}
             </p>
           </div>
         </div>
@@ -102,6 +106,18 @@ export default function DetailAkunOrangTuaPage({
                 <p className="font-mono font-bold text-[#0b1c30] mt-0.5">{parent.nik}</p>
               </div>
 
+              {parent.spouseName && (
+                <div className="p-3 bg-emerald-50/70 rounded-xl border border-emerald-200/60">
+                  <span className="text-emerald-900 font-bold block text-[11px]">
+                    Data Pasangan (Orang Tua Kedua)
+                  </span>
+                  <p className="font-bold text-slate-900 mt-0.5">{parent.spouseName}</p>
+                  <p className="text-[11px] text-slate-600">
+                    NIK: {parent.spouseNik || "-"} • WA: {parent.spousePhone || "-"}
+                  </p>
+                </div>
+              )}
+
               <div>
                 <span className="text-[#6f7a6e] block text-[11px]">Alamat Tinggal</span>
                 <p className="font-medium text-[#0b1c30] mt-0.5 leading-relaxed">{parent.address}</p>
@@ -130,39 +146,45 @@ export default function DetailAkunOrangTuaPage({
             </p>
 
             <div className="space-y-3">
-              {assignedChildren.map((c) => (
-                <div
-                  key={c.id}
-                  className="p-4 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between gap-4 hover:border-emerald-300 transition-all"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs shrink-0">
-                      {c.name.slice(0, 2).toUpperCase()}
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-slate-900">{c.name}</h4>
-                      <p className="text-xs text-slate-500">
-                        {c.ageMonths} Bulan • {c.gender === "L" ? "Laki-laki" : "Perempuan"} • NIK: {c.nik}
-                      </p>
-                      <div className="mt-1.5 flex items-center gap-2">
-                        <span className="text-xs font-semibold text-slate-800">
-                          {c.weight} kg / {c.height} cm
-                        </span>
-                        <StuntingBadge status={c.stuntingStatus} />
+              {assignedChildren.map((c) => {
+                const ageDetail = calculateDetailedAge(c.birthDate);
+                return (
+                  <div
+                    key={c.id}
+                    className="p-4 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between gap-4 hover:border-emerald-300 transition-all"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs shrink-0">
+                        {c.name.slice(0, 2).toUpperCase()}
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-semibold text-slate-900">{c.name}</h4>
+                        <p className="text-xs text-slate-500">
+                          Umur Presisi: <strong className="text-emerald-800">{ageDetail.textLong}</strong> • {c.gender === "L" ? "Laki-laki" : "Perempuan"}
+                        </p>
+                        <p className="text-[11px] text-slate-500">
+                          NIK: {c.nik} • Hubungan: <strong className="text-slate-700">Anak Kandung</strong>
+                        </p>
+                        <div className="mt-1.5 flex items-center gap-2">
+                          <span className="text-xs font-semibold text-slate-800">
+                            {c.weight} kg / {c.height} cm
+                          </span>
+                          <StuntingBadge status={c.stuntingStatus} />
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="flex items-center gap-2 shrink-0">
-                    <Link
-                      href={`/staff/balita/${c.id}`}
-                      className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors"
-                    >
-                      Buka Grafik
-                    </Link>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <Link
+                        href={`/staff/balita/${c.id}`}
+                        className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors"
+                      >
+                        Buka Grafik
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
 
               {assignedChildren.length === 0 && (
                 <div className="p-8 text-center text-xs text-[#6f7a6e] border border-dashed rounded-xl">
