@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"secondary-fixed-dim":"#96d5a3","surface-bright":"#f8f9ff","surface-dim":"#cbdbf5","outline":"#6f7a6e","primary-fixed":"#95f8a7","primary-container":"#15803d","on-primary":"#ffffff","tertiary-fixed":"#d6e6dd","on-primary-fixed-variant":"#005323","surface-tint":"#006d30","on-secondary-fixed":"#00210d","on-tertiary-fixed":"#101e19","on-primary-fixed":"#00210a","on-tertiary-container":"#e7f8ee","on-secondary-container":"#347047","surface":"#f8f9ff","surface-container-highest":"#d3e4fe","on-tertiary":"#ffffff","primary":"#00652c","inverse-primary":"#79db8d","primary-fixed-dim":"#79db8d","error-container":"#ffdad6","on-surface":"#0b1c30","on-surface-variant":"#3f493f","on-error":"#ffffff","on-background":"#0b1c30","on-error-container":"#93000a","background":"#f8f9ff","surface-container":"#e5eeff","surface-variant":"#d3e4fe","inverse-on-surface":"#eaf1ff","surface-container-low":"#eff4ff","secondary":"#2e6a41","secondary-fixed":"#b1f2be","inverse-surface":"#213145","on-primary-container":"#d3ffd5","tertiary-fixed-dim":"#bacac1","on-secondary-fixed-variant":"#12512c","surface-container-lowest":"#ffffff","outline-variant":"#becabc","tertiary":"#4b5a53","on-tertiary-fixed-variant":"#3b4a43","on-secondary":"#ffffff","error":"#ba1a1a","secondary-container":"#b1f2be","tertiary-container":"#63736b","surface-container-high":"#dce9ff"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"margin":"2rem","space-sm":"0.5rem","gutter":"1.5rem","space-xs":"0.25rem","space-md":"1rem","space-lg":"1.5rem","space-xl":"2rem"},"fontFamily":{"caption":["Inter"],"headline-lg":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"body-md":["Inter"],"headline-md":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"display-lg":["Plus Jakarta Sans"],"body-lg":["Inter"],"body-sm":["Inter"]},"fontSize":{"caption":["12px",{"lineHeight":"16px","fontWeight":"500"}],"headline-lg":["22px",{"lineHeight":"30px","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"16px","fontWeight":"600"}],"headline-xl":["28px",{"lineHeight":"36px","fontWeight":"700"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"headline-md":["18px",{"lineHeight":"26px","fontWeight":"600"}],"label-md":["13px",{"lineHeight":"18px","fontWeight":"600"}],"display-lg":["36px",{"lineHeight":"44px","fontWeight":"700"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"body-sm":["13px",{"lineHeight":"18px","fontWeight":"400"}]}}}};</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-screen w-[260px] bg-surface-container-lowest z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(20,83,45,0.04)]"><div class="flex flex-col flex-1 overflow-y-auto"><div class="px-space-lg py-space-lg flex items-center gap-space-sm"><div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center text-on-primary shadow-[0_1px_3px_rgba(20,83,45,0.04)]"><span class="material-symbols-outlined text-[24px]">potted_plant</span></div><div class="flex flex-col"><span class="font-headline-md text-headline-md tracking-tight text-primary">TumbuhKu</span><span class="font-caption text-caption text-on-surface-variant font-medium">Portal Petugas &amp; Kader</span></div></div><div class="px-space-md mb-space-sm"><span class="px-space-sm font-label-sm text-label-sm uppercase tracking-wider text-outline">Menu Navigasi</span></div><nav class="flex flex-col gap-space-xs px-space-md" data-active-classes="bg-primary-container text-on-primary shadow-sm font-label-md"><a class="flex items-center px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="dashboard" href="#">Dashboard</a><a class="flex items-center px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="data-balita" href="#">Data Balita</a><a class="flex items-center px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="akun-orang-tua" href="#">Akun Orang Tua</a><a class="flex items-center px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="pemeriksaan" href="#">Pemeriksaan</a><a aria-current="page" class="flex items-center px-space-md py-space-sm rounded-lg transition-colors bg-primary-container text-on-primary shadow-sm font-label-md" data-path="monitoring" href="#">Monitoring</a><a class="flex items-center px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="posyandu-dan-wilayah" href="#">Posyandu &amp; Wilayah</a><a class="flex items-center px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="laporan" href="#">Laporan</a><a class="flex items-center px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="pengumuman-dan-jadwal" href="#">Pengumuman &amp; Jadwal</a><a class="flex items-center px-space-md py-space-sm rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="profil" href="#">Profil</a></nav></div><div class="p-space-md bg-surface-container-low m-space-md rounded-xl flex items-center justify-between"><div class="flex items-center gap-space-sm overflow-hidden"><div class="w-9 h-9 rounded-full bg-secondary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-secondary text-[20px]">local_hospital</span></div><div class="flex flex-col min-w-0"><span class="font-label-md text-label-md text-on-surface truncate">Bidan Sri Wahyuni, A.Md.Keb</span><span class="font-caption text-caption text-on-surface-variant truncate">Petugas Pembina</span></div></div><button class="p-space-xs text-on-surface-variant hover:text-error transition-colors rounded-lg" title="Keluar" type="button"><span class="material-symbols-outlined text-[20px]">logout</span></button></div></aside><div class="pl-[260px]"><header class="fixed top-0 left-[260px] right-0 h-16 bg-surface-container-lowest/95 backdrop-blur-md z-40 flex items-center justify-between px-space-xl shadow-[0_1px_8px_rgba(20,83,45,0.04)]"><div class="flex items-center gap-space-md"><div class="inline-flex items-center gap-space-xs px-space-md py-1.5 rounded-full bg-secondary-container text-on-secondary-container"><span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span><span class="font-label-sm text-label-sm font-semibold">Posyandu Melati 1 s/d 4 (Kel. Sukamaju)</span></div></div><div class="flex-1 max-w-md mx-space-lg"><div class="relative flex items-center"><span class="material-symbols-outlined absolute left-3 text-[18px] text-outline pointer-events-none">search</span><input class="w-full pl-9 pr-4 py-2 bg-surface-container-low rounded-lg font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary shadow-[0_1px_3px_rgba(20,83,45,0.04)]" placeholder="Cari data balita, NIK, orang tua, atau jadwal..." type="text"/></div></div><div class="flex items-center gap-space-md shrink-0"><div class="hidden xl:flex items-center gap-space-xs text-on-surface-variant"><span class="material-symbols-outlined text-[18px]">calendar_today</span><span class="font-caption text-caption font-medium">Kamis, 24 Oktober 2024</span></div><button class="relative p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" title="Notifikasi" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-primary-container rounded-full ring-2 ring-surface-container-lowest"></span></button><div class="flex items-center gap-space-sm pl-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden lg:flex flex-col text-left"><span class="font-label-md text-label-md text-on-surface leading-tight">Bidan Sri Wahyuni</span><span class="font-caption text-caption text-on-surface-variant leading-tight">Petugas Pembina</span></div></div></div></header><main class="w-full pt-16 bg-surface"><div class="flex flex-col w-full">
+<div class="p-space-lg flex flex-col gap-space-lg max-w-[1360px] mx-auto w-full">
+<!-- Top Section & Breadcrumb -->
+<div class="flex flex-col gap-space-sm">
+<nav class="flex items-center gap-space-xs text-caption font-caption text-on-surface-variant">
+<a class="hover:text-primary transition-colors" href="#">Beranda</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-on-surface font-semibold">Monitoring &amp; Tindak Lanjut</span>
+</nav>
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+<div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">Monitoring Tumbuh Kembang &amp; Intervensi Balita</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-0.5">
+            Pantau balita dengan indikasi risiko stunting, perlambatan pertumbuhan, atau data pemeriksaan belum lengkap di wilayah binaan Posyandu Melati 1 s/d 4.
+          </p>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<button class="inline-flex items-center gap-space-xs px-3.5 py-2 rounded-lg bg-surface-container-lowest text-primary border border-outline-variant font-label-md text-label-md hover:bg-surface-container-low transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span>Unduh Rekap (XLSX)</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-3.5 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>Input Catatan Khusus</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Quick Stats Counter Row -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Stat 1: Perlu Ditinjau -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm border border-outline-variant/40 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-caption text-caption text-on-surface-variant">Perlu Ditinjau Segera</span>
+<div class="flex items-baseline gap-space-xs mt-1">
+<span class="font-display-lg text-display-lg text-error font-bold">5</span>
+<span class="font-caption text-caption text-on-surface-variant">Balita</span>
+</div>
+<span class="font-label-sm text-label-sm text-error mt-0.5 inline-flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error animate-pulse"></span> Prioritas tindak lanjut
+          </span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-error-container/60 text-error flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[26px]">warning</span>
+</div>
+</div>
+<!-- Stat 2: Perlu Dipantau Rutin -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm border border-outline-variant/40 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-caption text-caption text-on-surface-variant">Perlu Dipantau Rutin</span>
+<div class="flex items-baseline gap-space-xs mt-1">
+<span class="font-display-lg text-display-lg text-secondary font-bold">9</span>
+<span class="font-caption text-caption text-on-surface-variant">Balita</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary mt-0.5 inline-flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Evaluasi bulan depan
+          </span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-secondary-container/60 text-on-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[26px]">monitoring</span>
+</div>
+</div>
+<!-- Stat 3: Data Belum Lengkap -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm border border-outline-variant/40 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-caption text-caption text-on-surface-variant">Data Belum Lengkap</span>
+<div class="flex items-baseline gap-space-xs mt-1">
+<span class="font-display-lg text-display-lg text-tertiary font-bold">4</span>
+<span class="font-caption text-caption text-on-surface-variant">Balita</span>
+</div>
+<span class="font-label-sm text-label-sm text-tertiary mt-0.5">Absen penimbangan</span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-surface-container text-tertiary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[26px]">event_busy</span>
+</div>
+</div>
+<!-- Stat 4: Telah Ditindaklanjuti -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm border border-outline-variant/40 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-caption text-caption text-on-surface-variant">Telah Ditindaklanjuti Bulan Ini</span>
+<div class="flex items-baseline gap-space-xs mt-1">
+<span class="font-display-lg text-display-lg text-primary font-bold">24</span>
+<span class="font-caption text-caption text-on-surface-variant">Balita</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary mt-0.5 inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> 82% target tercapai
+          </span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-primary-fixed/50 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[26px]">task_alt</span>
+</div>
+</div>
+</div>
+<!-- Top Filters Bar -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm border border-outline-variant/50 flex flex-wrap lg:flex-nowrap items-center gap-space-md justify-between">
+<div class="flex flex-wrap items-center gap-space-sm w-full lg:w-auto">
+<!-- Posyandu Filter -->
+<div class="flex flex-col min-w-[190px]">
+<label class="font-label-sm text-label-sm text-on-surface-variant mb-1">Unit Posyandu</label>
+<div class="relative">
+<select class="w-full h-10 px-3 pr-8 rounded-lg bg-surface border border-outline-variant/60 font-body-sm text-body-sm text-on-surface appearance-none focus:outline-none focus:border-primary">
+<option>Semua Posyandu (Melati 1 - 4)</option>
+<option>Posyandu Melati 01</option>
+<option>Posyandu Melati 02</option>
+<option>Posyandu Melati 03</option>
+<option selected="">Posyandu Melati 04</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-on-surface-variant pointer-events-none text-[18px]">expand_more</span>
+</div>
+</div>
+<!-- Periode Filter -->
+<div class="flex flex-col min-w-[160px]">
+<label class="font-label-sm text-label-sm text-on-surface-variant mb-1">Periode Pemeriksaan</label>
+<div class="relative">
+<select class="w-full h-10 px-3 pr-8 rounded-lg bg-surface border border-outline-variant/60 font-body-sm text-body-sm text-on-surface appearance-none focus:outline-none focus:border-primary">
+<option selected="">November 2024</option>
+<option>Oktober 2024</option>
+<option>September 2024</option>
+<option>Triwulan IV (Okt-Des)</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-on-surface-variant pointer-events-none text-[18px]">expand_more</span>
+</div>
+</div>
+<!-- Status Indikator Filter -->
+<div class="flex flex-col min-w-[210px]">
+<label class="font-label-sm text-label-sm text-on-surface-variant mb-1">Status Indikator / Masalah</label>
+<div class="relative">
+<select class="w-full h-10 px-3 pr-8 rounded-lg bg-surface border border-outline-variant/60 font-body-sm text-body-sm text-on-surface appearance-none focus:outline-none focus:border-primary">
+<option>Semua Status Indikator</option>
+<option selected="">Kurva Menurun (2T)</option>
+<option>Bawah Garis Merah (BGM)</option>
+<option>Gizi Kurang / Wasting</option>
+<option>Berat Badan Tetap (T1)</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-on-surface-variant pointer-events-none text-[18px]">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Quick Search & Actions -->
+<div class="flex items-end gap-space-sm w-full lg:w-auto">
+<div class="flex flex-col flex-1 lg:w-64">
+<label class="font-label-sm text-label-sm text-on-surface-variant mb-1">Cari Balita / NIK</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[18px]">search</span>
+<input class="w-full h-10 pl-9 pr-3 rounded-lg bg-surface border border-outline-variant/60 font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary" placeholder="Cari nama balita / NIK..." type="text" value="Rayhan"/>
+</div>
+</div>
+<button class="h-10 px-3 rounded-lg border border-outline-variant/60 hover:bg-surface text-on-surface-variant flex items-center justify-center shrink-0 transition-colors" title="Reset Filter">
+<span class="material-symbols-outlined text-[18px]">filter_alt_off</span>
+</button>
+</div>
+</div>
+<!-- Two-Column Master-Detail Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- LEFT PANEL: Daftar Balita Perlu Perhatian (4 cols / ~380-400px) -->
+<div class="lg:col-span-4 flex flex-col gap-space-md">
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm border border-outline-variant/50">
+<div class="flex items-center justify-between pb-space-sm border-b border-surface-container">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Daftar Perlu Perhatian</h2>
+<span class="font-caption text-caption text-on-surface-variant">18 Anak ditemukan</span>
+</div>
+<div class="flex items-center gap-1 bg-surface-container-low px-2 py-1 rounded-md text-caption font-caption text-on-surface-variant">
+<span>Prioritas</span>
+<span class="material-symbols-outlined text-[16px]">swap_vert</span>
+</div>
+</div>
+<!-- Group 1: Perlu Ditinjau Segera (Amber/Warning) -->
+<div class="mt-space-md">
+<div class="flex items-center justify-between px-space-xs mb-space-xs">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-error font-semibold">
+<span class="material-symbols-outlined text-[16px]">error</span> PERLU DITINJAU SEGERA (5)
+              </span>
+<span class="font-caption text-caption text-on-surface-variant">Bidan</span>
+</div>
+<div class="space-y-space-xs">
+<!-- Item 1: ACTIVE / SELECTED -->
+<div class="p-space-sm rounded-lg bg-primary-fixed/20 border-l-4 border-l-primary border border-primary/30 transition-all cursor-pointer shadow-xs">
+<div class="flex items-start justify-between">
+<div>
+<h3 class="font-label-md text-label-md text-primary font-bold">Rayhan Al-Ghifari</h3>
+<p class="font-caption text-caption text-on-surface-variant">Laki-laki • 20 Bulan • RW 04</p>
+</div>
+<span class="text-caption font-caption text-on-surface-variant">12 Nov</span>
+</div>
+<div class="mt-space-xs flex items-center justify-between">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-error-container text-error font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> 2T - Tidak Naik 2x Berturut
+                  </span>
+<span class="font-label-sm text-label-sm text-primary font-semibold flex items-center">
+                    Aktif <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+</span>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="p-space-sm rounded-lg bg-surface hover:bg-surface-container-low border border-transparent hover:border-outline-variant/40 transition-colors cursor-pointer">
+<div class="flex items-start justify-between">
+<div>
+<h3 class="font-label-md text-label-md text-on-surface font-semibold">Alifia Zahra</h3>
+<p class="font-caption text-caption text-on-surface-variant">Perempuan • 14 Bulan • RW 02</p>
+</div>
+<span class="text-caption font-caption text-on-surface-variant">10 Nov</span>
+</div>
+<div class="mt-space-xs">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-error-container text-error font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> BGM - BB/U &lt; -3 SD
+                  </span>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="p-space-sm rounded-lg bg-surface hover:bg-surface-container-low border border-transparent hover:border-outline-variant/40 transition-colors cursor-pointer">
+<div class="flex items-start justify-between">
+<div>
+<h3 class="font-label-md text-label-md text-on-surface font-semibold">Dimas Arya Putra</h3>
+<p class="font-caption text-caption text-on-surface-variant">Laki-laki • 28 Bulan • RW 01</p>
+</div>
+<span class="text-caption font-caption text-on-surface-variant">08 Nov</span>
+</div>
+<div class="mt-space-xs">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-error-container/70 text-on-error-container font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> TB/U Pendek (Indikasi Stunting)
+                  </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Group 2: Perlu Dipantau Rutin (Gentle Olive/Green) -->
+<div class="mt-space-md pt-space-sm border-t border-surface-container">
+<div class="flex items-center justify-between px-space-xs mb-space-xs">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-secondary font-semibold">
+<span class="material-symbols-outlined text-[16px]">visibility</span> PERLU DIPANTAU (9)
+              </span>
+<span class="font-caption text-caption text-on-surface-variant">Kader</span>
+</div>
+<div class="space-y-space-xs">
+<!-- Item 4 -->
+<div class="p-space-sm rounded-lg bg-surface hover:bg-surface-container-low border border-transparent hover:border-outline-variant/40 transition-colors cursor-pointer">
+<div class="flex items-start justify-between">
+<div>
+<h3 class="font-label-md text-label-md text-on-surface font-semibold">Kenzo Rafasya</h3>
+<p class="font-caption text-caption text-on-surface-variant">Laki-laki • 9 Bulan • RW 03</p>
+</div>
+<span class="text-caption font-caption text-on-surface-variant">11 Nov</span>
+</div>
+<div class="mt-space-xs">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> T1 - Kenaikan BB &lt; KBM
+                  </span>
+</div>
+</div>
+<!-- Item 5 -->
+<div class="p-space-sm rounded-lg bg-surface hover:bg-surface-container-low border border-transparent hover:border-outline-variant/40 transition-colors cursor-pointer">
+<div class="flex items-start justify-between">
+<div>
+<h3 class="font-label-md text-label-md text-on-surface font-semibold">Nafisa Ayu</h3>
+<p class="font-caption text-caption text-on-surface-variant">Perempuan • 18 Bulan • RW 04</p>
+</div>
+<span class="text-caption font-caption text-on-surface-variant">12 Nov</span>
+</div>
+<div class="mt-space-xs">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> LiLA &lt; 12.0 cm (Pita Kuning)
+                  </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Group 3: Data Belum Lengkap -->
+<div class="mt-space-md pt-space-sm border-t border-surface-container">
+<div class="flex items-center justify-between px-space-xs mb-space-xs">
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-tertiary font-semibold">
+<span class="material-symbols-outlined text-[16px]">schedule</span> DATA BELUM LENGKAP (4)
+              </span>
+</div>
+<div class="space-y-space-xs">
+<!-- Item 6 -->
+<div class="p-space-sm rounded-lg bg-surface hover:bg-surface-container-low border border-transparent hover:border-outline-variant/40 transition-colors cursor-pointer">
+<div class="flex items-start justify-between">
+<div>
+<h3 class="font-label-md text-label-md text-on-surface font-semibold">Bilal Ramadhan</h3>
+<p class="font-caption text-caption text-on-surface-variant">Laki-laki • 16 Bulan • RW 04</p>
+</div>
+<span class="text-caption font-caption text-on-surface-variant">Sept 2024</span>
+</div>
+<div class="mt-space-xs">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-tertiary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Absen 2 Bulan Berturut
+                  </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination preview -->
+<div class="mt-space-md pt-space-sm border-t border-surface-container flex items-center justify-between text-caption font-caption text-on-surface-variant">
+<span>Menampilkan 6 dari 18</span>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded hover:bg-surface text-outline disabled:opacity-40" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="p-1 rounded hover:bg-surface text-on-surface">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT PANEL: Detail Anak Terpilih (8 cols) -->
+<div class="lg:col-span-8 flex flex-col gap-space-lg">
+<!-- Selected Child Header Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm border border-outline-variant/50 relative overflow-hidden">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md">
+<div class="w-14 h-14 rounded-full bg-primary-fixed text-primary flex items-center justify-center font-headline-md text-headline-md font-bold shrink-0">
+                RA
+              </div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-sm flex-wrap">
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold">Rayhan Al-Ghifari</h2>
+<span class="px-2.5 py-0.5 rounded-full bg-error-container text-error font-label-sm text-label-sm font-semibold inline-flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> Perlu Ditinjau Bidan
+                  </span>
+</div>
+<p class="font-caption text-caption text-on-surface-variant mt-0.5">
+                  Laki-laki • 20 Bulan (Lahir: 15 Maret 2023) • <span class="font-mono">NIK: 3201121008230002</span>
+</p>
+<div class="flex flex-wrap items-center gap-x-space-md gap-y-1 mt-2 font-caption text-caption text-on-surface">
+<span class="inline-flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-primary">person</span>
+                    Ibu: <strong class="text-on-surface font-semibold">Sari Rahmawati</strong>
+</span>
+<a class="inline-flex items-center gap-1 text-primary hover:underline font-semibold" href="#">
+<span class="material-symbols-outlined text-[15px]">chat</span> 0812-3456-7890 (WhatsApp)
+                  </a>
+<span class="inline-flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-primary">apartment</span>
+                    Posyandu Melati 04 (Kader: Nurul Hidayah)
+                  </span>
+</div>
+</div>
+</div>
+<div class="shrink-0 self-start md:self-center">
+<a class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-primary font-label-md text-label-md transition-colors border border-outline-variant/30" href="#">
+<span>Rekam Medis Lengkap</span>
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Growth Chart Section (KMS - Kurva Pertumbuhan) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm border border-outline-variant/50 flex flex-col gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm pb-space-sm border-b border-surface-container">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Grafik Pertumbuhan KMS (WHO Multicentre Study)</h3>
+<p class="font-caption text-caption text-on-surface-variant">Standar Baku Antropometri Anak Kemenkes RI No. 2 Tahun 2020</p>
+</div>
+<!-- Metric Toggle Tabs -->
+<div class="inline-flex p-1 rounded-lg bg-surface-container-low">
+<button class="px-3 py-1 rounded-md bg-primary text-on-primary font-label-sm text-label-sm font-semibold shadow-xs">
+                Berat Badan (BB/U)
+              </button>
+<button class="px-3 py-1 rounded-md text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-medium transition-colors">
+                Tinggi Badan (TB/U)
+              </button>
+<button class="px-3 py-1 rounded-md text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-medium transition-colors">
+                Lingkar Kepala (LK)
+              </button>
+<button class="px-3 py-1 rounded-md text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-medium transition-colors">
+                LiLA
+              </button>
+</div>
+</div>
+<!-- Realistic KMS Graph Canvas (Clean inline SVG) -->
+<div class="relative bg-surface rounded-lg p-space-md overflow-x-auto">
+<div class="min-w-[620px]">
+<svg class="w-full h-auto text-on-surface" viewbox="0 0 680 290" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="normalBand" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#b1f2be" stop-opacity="0.45"></stop>
+<stop offset="100%" stop-color="#d6e6dd" stop-opacity="0.3"></stop>
+</lineargradient>
+<lineargradient id="warningBand" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#ffdad6" stop-opacity="0.5"></stop>
+<stop offset="100%" stop-color="#ffdad6" stop-opacity="0.2"></stop>
+</lineargradient>
+</defs>
+<!-- Grid horizontal lines -->
+<line opacity="0.6" stroke="#becabc" stroke-dasharray="3 3" stroke-width="0.75" x1="70" x2="640" y1="40" y2="40"></line>
+<line opacity="0.6" stroke="#becabc" stroke-dasharray="3 3" stroke-width="0.75" x1="70" x2="640" y1="85" y2="85"></line>
+<line opacity="0.6" stroke="#becabc" stroke-dasharray="3 3" stroke-width="0.75" x1="70" x2="640" y1="130" y2="130"></line>
+<line opacity="0.6" stroke="#becabc" stroke-dasharray="3 3" stroke-width="0.75" x1="70" x2="640" y1="175" y2="175"></line>
+<line opacity="0.6" stroke="#becabc" stroke-dasharray="3 3" stroke-width="0.75" x1="70" x2="640" y1="220" y2="220"></line>
+<!-- Grid vertical lines -->
+<line opacity="0.4" stroke="#becabc" stroke-width="0.75" x1="120" x2="120" y1="30" y2="230"></line>
+<line opacity="0.4" stroke="#becabc" stroke-width="0.75" x1="240" x2="240" y1="30" y2="230"></line>
+<line opacity="0.4" stroke="#becabc" stroke-width="0.75" x1="360" x2="360" y1="30" y2="230"></line>
+<line opacity="0.4" stroke="#becabc" stroke-width="0.75" x1="480" x2="480" y1="30" y2="230"></line>
+<line opacity="0.4" stroke="#becabc" stroke-width="0.75" x1="600" x2="600" y1="30" y2="230"></line>
+<!-- Normal Band (+2 SD down to -2 SD) -->
+<polygon fill="url(#normalBand)" points="120,50 240,65 360,82 480,100 600,118 600,205 480,188 360,172 240,158 120,145"></polygon>
+<!-- Warning Band (-2 SD to -3 SD / Garis Merah) -->
+<polygon fill="url(#warningBand)" points="120,145 240,158 360,172 480,188 600,205 600,225 480,210 360,195 240,182 120,170"></polygon>
+<!-- Red Reference Line (-3 SD / BGM) -->
+<polyline fill="none" points="120,170 240,182 360,195 480,210 600,225" stroke="#ba1a1a" stroke-dasharray="4 2" stroke-width="1.8"></polyline>
+<!-- Rayhan's Actual Child Curve (Notice flattening between bln 19 & 20) -->
+<!-- 12m: 8.8kg (120,165), 14m: 9.3kg (240,152), 16m: 9.8kg (360,140), 18m: 10.2kg (480,132), 19m: 10.5kg (540,126), 20m: 10.8kg (600,124) -->
+<polyline fill="none" points="120,165 240,150 360,138 480,126 540,122 600,119" stroke="#00652c" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></polyline>
+<!-- Data Points with Halos -->
+<circle cx="120" cy="165" fill="#00652c" r="4.5" stroke="#ffffff" stroke-width="2"></circle>
+<circle cx="240" cy="150" fill="#00652c" r="4.5" stroke="#ffffff" stroke-width="2"></circle>
+<circle cx="360" cy="138" fill="#00652c" r="4.5" stroke="#ffffff" stroke-width="2"></circle>
+<circle cx="480" cy="126" fill="#00652c" r="4.5" stroke="#ffffff" stroke-width="2"></circle>
+<circle cx="540" cy="122" fill="#00652c" r="4.5" stroke="#ffffff" stroke-width="2"></circle>
+<circle cx="600" cy="119" fill="#ba1a1a" r="6" stroke="#ffffff" stroke-width="2.5"></circle>
+<!-- Indicator Callout on Last Point (2T alert) -->
+<rect fill="#ffffff" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.06))" height="42" rx="6" stroke="#ffdad6" stroke-width="1.5" width="125" x="535" y="65"></rect>
+<text fill="#ba1a1a" font-family="Plus Jakarta Sans" font-size="10.5" font-weight="700" text-anchor="middle" x="597" y="82">10.8 kg • Pola 2T</text>
+<text fill="#3f493f" font-family="Inter" font-size="9" text-anchor="middle" x="597" y="97">Hanya +300g dlm 2 bln</text>
+<line stroke="#ba1a1a" stroke-width="1.5" x1="600" x2="600" y1="107" y2="114"></line>
+<!-- Y-Axis Labels (kg) -->
+<text fill="#3f493f" font-family="Inter" font-size="11" text-anchor="end" x="60" y="44">13 kg</text>
+<text fill="#3f493f" font-family="Inter" font-size="11" text-anchor="end" x="60" y="89">12 kg</text>
+<text fill="#3f493f" font-family="Inter" font-size="11" text-anchor="end" x="60" y="134">11 kg</text>
+<text fill="#3f493f" font-family="Inter" font-size="11" text-anchor="end" x="60" y="179">10 kg</text>
+<text fill="#3f493f" font-family="Inter" font-size="11" text-anchor="end" x="60" y="224">9 kg</text>
+<!-- X-Axis Labels (Months) -->
+<text fill="#3f493f" font-family="Plus Jakarta Sans" font-size="11" font-weight="600" text-anchor="middle" x="120" y="252">12 Bln</text>
+<text fill="#3f493f" font-family="Plus Jakarta Sans" font-size="11" font-weight="600" text-anchor="middle" x="240" y="252">14 Bln</text>
+<text fill="#3f493f" font-family="Plus Jakarta Sans" font-size="11" font-weight="600" text-anchor="middle" x="360" y="252">16 Bln</text>
+<text fill="#3f493f" font-family="Plus Jakarta Sans" font-size="11" font-weight="600" text-anchor="middle" x="480" y="252">18 Bln</text>
+<text fill="#3f493f" font-family="Plus Jakarta Sans" font-size="11" font-weight="600" text-anchor="middle" x="540" y="252">19 Bln</text>
+<text fill="#00652c" font-family="Plus Jakarta Sans" font-size="11" font-weight="700" text-anchor="middle" x="600" y="252">20 Bln</text>
+<text fill="#6f7a6e" font-family="Inter" font-size="11" text-anchor="middle" x="360" y="275">Usia Balita (Bulan)</text>
+</svg>
+</div>
+<!-- Legend Bar -->
+<div class="mt-space-sm pt-space-xs border-t border-surface-container flex flex-wrap items-center justify-between gap-space-sm text-caption font-caption text-on-surface-variant">
+<div class="flex items-center gap-space-md flex-wrap">
+<span class="inline-flex items-center gap-1.5">
+<span class="w-3.5 h-3.5 rounded bg-secondary-fixed"></span> Rentang Normal (+2 SD s/d -2 SD)
+                </span>
+<span class="inline-flex items-center gap-1.5">
+<span class="w-3.5 h-1 bg-error rounded-full"></span> Garis Merah Kritis (-3 SD)
+                </span>
+<span class="inline-flex items-center gap-1.5">
+<span class="w-3 h-3 rounded-full bg-primary border-2 border-white"></span> Pertumbuhan Rayhan
+                </span>
+</div>
+<span class="text-error font-semibold">Status: Tidak Naik 2x Berturut-turut (2T)</span>
+</div>
+</div>
+</div>
+<!-- Hasil Indikator & Interpretasi Klinis -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm border border-outline-variant/50 flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md text-on-surface">Hasil Indikator &amp; Interpretasi Klinis (12 Nov 2024)</h3>
+<span class="font-label-sm text-label-sm text-secondary bg-secondary-container/40 px-2.5 py-1 rounded-full">Validasi Sistem: Positif Waspada</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead class="bg-surface text-on-surface-variant font-label-sm text-label-sm uppercase">
+<tr>
+<th class="py-2.5 px-3 rounded-l-lg">Indikator</th>
+<th class="py-2.5 px-3">Nilai Terakhir</th>
+<th class="py-2.5 px-3">Z-Score / Kategori</th>
+<th class="py-2.5 px-3 rounded-r-lg">Interpretasi &amp; Rekomendasi Kemenkes</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<tr>
+<td class="py-3 px-3 font-semibold text-on-surface">
+                    Berat Badan menurut Umur (BB/U)
+                  </td>
+<td class="py-3 px-3 font-bold text-on-surface">10.8 kg <span class="font-normal text-caption text-on-surface-variant">(20 bln)</span></td>
+<td class="py-3 px-3">
+<span class="px-2 py-0.5 rounded-full bg-error-container text-error font-label-sm text-label-sm font-semibold inline-block">
+                      Risiko BB Kurang (-1.8 SD)
+                    </span>
+</td>
+<td class="py-3 px-3 text-on-surface-variant font-caption text-caption">
+                    Kenaikan BB 2 bulan terakhir tidak memenuhi KBM (Kenaikan Berat Minimal 300-400 gr). Perlu konfirmasi asupan kalori &amp; riwayat sakit.
+                  </td>
+</tr>
+<tr>
+<td class="py-3 px-3 font-semibold text-on-surface">
+                    Panjang/Tinggi Badan menurut Umur (TB/U)
+                  </td>
+<td class="py-3 px-3 font-bold text-on-surface">82.5 cm</td>
+<td class="py-3 px-3">
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold inline-block">
+                      Gizi Baik / Normal (+0.1 SD)
+                    </span>
+</td>
+<td class="py-3 px-3 text-on-surface-variant font-caption text-caption">
+                    Tinggi badan tumbuh optimal sesuai standar usia. Tidak terindikasi stunting perawakan pendek saat ini.
+                  </td>
+</tr>
+<tr>
+<td class="py-3 px-3 font-semibold text-on-surface">
+                    Berat Badan menurut Panjang Badan (BB/PB)
+                  </td>
+<td class="py-3 px-3 font-bold text-on-surface">10.8 kg / 82.5 cm</td>
+<td class="py-3 px-3">
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold inline-block">
+                      Gizi Baik (-1.1 SD)
+                    </span>
+</td>
+<td class="py-3 px-3 text-on-surface-variant font-caption text-caption">
+                    Proporsi massa tubuh terhadap panjang badan masih dalam batas normal (wasting belum terjadi, namun rentan jika 2T berlanjut).
+                  </td>
+</tr>
+<tr>
+<td class="py-3 px-3 font-semibold text-on-surface">
+                    Lingkar Lengan Atas (LiLA)
+                  </td>
+<td class="py-3 px-3 font-bold text-on-surface">15.1 cm</td>
+<td class="py-3 px-3">
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold inline-block">
+                      Normal (Pita Hijau)
+                    </span>
+</td>
+<td class="py-3 px-3 text-on-surface-variant font-caption text-caption">
+                    Lingkar lengan berada di atas 12.5 cm. Tidak ditemukan indikasi malnutrisi akut (wasting akut).
+                  </td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Riwayat Perubahan Status & Intervensi (Vertical Timeline) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm border border-outline-variant/50 flex flex-col gap-space-md">
+<div class="flex items-center justify-between pb-space-xs border-b border-surface-container">
+<h3 class="font-headline-md text-headline-md text-on-surface">Riwayat Perubahan Status &amp; Intervensi</h3>
+<span class="font-caption text-caption text-on-surface-variant">Log Terverifikasi</span>
+</div>
+<div class="relative pl-6 space-y-space-md before:content-[''] before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-outline-variant/60">
+<!-- Event 1 -->
+<div class="relative">
+<span class="absolute -left-6 top-1 w-4 h-4 rounded-full bg-error border-2 border-surface-container-lowest"></span>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-label-md text-label-md text-on-surface font-bold">Pemeriksaan Rutin Bulan ke-20 (12 Nov 2024)</span>
+<span class="px-2 py-0.5 rounded bg-error-container text-error font-label-sm text-label-sm">Eskalasi Sistem</span>
+</div>
+<p class="font-caption text-caption text-on-surface-variant mt-0.5">Petugas: Kader Nurul Hidayah • BB: 10.8 kg (+100 gr) • TB: 82.5 cm</p>
+<div class="mt-1 p-2 rounded-lg bg-surface border border-outline-variant/40 font-body-sm text-body-sm text-on-surface">
+                  Ditemukan pola 2T (Kenaikan BB tidak adekuat dalam 2 penimbangan berturut-turut). Sistem mengeskalasi status balita menjadi <strong>“Perlu Ditinjau Bidan”</strong> untuk tindak lanjut Puskesmas.
+                </div>
+</div>
+</div>
+<!-- Event 2 -->
+<div class="relative">
+<span class="absolute -left-6 top-1 w-4 h-4 rounded-full bg-secondary border-2 border-surface-container-lowest"></span>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Pemeriksaan Rutin Bulan ke-19 (14 Okt 2024)</span>
+<span class="px-2 py-0.5 rounded bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">Edukasi Gizi</span>
+</div>
+<p class="font-caption text-caption text-on-surface-variant mt-0.5">Petugas: Kader Anisa Putri • BB: 10.7 kg (+100 gr)</p>
+<div class="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+                  Kenaikan BB kurang dari KBM (hanya 100 gr). Kader memberikan edukasi peningkatan konsumsi protein hewani (telur &amp; ikan) kepada orang tua.
+                </div>
+</div>
+</div>
+<!-- Event 3 -->
+<div class="relative">
+<span class="absolute -left-6 top-1 w-4 h-4 rounded-full bg-primary border-2 border-surface-container-lowest"></span>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs flex-wrap">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Pemeriksaan Rutin Bulan ke-18 (14 Sep 2024)</span>
+<span class="px-2 py-0.5 rounded bg-primary-fixed text-primary font-label-sm text-label-sm">Tervalidasi Normal</span>
+</div>
+<p class="font-caption text-caption text-on-surface-variant mt-0.5">Petugas: Bidan Sri Wahyuni, A.Md.Keb • BB: 10.6 kg (+400 gr)</p>
+<div class="mt-1 font-body-sm text-body-sm text-on-surface-variant">
+                  Pertumbuhan optimal, kenaikan berat badan melampaui KBM. Dinyatakan normal dan sehat.
+                </div>
+</div>
+</div>
+</div>
+</div>
+<!-- Gentle Action Area: Kotak Aksi Tindak Lanjut & Validasi -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm border border-primary/30 relative">
+<div class="flex items-center gap-space-xs mb-1">
+<span class="material-symbols-outlined text-primary text-[22px]">medical_services</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Tindak Lanjut Petugas Kesehatan / Bidan</h3>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+            Tentukan rencana intervensi balita untuk posyandu mendatang atau penerbitan rujukan ke Puskesmas Sukamaju.
+          </p>
+<!-- Quick Actions Selector Chips -->
+<div class="flex flex-wrap gap-2 mb-space-md">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-secondary-container hover:text-on-secondary-container text-on-surface font-label-sm text-label-sm border border-outline-variant/40 transition-colors flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px] text-primary">add</span> Berikan PMT Pemulihan
+            </button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-secondary-container hover:text-on-secondary-container text-on-surface font-label-sm text-label-sm border border-outline-variant/40 transition-colors flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px] text-primary">add</span> Rujuk ke Puskesmas
+            </button>
+<button class="px-3 py-1.5 rounded-lg bg-secondary-container text-on-secondary-container font-label-sm text-label-sm border border-primary/20 transition-colors flex items-center gap-1 font-semibold" type="button">
+<span class="material-symbols-outlined text-[16px]">check</span> Jadwalkan Kunjungan Rumah (Home Visit)
+            </button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-secondary-container hover:text-on-secondary-container text-on-surface font-label-sm text-label-sm border border-outline-variant/40 transition-colors flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px] text-primary">add</span> Edukasi MPASI Protein Hewani
+            </button>
+</div>
+<!-- Note Textarea -->
+<div class="flex flex-col gap-1 mb-space-md">
+<label class="font-label-sm text-label-sm text-on-surface font-semibold">
+              Catatan Tindak Lanjut &amp; Saran Intervensi *
+            </label>
+<textarea class="w-full p-3 rounded-lg bg-surface border border-outline-variant/60 font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" placeholder="Tuliskan catatan observasi klinis... Contoh: Balita telah dikonsultasikan dengan ibu. Dianjurkan penambahan PMT biskuit &amp; telur 1 butir/hari. Jadwalkan home visit atau rujukan jika bulan depan tidak naik." rows="3">Ibu balita menyampaikan nafsu makan anak berkurang pasca batuk pilek 2 minggu lalu. Telah diedukasi pemberian telur 1 butir/hari dan santan/minyak pada bubur. Jadwalkan kunjungan rumah kader minggu depan untuk pantau asupan makan harian.</textarea>
+</div>
+<!-- Action Buttons Row -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm pt-space-xs border-t border-surface-container">
+<div class="flex items-center gap-space-sm">
+<button class="px-4 py-2.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container transition-colors shadow-sm flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>Tandai Sudah Ditinjau &amp; Simpan Catatan</span>
+</button>
+<button class="px-3.5 py-2.5 rounded-lg bg-secondary-container text-on-secondary-container font-label-md text-label-md hover:bg-secondary-fixed transition-colors flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+<span>WhatsApp Orang Tua</span>
+</button>
+</div>
+<button class="px-3 py-2 text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[18px]">event_repeat</span>
+<span>Jadwalkan Kunjungan Ulang</span>
+</button>
+</div>
+</div>
+<!-- Disclaimer Banner (Mandatory Notice) -->
+<div class="rounded-xl p-space-md bg-secondary-container/30 border border-secondary-fixed flex items-start gap-space-md">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[18px]">health_and_safety</span>
+</div>
+<div class="flex flex-col">
+<h4 class="font-label-md text-label-md text-on-surface font-bold">Pemberitahuan Medis Penapisan Tumbuh Kembang</h4>
+<p class="font-caption text-caption text-on-surface-variant mt-0.5 leading-relaxed">
+              Seluruh hasil indikator, status Z-Score, dan grafik pemantauan pertumbuhan pada halaman ini merupakan <strong>indikasi awal penapisan (skrining)</strong> tumbuh kembang di tingkat Posyandu dan <strong>BUKAN diagnosis medis final</strong>. Diagnosis klinis resmi dan penetapan tata laksana lanjutan ditegakkan oleh Tenaga Medis / Dokter di Puskesmas Pembina.
+            </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></main></div></body></html>
