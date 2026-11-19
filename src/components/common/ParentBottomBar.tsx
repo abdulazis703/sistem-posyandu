@@ -25,7 +25,7 @@ export function ParentBottomBar() {
   return (
     <nav
       aria-label="Navigasi Bawah Orang Tua"
-      className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg border-t border-[#e2ebe5] shadow-[0_-4px_16px_rgba(0,0,0,0.06)] px-2 py-1.5"
+      className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg border-t border-[#e2ebe5] shadow-[0_-4px_16px_rgba(0,0,0,0.06)] px-2 pt-1.5 pb-[calc(0.5rem+env(safe-area-inset-bottom))]"
     >
       <div className="max-w-md mx-auto grid grid-cols-5 items-center">
         {parentBottomNavItems.map((item) => {
@@ -38,7 +38,7 @@ export function ParentBottomBar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all relative group",
+                "flex flex-col items-center justify-center min-h-[44px] py-1 px-1 rounded-xl transition-all relative group touch-manipulation select-none",
                 isActive
                   ? "text-[#15803d] font-bold"
                   : "text-[#6f7a6e] hover:text-[#0b1c30] font-medium"
@@ -75,4 +75,3 @@ export function ParentBottomBar() {
     </nav>
   );
 }
-

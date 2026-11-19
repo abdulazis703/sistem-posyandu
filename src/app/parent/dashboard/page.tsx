@@ -1,18 +1,34 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import useChildrenData from "@/app/hooks/useChildrenData";
-import { mockChildren } from "@/lib/mockData";
+import { getCurrentUser, UserProfile } from "@/lib/supabase";
 import { StuntingBadge } from "@/components/ui/badge";
 import { calculateDetailedAge } from "@/lib/ageHelper";
 
 export default function ParentDashboardPage() {
   const { children } = useChildrenData();
-  const matched = children.filter(
-    (c) => c.parentId === "parent-1" || c.parentName.toLowerCase().includes("sari")
-  );
-  const myChildren = matched.length > 0 ? matched : (children.length > 0 ? children.slice(0, 2) : mockChildren.slice(0, 2));
+  const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
+  const [loadingUser, setLoadingUser] = useState(true);
+
+  useEffect(() => {
+    getCurrentUser()
+      .then((user) => setCurrentUser(user))
+      .finally(() => setLoadingUser(false));
+  }, []);
+
+  // Filter balita milik akun yang sedang login (berdasarkan parent_id)
+  const myChildren = currentUser
+    ? children.filter((c) => c.parentId === currentUser.id)
+    : [];
+
+  const displayName = loadingUser
+    ? "..."
+    : currentUser?.fullName || "Orang Tua";
+
+  const displayPosyandu =
+    currentUser?.posyandu || "Posyandu Melati 01 (RW 01)";
 
   return (
     <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-6 sm:gap-8">
@@ -27,7 +43,7 @@ export default function ParentDashboardPage() {
               Hasil ini adalah indikasi awal dan perlu ditinjau petugas kesehatan.
             </span>
             <span className="text-xs text-slate-500">
-              Data bersumber dari penimbangan resmi kader Posyandu Melati.
+              Data bersumber dari penimbangan resmi kader {displayPosyandu}.
             </span>
           </div>
         </div>
@@ -40,11 +56,11 @@ export default function ParentDashboardPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex flex-col gap-1">
           <h1 className="font-heading text-2xl lg:text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            Selamat datang, Bu Sari <span className="text-2xl">👋</span>
+            Selamat datang, {displayName} <span className="text-2xl">👋</span>
           </h1>
           <p className="text-xs sm:text-sm text-slate-500">
             Pantau perkembangan dan jadwal pemeriksaan rutin buah hati Anda di{" "}
-            <strong className="text-slate-800 font-semibold">Posyandu Melati RW 04</strong>.
+            <strong className="text-slate-800 font-semibold">{displayPosyandu}</strong>.
           </p>
         </div>
 
@@ -82,7 +98,9 @@ export default function ParentDashboardPage() {
             </div>
             <div className="mt-3 flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
-              <span className="text-xs text-emerald-800 font-medium">Semua aktif terpantau</span>
+              <span className="text-xs text-emerald-800 font-medium">
+                {myChildren.length > 0 ? "Semua aktif terpantau" : "Menunggu sinkronisasi kader"}
+              </span>
             </div>
           </div>
           <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-700 shrink-0">
@@ -99,10 +117,13 @@ export default function ParentDashboardPage() {
               </span>
               <div className="flex items-baseline gap-2 mt-2">
                 <span className="font-heading text-2xl lg:text-3xl font-extrabold text-slate-900">
-                  1 <span className="text-xs text-slate-500 font-normal">dari {myChildren.length} Selesai</span>
+                  {myChildren.length > 0 ? 1 : 0}{" "}
+                  <span className="text-xs text-slate-500 font-normal">
+                    dari {myChildren.length} Selesai
+                  </span>
                 </span>
                 <span className="text-xs text-emerald-800 font-bold bg-emerald-100 px-2.5 py-0.5 rounded-full">
-                  50%
+                  {myChildren.length > 0 ? "50%" : "0%"}
                 </span>
               </div>
             </div>
@@ -112,11 +133,16 @@ export default function ParentDashboardPage() {
           </div>
           <div className="mt-3">
             <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-              <div className="bg-emerald-600 h-full rounded-full" style={{ width: "50%" }}></div>
+              <div
+                className="bg-emerald-600 h-full rounded-full"
+                style={{ width: myChildren.length > 0 ? "50%" : "0%" }}
+              ></div>
             </div>
             <div className="flex justify-between items-center mt-2 text-xs text-slate-500">
               <span>Periode: November 2026</span>
-              <span className="font-semibold text-slate-800">Aisyah menunggu jadwal</span>
+              <span className="font-semibold text-slate-800">
+                {myChildren.length > 0 ? "Terjadwal rutin" : "Belum ada jadwal"}
+              </span>
             </div>
           </div>
         </div>
@@ -128,12 +154,16 @@ export default function ParentDashboardPage() {
               Status Pertumbuhan
             </span>
             <div className="flex items-baseline gap-2 mt-2">
-              <span className="font-heading text-3xl lg:text-4xl font-extrabold text-emerald-700">100%</span>
+              <span className="font-heading text-3xl lg:text-4xl font-extrabold text-emerald-700">
+                {myChildren.length > 0 ? "100%" : "-"}
+              </span>
               <span className="text-xs text-slate-500 font-medium">Zona Hijau</span>
             </div>
             <div className="mt-3 flex items-center gap-1.5">
               <span className="material-symbols-outlined text-[16px] text-emerald-600">verified</span>
-              <span className="text-xs text-emerald-800 font-medium">Tumbuh Kembang Baik</span>
+              <span className="text-xs text-emerald-800 font-medium">
+                {myChildren.length > 0 ? "Tumbuh Kembang Baik" : "Belum ada data ukur"}
+              </span>
             </div>
           </div>
           <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-700 shrink-0">
@@ -153,82 +183,98 @@ export default function ParentDashboardPage() {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-          {myChildren.map((child) => (
-            <div
-              key={child.id}
-              className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/80 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex items-start justify-between pb-4 border-b border-slate-100">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 font-bold text-lg flex items-center justify-center border border-emerald-200">
-                      {child.name.slice(0, 2).toUpperCase()}
+        {myChildren.length === 0 ? (
+          <div className="bg-white rounded-2xl p-8 border border-slate-200/80 text-center space-y-2">
+            <p className="text-sm font-semibold text-slate-800">
+              Belum ada data balita yang terhubung ke akun {displayName}.
+            </p>
+            <p className="text-xs text-slate-500 max-w-md mx-auto">
+              Data balita akan muncul otomatis setelah kader Posyandu mendaftarkan anak Anda menggunakan NIK orang tua ({currentUser?.nik || "-"}).
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            {myChildren.map((child) => (
+              <div
+                key={child.id}
+                className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/80 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-start justify-between pb-4 border-b border-slate-100">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 font-bold text-lg flex items-center justify-center border border-emerald-200">
+                        {child.name.slice(0, 2).toUpperCase()}
+                      </div>
+                      <div>
+                        <h3 className="font-heading text-base font-bold text-slate-900">
+                          {child.name}
+                        </h3>
+                        <p className="text-xs text-slate-500">
+                          {calculateDetailedAge(child.birthDate).textLong} ({child.ageMonths} Bulan) •{" "}
+                          {child.gender === "L" ? "Laki-laki" : "Perempuan"}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-heading text-base font-bold text-slate-900">
-                        {child.name}
-                      </h3>
-                      <p className="text-xs text-slate-500">
-                        {calculateDetailedAge(child.birthDate).textLong} ({child.ageMonths} Bulan) • {child.gender === "L" ? "Laki-laki" : "Perempuan"}
-                      </p>
+
+                    <StuntingBadge status={child.stuntingStatus} />
+                  </div>
+
+                  {/* Metrics */}
+                  <div className="grid grid-cols-3 gap-2 sm:gap-3 my-4">
+                    <div className="p-2 sm:p-3 bg-slate-50 rounded-xl text-center border border-slate-200/70">
+                      <span className="text-[11px] sm:text-xs text-slate-500 block truncate">Berat Badan</span>
+                      <span className="font-heading text-base sm:text-lg font-bold text-slate-900 mt-0.5 block">
+                        {child.weight} <span className="text-[10px] sm:text-xs font-normal text-slate-500">kg</span>
+                      </span>
+                      <span className="text-[11px] sm:text-xs text-emerald-700 font-semibold truncate block">Normal</span>
+                    </div>
+
+                    <div className="p-2 sm:p-3 bg-slate-50 rounded-xl text-center border border-slate-200/70">
+                      <span className="text-[11px] sm:text-xs text-slate-500 block truncate">Tinggi Badan</span>
+                      <span className="font-heading text-base sm:text-lg font-bold text-slate-900 mt-0.5 block">
+                        {child.height} <span className="text-[10px] sm:text-xs font-normal text-slate-500">cm</span>
+                      </span>
+                      <span className="text-[11px] sm:text-xs text-emerald-700 font-semibold truncate block">Normal</span>
+                    </div>
+
+                    <div className="p-2 sm:p-3 bg-slate-50 rounded-xl text-center border border-slate-200/70">
+                      <span className="text-[11px] sm:text-xs text-slate-500 block truncate">Z-Score TB/U</span>
+                      <span className="font-heading text-base sm:text-lg font-bold text-emerald-700 mt-0.5 block">
+                        {child.zScoreTbU} <span className="text-[10px] sm:text-xs font-normal text-slate-500">SD</span>
+                      </span>
+                      <span className="text-[11px] sm:text-xs text-emerald-700 font-semibold truncate block">Sesuai Usia</span>
                     </div>
                   </div>
 
-                  <StuntingBadge status={child.stuntingStatus} />
+                  <div className="text-xs text-slate-500 space-y-1">
+                    <p>
+                      Terakhir ditimbang: <strong className="text-slate-800">{child.lastExamDate}</strong>
+                    </p>
+                    <p>
+                      Posyandu: <strong className="text-slate-800">{child.posyandu}</strong>
+                    </p>
+                  </div>
                 </div>
 
-                {/* Metrics */}
-                <div className="grid grid-cols-3 gap-3 my-4">
-                  <div className="p-3 bg-slate-50 rounded-xl text-center border border-slate-200/70">
-                    <span className="text-xs text-slate-500 block">Berat Badan</span>
-                    <span className="font-heading text-lg font-bold text-slate-900 mt-0.5 block">
-                      {child.weight} <span className="text-xs font-normal text-slate-500">kg</span>
-                    </span>
-                    <span className="text-xs text-emerald-700 font-semibold">Normal</span>
-                  </div>
-
-                  <div className="p-3 bg-slate-50 rounded-xl text-center border border-slate-200/70">
-                    <span className="text-xs text-slate-500 block">Panjang/Tinggi</span>
-                    <span className="font-heading text-lg font-bold text-slate-900 mt-0.5 block">
-                      {child.height} <span className="text-xs font-normal text-slate-500">cm</span>
-                    </span>
-                    <span className="text-xs text-emerald-700 font-semibold">Normal</span>
-                  </div>
-
-                  <div className="p-3 bg-slate-50 rounded-xl text-center border border-slate-200/70">
-                    <span className="text-xs text-slate-500 block">Z-Score TB/U</span>
-                    <span className="font-heading text-lg font-bold text-emerald-700 mt-0.5 block">
-                      {child.zScoreTbU} <span className="text-xs font-normal text-slate-500">SD</span>
-                    </span>
-                    <span className="text-xs text-emerald-700 font-semibold">Sesuai Usia</span>
-                  </div>
-                </div>
-
-                <div className="text-xs text-slate-500 space-y-1">
-                  <p>Terakhir ditimbang: <strong className="text-slate-800">{child.lastExamDate}</strong></p>
-                  <p>Posyandu: <strong className="text-slate-800">{child.posyandu}</strong></p>
+                <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
+                  <Link
+                    href="/parent/riwayat"
+                    className="text-xs font-semibold text-slate-600 hover:text-emerald-700"
+                  >
+                    Riwayat Pengukuran
+                  </Link>
+                  <Link
+                    href="/parent/grafik"
+                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl shadow-xs transition-all flex items-center gap-1.5"
+                  >
+                    <span>Lihat Grafik</span>
+                    <span className="material-symbols-outlined text-[16px]">show_chart</span>
+                  </Link>
                 </div>
               </div>
-
-              <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
-                <Link
-                  href="/parent/riwayat"
-                  className="text-xs font-semibold text-slate-600 hover:text-emerald-700"
-                >
-                  Riwayat Pengukuran
-                </Link>
-                <Link
-                  href="/parent/grafik"
-                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl shadow-xs transition-all flex items-center gap-1.5"
-                >
-                  <span>Lihat Grafik</span>
-                  <span className="material-symbols-outlined text-[16px]">show_chart</span>
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

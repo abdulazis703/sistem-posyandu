@@ -55,7 +55,7 @@ export function StaffSidebar({ collapsed: controlledCollapsed, onToggle }: Staff
       {/* Sidebar */}
       <aside
         style={{ width: sidebarW }}
-        className="hidden lg:flex fixed left-0 top-0 h-screen bg-white z-50 flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)] border-r border-[#e2ebe5] transition-[width] duration-300 overflow-hidden"
+        className="hidden lg:flex fixed left-0 top-0 h-dvh bg-white z-50 flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)] border-r border-[#e2ebe5] transition-[width] duration-300 overflow-hidden"
       >
         <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
           {/* Brand Header */}

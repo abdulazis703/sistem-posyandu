@@ -22,7 +22,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             type={type}
             ref={ref}
             className={cn(
-              "w-full h-[42px] px-3.5 bg-white rounded-[10px] border border-[#cbd5e1] text-sm text-[#0f172a] placeholder:text-[#94a3b8] transition-all focus:outline-none focus:border-[#15803d] focus:ring-2 focus:ring-[#15803d]/20 disabled:bg-[#f1f5f9] disabled:cursor-not-allowed",
+              "w-full h-11 px-3.5 bg-white rounded-xl border border-[#cbd5e1] text-base sm:text-xs text-[#0f172a] placeholder:text-[#94a3b8] transition-all focus:outline-none focus:border-[#15803d] focus:ring-2 focus:ring-[#15803d]/20 disabled:bg-[#f1f5f9] disabled:cursor-not-allowed",
               affix && "pr-14",
               error && "border-[#ba1a1a] focus:border-[#ba1a1a] focus:ring-[#ba1a1a]/20",
               className

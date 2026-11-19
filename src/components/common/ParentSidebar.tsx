@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { signOut } from "@/lib/supabase";
+import { getCurrentUser, signOut, UserProfile } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
 
 const parentNavItems = [
@@ -22,7 +22,12 @@ interface ParentSidebarProps {
 export function ParentSidebar({ collapsed: controlledCollapsed, onToggle }: ParentSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const [internalCollapsed, setInternalCollapsed] = React.useState(false);
+  const [internalCollapsed, setInternalCollapsed] = useState(false);
+  const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
+
+  useEffect(() => {
+    getCurrentUser().then((user) => setCurrentUser(user));
+  }, []);
 
   const isControlled = controlledCollapsed !== undefined;
   const collapsed = isControlled ? controlledCollapsed : internalCollapsed;
@@ -52,7 +57,7 @@ export function ParentSidebar({ collapsed: controlledCollapsed, onToggle }: Pare
       {/* Sidebar */}
       <aside
         style={{ width: sidebarW }}
-        className="hidden lg:flex fixed left-0 top-0 h-screen bg-white text-[#0b1c30] z-50 flex-col justify-between border-r border-[#e2ebe5] shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-[width] duration-300 overflow-hidden"
+        className="hidden lg:flex fixed left-0 top-0 h-dvh bg-white text-[#0b1c30] z-50 flex-col justify-between border-r border-[#e2ebe5] shadow-[0_1px_8px_rgba(0,0,0,0.04)] transition-[width] duration-300 overflow-hidden"
       >
         <div className="flex flex-col overflow-x-hidden">
           {/* Brand Header */}
@@ -134,7 +139,7 @@ export function ParentSidebar({ collapsed: controlledCollapsed, onToggle }: Pare
               </div>
               <div className="flex flex-col min-w-0">
                 <span className="text-xs font-semibold text-[#0b1c30] truncate">
-                  Sari Rahmawati
+                  {currentUser?.fullName || "Orang Tua"}
                 </span>
                 <span className="text-[11px] text-[#4b5a53] truncate">Orang Tua / Wali</span>
               </div>

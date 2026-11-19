@@ -93,7 +93,7 @@ export function HeaderCalendarWidget() {
 
       {/* Datepicker Popover */}
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-72 bg-white rounded-2xl shadow-xl border border-[#e2ebe5] p-4 z-50 animate-in fade-in zoom-in-95 duration-150">
+        <div className="absolute right-0 top-full mt-2 w-[calc(100vw-1.5rem)] sm:w-72 max-w-xs bg-white rounded-2xl shadow-xl border border-[#e2ebe5] p-4 z-50 animate-in fade-in zoom-in-95 duration-150">
           {/* Header Month / Year controls */}
           <div className="flex items-center justify-between pb-3 mb-2 border-b border-[#f1f5f9]">
             <button

@@ -1,3 +1,4 @@
+// src/lib/supabase/auth.ts
 import { supabase } from "./client";
 
 export interface UserProfile {
@@ -5,35 +6,29 @@ export interface UserProfile {
   email: string;
   phone?: string;
   role: "parent" | "staff" | "admin";
-  fullName?: string;
-  posyanduId?: string;
+  fullName: string;
+  posyandu?: string;
+  nik?: string;
 }
 
-/**
- * Login dengan Email dan Password
- */
 export async function signIn(email: string, password: string) {
   const { data, error } = await supabase.auth.signInWithPassword({
     email: email.trim().toLowerCase(),
     password,
   });
 
-  if (error) {
-    throw error;
-  }
+  if (error) throw error;
 
-  // Ambil metadata & role dari tabel users
-  const { data: userRecord, error: userError } = await supabase
+  const { data: userRecord } = await supabase
     .from("users")
     .select("id, email, phone, role")
     .eq("id", data.user.id)
     .single();
 
-  if (userError) {
-    console.warn("User record lookup fallback to metadata:", userError.message);
-  }
-
-  const role = userRecord?.role || (data.user.user_metadata?.role as "parent" | "staff" | "admin") || "parent";
+  const role =
+    (userRecord?.role as "parent" | "staff" | "admin") ||
+    (data.user.user_metadata?.role as "parent" | "staff" | "admin") ||
+    "parent";
 
   return {
     user: data.user,
@@ -42,9 +37,6 @@ export async function signIn(email: string, password: string) {
   };
 }
 
-/**
- * Registrasi Orang Tua Baru
- */
 export async function signUpParent(params: {
   fullName: string;
   phone: string;
@@ -53,7 +45,9 @@ export async function signUpParent(params: {
   posyanduName?: string;
   nik?: string;
 }) {
-  const finalEmail = params.email?.trim() || `${params.phone.replace(/[^0-9]/g, "")}@posyandu.parent.local`;
+  const finalEmail =
+    params.email?.trim() ||
+    `${params.phone.replace(/[^0-9]/g, "")}@posyandu.parent.local`;
 
   const { data, error } = await supabase.auth.signUp({
     email: finalEmail.toLowerCase(),
@@ -61,51 +55,40 @@ export async function signUpParent(params: {
     options: {
       data: {
         role: "parent",
-        full_name: params.fullName,
-        phone: params.phone,
+        full_name: params.fullName.trim(),
+        phone: params.phone.trim(),
         posyandu: params.posyanduName,
-        nik: params.nik,
+        nik: params.nik?.trim(),
       },
     },
   });
 
-  if (error) {
-    throw error;
-  }
+  if (error) throw error;
 
   return data;
 }
 
-/**
- * Reset Kata Sandi via Email
- */
 export async function resetPassword(email: string) {
-  const { data, error } = await supabase.auth.resetPasswordForEmail(email.trim().toLowerCase(), {
-    redirectTo: typeof window !== "undefined" ? `${window.location.origin}/login` : undefined,
-  });
-
-  if (error) {
-    throw error;
-  }
-
+  const { data, error } = await supabase.auth.resetPasswordForEmail(
+    email.trim().toLowerCase(),
+    {
+      redirectTo:
+        typeof window !== "undefined" ? `${window.location.origin}/login` : undefined,
+    }
+  );
+  if (error) throw error;
   return data;
 }
 
-/**
- * Logout
- */
 export async function signOut() {
   const { error } = await supabase.auth.signOut();
-  if (error) {
-    throw error;
-  }
+  if (error) throw error;
 }
 
-/**
- * Ambil data sesi user saat ini
- */
 export async function getCurrentUser(): Promise<UserProfile | null> {
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   if (!user) return null;
 
   const { data: userProfile } = await supabase
@@ -114,12 +97,42 @@ export async function getCurrentUser(): Promise<UserProfile | null> {
     .eq("id", user.id)
     .single();
 
+  const role =
+    (userProfile?.role as "parent" | "staff" | "admin") ||
+    (user.user_metadata?.role as "parent" | "staff" | "admin") ||
+    "parent";
+
+  let dbFullName: string | undefined;
+  let dbNik: string | undefined;
+
+  if (role === "parent") {
+    const { data: parentProf } = await supabase
+      .from("parent_profiles")
+      .select("full_name, nik")
+      .eq("user_id", user.id)
+      .single();
+    dbFullName = parentProf?.full_name;
+    dbNik = parentProf?.nik;
+  } else {
+    const { data: staffProf } = await supabase
+      .from("staff_profiles")
+      .select("full_name")
+      .eq("user_id", user.id)
+      .single();
+    dbFullName = staffProf?.full_name;
+  }
+
   return {
     id: user.id,
     email: user.email || "",
     phone: userProfile?.phone || user.user_metadata?.phone,
-    role: userProfile?.role || user.user_metadata?.role || "parent",
-    fullName: user.user_metadata?.full_name,
+    role,
+    fullName:
+      dbFullName ||
+      user.user_metadata?.full_name ||
+      user.email?.split("@")[0] ||
+      "Pengguna",
+    posyandu: user.user_metadata?.posyandu || "Posyandu Melati 01 (RW 01)",
+    nik: dbNik || user.user_metadata?.nik,
   };
 }
-

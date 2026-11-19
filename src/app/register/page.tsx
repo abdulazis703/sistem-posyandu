@@ -71,48 +71,48 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9ff] flex flex-col justify-center">
-      <div className="w-full min-h-screen flex flex-col lg:flex-row bg-[#f8f9ff]">
+    <div className="min-h-dvh bg-[#f8f9ff] flex flex-col justify-center overflow-x-hidden">
+      <div className="w-full min-h-dvh flex flex-col lg:flex-row bg-[#f8f9ff]">
         {/* Left Hero & Narrative Panel */}
-        <div className="w-full lg:w-1/2 bg-[#12512c] relative p-8 sm:p-12 lg:p-16 flex flex-col justify-between overflow-hidden text-white">
+        <div className="w-full lg:w-1/2 bg-[#12512c] relative p-5 sm:p-8 lg:p-16 flex flex-col justify-between overflow-hidden text-white">
           {/* Ambient Decorative Organic Blobs */}
-          <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-[#2e6a41] opacity-30 blur-3xl pointer-events-none"></div>
-          <div className="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-[#95f8a7] opacity-15 blur-3xl pointer-events-none"></div>
+          <div className="absolute -top-32 -left-32 w-72 sm:w-96 h-72 sm:h-96 rounded-full bg-[#2e6a41] opacity-30 blur-3xl pointer-events-none"></div>
+          <div className="absolute -bottom-24 -right-24 w-72 sm:w-96 h-72 sm:h-96 rounded-full bg-[#95f8a7] opacity-15 blur-3xl pointer-events-none"></div>
 
           {/* Top Header / Brand Identity */}
           <div className="relative z-10 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-2xl bg-[#b1f2be] flex items-center justify-center shadow-md">
+            <Link href="/" className="flex items-center gap-2.5 sm:gap-3">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#b1f2be] flex items-center justify-center shadow-md shrink-0">
                 <span className="material-symbols-outlined text-[#00652c] text-2xl">eco</span>
               </div>
               <div>
-                <span className="font-heading text-xl font-bold tracking-tight text-white block leading-tight">
+                <span className="font-heading text-lg sm:text-xl font-bold tracking-tight text-white block leading-tight">
                   TumbuhKu
                 </span>
-                <span className="text-[11px] text-[#96d5a3] uppercase tracking-wider block">
+                <span className="text-[10px] sm:text-[11px] text-[#96d5a3] uppercase tracking-wider block">
                   KMS & Posyandu Digital
                 </span>
               </div>
             </Link>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2e6a41]/70 backdrop-blur text-[#95f8a7] text-xs font-semibold shadow-sm">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2e6a41]/70 backdrop-blur text-[#95f8a7] text-[11px] sm:text-xs font-semibold shadow-sm">
               <span className="w-1.5 h-1.5 rounded-full bg-[#95f8a7] animate-pulse"></span>
-              Pendaftaran Akun Baru
+              Pendaftaran Baru
             </span>
           </div>
 
           {/* Center Narrative & Feature Highlights */}
-          <div className="relative z-10 my-10 lg:my-auto flex flex-col gap-6 max-w-xl">
-            <div className="space-y-4">
-              <h1 className="font-heading text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+          <div className="relative z-10 my-4 sm:my-6 lg:my-auto flex flex-col gap-4 sm:gap-6 max-w-xl">
+            <div className="space-y-2 sm:space-y-4">
+              <h1 className="font-heading text-xl sm:text-2xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight">
                 Tumbuh sehat dimulai dari pemantauan yang tepat.
               </h1>
-              <p className="text-sm sm:text-base text-[#d6e6dd] leading-relaxed">
+              <p className="text-xs sm:text-sm lg:text-base text-[#d6e6dd] leading-relaxed">
                 Bergabung bersama ribuan orang tua dan kader Posyandu untuk memastikan tumbuh kembang balita optimal, terukur, dan bebas risiko stunting sejak dini.
               </p>
             </div>
 
-            {/* Feature Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-2">
+            {/* Feature Cards (Desktop only agar di mobile langsung menuju form) */}
+            <div className="hidden lg:grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-2">
               <div className="rounded-2xl p-4 bg-[#2e6a41]/40 backdrop-blur-sm border border-[#b1f2be]/20">
                 <div className="w-9 h-9 rounded-xl bg-[#b1f2be]/20 flex items-center justify-center text-[#95f8a7] mb-3">
                   <span className="material-symbols-outlined text-xl">insights</span>
@@ -145,27 +145,27 @@ export default function RegisterPage() {
             </div>
 
             {/* Notice info */}
-            <div className="p-4 rounded-2xl bg-[#2e6a41]/30 border border-[#b1f2be]/20 flex items-center gap-3">
-              <span className="material-symbols-outlined text-[#95f8a7] text-[24px]">info</span>
-              <p className="text-xs text-[#d6e6dd] leading-relaxed">
-                <strong className="text-white font-semibold">Tanpa Kode Undangan:</strong> Begitu akun Anda dibuat, balita yang didaftarkan oleh kader di Posyandu akan otomatis muncul di akun Anda.
+            <div className="p-3 sm:p-4 rounded-2xl bg-[#2e6a41]/30 border border-[#b1f2be]/20 flex items-center gap-3">
+              <span className="material-symbols-outlined text-[#95f8a7] text-[20px] sm:text-[24px] shrink-0">info</span>
+              <p className="text-[11px] sm:text-xs text-[#d6e6dd] leading-relaxed">
+                <strong className="text-white font-semibold">Sinkronisasi Otomatis:</strong> Begitu akun Anda dibuat, balita yang didaftarkan oleh kader dengan NIK Anda akan otomatis muncul di dashboard.
               </p>
             </div>
           </div>
 
           {/* Footer note */}
-          <div className="relative z-10 pt-6 border-t border-[#2e6a41] flex items-center justify-between text-xs text-[#96d5a3]">
+          <div className="relative z-10 pt-3 sm:pt-4 lg:pt-6 border-t border-[#2e6a41] flex items-center justify-between text-[11px] sm:text-xs text-[#96d5a3]">
             <span>Sesuai Pedoman Antropometri Kemenkes RI</span>
             <span>Versi 2.4</span>
           </div>
         </div>
 
         {/* Right Form Workspace */}
-        <div className="w-full lg:w-1/2 flex flex-col justify-between p-6 sm:p-10 lg:p-14 bg-[#eff4ff]">
-          <div className="flex justify-between items-center w-full max-w-lg mx-auto">
+        <div className="w-full lg:w-1/2 flex flex-col justify-between p-4 sm:p-8 lg:p-14 bg-[#eff4ff]">
+          <div className="flex justify-between items-center w-full max-w-lg mx-auto mb-3 sm:mb-4">
             <Link
               href="/login"
-              className="inline-flex items-center gap-2 text-xs font-semibold text-[#00652c] hover:underline"
+              className="inline-flex items-center gap-1.5 min-h-[44px] py-2 text-xs font-semibold text-[#00652c] hover:underline touch-manipulation"
             >
               <span className="material-symbols-outlined text-[18px]">arrow_back</span>
               Sudah punya akun? Masuk
@@ -176,10 +176,10 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          <div className="w-full max-w-lg mx-auto my-6">
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#e2ebe5]">
-              <div className="mb-6">
-                <h2 className="font-heading text-2xl font-bold text-[#0b1c30]">
+          <div className="w-full max-w-lg mx-auto my-auto py-2">
+            <div className="bg-white rounded-2xl p-5 sm:p-8 shadow-sm border border-[#e2ebe5]">
+              <div className="mb-5 sm:mb-6">
+                <h2 className="font-heading text-xl sm:text-2xl font-bold text-[#0b1c30]">
                   Registrasi Akun Orang Tua
                 </h2>
                 <p className="text-xs text-[#3f493f] mt-1">
@@ -203,153 +203,153 @@ export default function RegisterPage() {
                 <>
                   {errorMessage && (
                     <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-xl text-xs flex items-center gap-2">
-                      <span className="material-symbols-outlined text-base text-red-600">error</span>
+                      <span className="material-symbols-outlined text-base text-red-600 shrink-0">error</span>
                       <span>{errorMessage}</span>
                     </div>
                   )}
 
                   <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-[#0b1c30] mb-1.5">
-                      Nama Lengkap Ibu / Ayah / Wali *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      placeholder="Contoh: Siti Aminah"
-                      className="w-full h-11 px-3.5 bg-white border border-[#cbd5e1] rounded-xl text-xs text-[#0b1c30] focus:outline-none focus:border-[#15803d] focus:ring-2 focus:ring-[#15803d]/20 transition-all"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-[#0b1c30] mb-1.5 flex items-center justify-between">
-                      <span>Nomor Induk Kependudukan (NIK) *</span>
-                      <span className="text-[11px] font-normal text-emerald-700">Wajib 16 Digit KTP/KK</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      maxLength={16}
-                      value={nik}
-                      onChange={(e) => setNik(e.target.value.replace(/\D/g, ""))}
-                      placeholder="Contoh: 3201294829340001 (16 digit)"
-                      className="w-full h-11 px-3.5 bg-white border border-[#cbd5e1] rounded-xl text-xs text-[#0b1c30] tracking-wider font-mono focus:outline-none focus:border-[#15803d] focus:ring-2 focus:ring-[#15803d]/20 transition-all"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-semibold text-[#0b1c30] mb-1.5">
-                        Nomor WhatsApp Aktif *
+                        Nama Lengkap Ibu / Ayah / Wali *
                       </label>
                       <input
-                        type="tel"
+                        type="text"
                         required
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="Contoh: 081234567890"
-                        className="w-full h-11 px-3.5 bg-white border border-[#cbd5e1] rounded-xl text-xs text-[#0b1c30] focus:outline-none focus:border-[#15803d] focus:ring-2 focus:ring-[#15803d]/20 transition-all"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        placeholder="Contoh: Siti Aminah"
+                        className="w-full h-11 px-3.5 bg-white border border-[#cbd5e1] rounded-xl text-base sm:text-xs text-[#0b1c30] placeholder:text-[#94a3b8] focus:outline-none focus:border-[#15803d] focus:ring-2 focus:ring-[#15803d]/20 transition-all touch-manipulation"
                       />
                     </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-[#0b1c30] mb-1.5 flex items-center justify-between">
+                        <span>Nomor Induk Kependudukan (NIK) *</span>
+                        <span className="text-[11px] font-normal text-emerald-700">Wajib 16 Digit KTP/KK</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        maxLength={16}
+                        value={nik}
+                        onChange={(e) => setNik(e.target.value.replace(/\D/g, ""))}
+                        placeholder="Contoh: 3201294829340001 (16 digit)"
+                        className="w-full h-11 px-3.5 bg-white border border-[#cbd5e1] rounded-xl text-base sm:text-xs text-[#0b1c30] tracking-wider font-mono placeholder:text-[#94a3b8] focus:outline-none focus:border-[#15803d] focus:ring-2 focus:ring-[#15803d]/20 transition-all touch-manipulation"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold text-[#0b1c30] mb-1.5">
+                          Nomor WhatsApp Aktif *
+                        </label>
+                        <input
+                          type="tel"
+                          required
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          placeholder="Contoh: 081234567890"
+                          className="w-full h-11 px-3.5 bg-white border border-[#cbd5e1] rounded-xl text-base sm:text-xs text-[#0b1c30] placeholder:text-[#94a3b8] focus:outline-none focus:border-[#15803d] focus:ring-2 focus:ring-[#15803d]/20 transition-all touch-manipulation"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#0b1c30] mb-1.5">
+                          Email (Opsional)
+                        </label>
+                        <input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="nama@email.com"
+                          className="w-full h-11 px-3.5 bg-white border border-[#cbd5e1] rounded-xl text-base sm:text-xs text-[#0b1c30] placeholder:text-[#94a3b8] focus:outline-none focus:border-[#15803d] focus:ring-2 focus:ring-[#15803d]/20 transition-all touch-manipulation"
+                        />
+                      </div>
+                    </div>
+
                     <div>
                       <label className="block text-xs font-semibold text-[#0b1c30] mb-1.5">
-                        Email (Opsional)
+                        Pilih Posyandu Domisili Terdekat *
                       </label>
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="nama@email.com"
-                        className="w-full h-11 px-3.5 bg-white border border-[#cbd5e1] rounded-xl text-xs text-[#0b1c30] focus:outline-none focus:border-[#15803d] focus:ring-2 focus:ring-[#15803d]/20 transition-all"
-                      />
+                      <select
+                        value={posyandu}
+                        onChange={(e) => setPosyandu(e.target.value)}
+                        className="w-full h-11 px-3.5 bg-white border border-[#cbd5e1] rounded-xl text-base sm:text-xs text-[#0b1c30] focus:outline-none focus:border-[#15803d] focus:ring-2 focus:ring-[#15803d]/20 transition-all touch-manipulation cursor-pointer"
+                      >
+                        <option>Posyandu Melati 01 (RW 01)</option>
+                        <option>Posyandu Melati 02 (RW 02)</option>
+                        <option>Posyandu Melati 03 (RW 03)</option>
+                        <option>Posyandu Melati 04 (RW 04)</option>
+                      </select>
                     </div>
-                  </div>
 
-                  <div>
-                    <label className="block text-xs font-semibold text-[#0b1c30] mb-1.5">
-                      Pilih Posyandu Domisili Terdekat *
-                    </label>
-                    <select
-                      value={posyandu}
-                      onChange={(e) => setPosyandu(e.target.value)}
-                      className="w-full h-11 px-3.5 bg-white border border-[#cbd5e1] rounded-xl text-xs text-[#0b1c30] focus:outline-none focus:border-[#15803d] focus:ring-2 focus:ring-[#15803d]/20 transition-all"
-                    >
-                      <option>Posyandu Melati 01 (RW 01)</option>
-                      <option>Posyandu Melati 02 (RW 02)</option>
-                      <option>Posyandu Melati 03 (RW 03)</option>
-                      <option>Posyandu Melati 04 (RW 04)</option>
-                    </select>
-                  </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold text-[#0b1c30] mb-1.5">
+                          Kata Sandi *
+                        </label>
+                        <input
+                          type="password"
+                          required
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          placeholder="Minimal 6 karakter"
+                          className="w-full h-11 px-3.5 bg-white border border-[#cbd5e1] rounded-xl text-base sm:text-xs text-[#0b1c30] placeholder:text-[#94a3b8] focus:outline-none focus:border-[#15803d] focus:ring-2 focus:ring-[#15803d]/20 transition-all touch-manipulation"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#0b1c30] mb-1.5">
+                          Konfirmasi Kata Sandi *
+                        </label>
+                        <input
+                          type="password"
+                          required
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          placeholder="Ulangi kata sandi"
+                          className="w-full h-11 px-3.5 bg-white border border-[#cbd5e1] rounded-xl text-base sm:text-xs text-[#0b1c30] placeholder:text-[#94a3b8] focus:outline-none focus:border-[#15803d] focus:ring-2 focus:ring-[#15803d]/20 transition-all touch-manipulation"
+                        />
+                      </div>
+                    </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-semibold text-[#0b1c30] mb-1.5">
-                        Kata Sandi *
+                    <div className="pt-1">
+                      <label className="min-h-[44px] flex items-center gap-3 cursor-pointer py-1 touch-manipulation select-none">
+                        <input
+                          type="checkbox"
+                          checked={agree}
+                          onChange={(e) => setAgree(e.target.checked)}
+                          required
+                          className="w-5 h-5 rounded border-slate-300 text-[#15803d] focus:ring-[#15803d] cursor-pointer shrink-0"
+                        />
+                        <span className="text-xs text-[#3f493f] leading-relaxed">
+                          Saya menyetujui ketentuan privasi data pemantauan pertumbuhan balita pada sistem Posyandu digital.
+                        </span>
                       </label>
-                      <input
-                        type="password"
-                        required
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Minimal 6 karakter"
-                        className="w-full h-11 px-3.5 bg-white border border-[#cbd5e1] rounded-xl text-xs text-[#0b1c30] focus:outline-none focus:border-[#15803d] focus:ring-2 focus:ring-[#15803d]/20 transition-all"
-                      />
                     </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-[#0b1c30] mb-1.5">
-                        Konfirmasi Kata Sandi *
-                      </label>
-                      <input
-                        type="password"
-                        required
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        placeholder="Ulangi kata sandi"
-                        className="w-full h-11 px-3.5 bg-white border border-[#cbd5e1] rounded-xl text-xs text-[#0b1c30] focus:outline-none focus:border-[#15803d] focus:ring-2 focus:ring-[#15803d]/20 transition-all"
-                      />
+
+                    <div className="pt-2">
+                      <button
+                        type="submit"
+                        disabled={loading || !agree}
+                        className="w-full min-h-[44px] h-11 bg-[#15803d] hover:bg-[#14532d] text-white font-semibold text-xs sm:text-sm rounded-xl shadow-md shadow-[#15803d]/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer touch-manipulation"
+                      >
+                        {loading ? (
+                          <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                        ) : (
+                          <>
+                            <span>Buat Akun Orang Tua Sekarang</span>
+                            <span className="material-symbols-outlined text-[18px]">how_to_reg</span>
+                          </>
+                        )}
+                      </button>
                     </div>
-                  </div>
-
-                  <div className="pt-2">
-                    <label className="flex items-start gap-2.5 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={agree}
-                        onChange={(e) => setAgree(e.target.checked)}
-                        required
-                        className="mt-0.5 rounded text-[#15803d] focus:ring-[#15803d]"
-                      />
-                      <span className="text-xs text-[#3f493f] leading-relaxed">
-                        Saya menyetujui ketentuan privasi data pemantauan pertumbuhan balita pada sistem Posyandu digital.
-                      </span>
-                    </label>
-                  </div>
-
-                  <div className="pt-3">
-                    <button
-                      type="submit"
-                      disabled={loading || !agree}
-                      className="w-full h-11 bg-[#15803d] hover:bg-[#14532d] text-white font-semibold text-xs rounded-xl shadow-md shadow-[#15803d]/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-                    >
-                      {loading ? (
-                        <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                      ) : (
-                        <>
-                          <span>Buat Akun Orang Tua Sekarang</span>
-                          <span className="material-symbols-outlined text-[18px]">how_to_reg</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </form>
-              </>
-            )}
+                  </form>
+                </>
+              )}
             </div>
           </div>
 
-          <div className="text-center text-xs text-[#6f7a6e]">
+          <div className="text-center text-xs text-[#6f7a6e] mt-3">
             © 2024 TumbuhKu KMS Digital. Dilindungi privasi kesehatan keluarga.
           </div>
         </div>
@@ -357,4 +357,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-

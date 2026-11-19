@@ -157,7 +157,7 @@ export function HeaderNotificationWidget({
 
       {/* Notification Popover Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-xl border border-[#e2ebe5] z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+        <div className="absolute right-0 top-full mt-2 w-[calc(100vw-1.5rem)] sm:w-96 max-w-sm bg-white rounded-2xl shadow-xl border border-[#e2ebe5] z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
           {/* Header */}
           <div className="p-4 border-b border-[#f1f5f9] flex items-center justify-between bg-white">
             <div className="flex items-center gap-2">

@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { signOut } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
 
 interface DrawerItem {
@@ -41,14 +42,27 @@ const moreMenuItems: DrawerItem[] = [
 
 export function StaffBottomBar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isMoreOpen, setIsMoreOpen] = useState(false);
   const [prevPathname, setPrevPathname] = useState(pathname);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   // Close drawer when path changes without useEffect
   if (prevPathname !== pathname) {
     setPrevPathname(pathname);
     setIsMoreOpen(false);
   }
+
+  const handleLogout = async () => {
+    try {
+      setIsLoggingOut(true);
+      await signOut();
+    } catch (e) {
+      console.warn("Staff bottom drawer logout error:", e);
+    } finally {
+      router.push("/login");
+    }
+  };
 
   const isMoreActive = moreMenuItems.some(
     (item) => pathname === item.href || pathname.startsWith(item.href)
@@ -66,7 +80,7 @@ export function StaffBottomBar() {
           />
 
           {/* Sheet Content */}
-          <div className="relative w-full bg-white rounded-t-3xl shadow-2xl border-t border-[#e2ebe5] p-5 pb-24 z-10 animate-in slide-in-from-bottom duration-200">
+          <div className="relative w-full bg-white rounded-t-3xl shadow-2xl border-t border-[#e2ebe5] p-5 pb-[calc(6rem+env(safe-area-inset-bottom))] z-10 animate-in slide-in-from-bottom duration-200">
             {/* Sheet Handle */}
             <div className="w-12 h-1.5 bg-[#e2ebe5] rounded-full mx-auto mb-4" />
 
@@ -100,7 +114,7 @@ export function StaffBottomBar() {
                     href={item.href}
                     onClick={() => setIsMoreOpen(false)}
                     className={cn(
-                      "flex items-center gap-3.5 p-3 rounded-2xl transition-all border",
+                      "flex items-center gap-3.5 p-3 rounded-2xl transition-all border touch-manipulation",
                       isActive
                         ? "bg-[#ecfdf3] border-[#15803d]/30 text-[#15803d]"
                         : "bg-[#f8f9ff] border-[#e2ebe5] text-[#3f493f] hover:bg-white"
@@ -134,15 +148,23 @@ export function StaffBottomBar() {
               })}
             </div>
 
-            {/* Logout Shortcut in Drawer */}
+            {/* Logout Action in Drawer */}
             <div className="pt-3 mt-3 border-t border-[#f1f5f9]">
-              <Link
-                href="/login"
-                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-[#fee2e2] bg-[#fff5f5] text-[#ba1a1a] text-xs font-bold hover:bg-[#fee2e2]/60 transition-colors"
+              <button
+                type="button"
+                onClick={handleLogout}
+                disabled={isLoggingOut}
+                className="w-full min-h-[44px] flex items-center justify-center gap-2 py-2.5 rounded-xl border border-[#fee2e2] bg-[#fff5f5] text-[#ba1a1a] text-xs font-bold hover:bg-[#fee2e2]/60 transition-colors cursor-pointer disabled:opacity-50 touch-manipulation"
               >
-                <span className="material-symbols-outlined text-[18px]">logout</span>
-                <span>Keluar dari Akun Petugas</span>
-              </Link>
+                {isLoggingOut ? (
+                  <span className="w-4 h-4 border-2 border-[#ba1a1a] border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <>
+                    <span className="material-symbols-outlined text-[18px]">logout</span>
+                    <span>Keluar dari Akun Petugas</span>
+                  </>
+                )}
+              </button>
             </div>
           </div>
         </div>
@@ -151,14 +173,14 @@ export function StaffBottomBar() {
       {/* Primary Fixed Bottom Navigation Bar */}
       <nav
         aria-label="Navigasi Bawah Petugas"
-        className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-lg border-t border-[#e2ebe5] shadow-[0_-4px_16px_rgba(0,0,0,0.06)] px-2 py-1.5"
+        className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-lg border-t border-[#e2ebe5] shadow-[0_-4px_16px_rgba(0,0,0,0.06)] px-2 pt-1.5 pb-[calc(0.5rem+env(safe-area-inset-bottom))]"
       >
         <div className="max-w-md mx-auto grid grid-cols-5 items-center">
           {/* 1. Dashboard */}
           <Link
             href="/staff/dashboard"
             className={cn(
-              "flex flex-col items-center justify-center py-1 rounded-xl transition-all relative group",
+              "flex flex-col items-center justify-center min-h-[44px] py-1 rounded-xl transition-all relative group touch-manipulation select-none",
               pathname === "/staff/dashboard"
                 ? "text-[#15803d] font-bold"
                 : "text-[#6f7a6e] hover:text-[#0b1c30] font-medium"
@@ -193,7 +215,7 @@ export function StaffBottomBar() {
           <Link
             href="/staff/balita"
             className={cn(
-              "flex flex-col items-center justify-center py-1 rounded-xl transition-all relative group",
+              "flex flex-col items-center justify-center min-h-[44px] py-1 rounded-xl transition-all relative group touch-manipulation select-none",
               pathname.startsWith("/staff/balita")
                 ? "text-[#15803d] font-bold"
                 : "text-[#6f7a6e] hover:text-[#0b1c30] font-medium"
@@ -231,7 +253,7 @@ export function StaffBottomBar() {
             <Link
               href="/staff/pemeriksaan"
               className={cn(
-                "w-12 h-12 -mt-5 rounded-full flex items-center justify-center shadow-lg transition-transform active:scale-95 border-2 border-white",
+                "w-12 h-12 -mt-5 rounded-full flex items-center justify-center shadow-lg transition-transform active:scale-95 border-2 border-white touch-manipulation",
                 pathname === "/staff/pemeriksaan"
                   ? "bg-[#14532d] text-white ring-2 ring-[#15803d]"
                   : "bg-[#15803d] hover:bg-[#14532d] text-white"
@@ -242,7 +264,7 @@ export function StaffBottomBar() {
             </Link>
             <span
               className={cn(
-                "text-[10px] leading-tight mt-1 truncate max-w-full font-bold",
+                "text-[10px] leading-tight mt-1 truncate max-w-full font-bold select-none",
                 pathname === "/staff/pemeriksaan" ? "text-[#15803d]" : "text-[#4b5a53]"
               )}
             >
@@ -254,7 +276,7 @@ export function StaffBottomBar() {
           <Link
             href="/staff/monitoring"
             className={cn(
-              "flex flex-col items-center justify-center py-1 rounded-xl transition-all relative group",
+              "flex flex-col items-center justify-center min-h-[44px] py-1 rounded-xl transition-all relative group touch-manipulation select-none",
               pathname.startsWith("/staff/monitoring")
                 ? "text-[#15803d] font-bold"
                 : "text-[#6f7a6e] hover:text-[#0b1c30] font-medium"
@@ -292,7 +314,7 @@ export function StaffBottomBar() {
             type="button"
             onClick={() => setIsMoreOpen(!isMoreOpen)}
             className={cn(
-              "flex flex-col items-center justify-center py-1 rounded-xl transition-all relative cursor-pointer group",
+              "flex flex-col items-center justify-center min-h-[44px] py-1 rounded-xl transition-all relative cursor-pointer group touch-manipulation select-none",
               isMoreActive || isMoreOpen
                 ? "text-[#15803d] font-bold"
                 : "text-[#6f7a6e] hover:text-[#0b1c30] font-medium"
@@ -327,4 +349,3 @@ export function StaffBottomBar() {
     </>
   );
 }
-
