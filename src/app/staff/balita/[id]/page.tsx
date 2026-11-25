@@ -5,6 +5,7 @@ import Link from "next/link";
 import { mockChildren, mockExamRecords } from "@/lib/mockData";
 import { StuntingBadge } from "@/components/ui/badge";
 import { ImtGrowthChart } from "@/components/growth/ImtGrowthChart";
+import MonthlyGrowthHistory from "@/components/growth/MonthlyGrowthHistory";
 import { calculateImt, assessImt } from "@/lib/imtStandards";
 import { calculateDetailedAge } from "@/lib/ageHelper";
 
@@ -362,51 +363,9 @@ export default function DetailBalitaPetugasPage({
         </div>
       )}
 
-      {/* Tab 2: Tabel Riwayat */}
+      {/* Tab 2: Tabel & Timeline Riwayat Perkembangan Bulanan */}
       {activeTab === "riwayat" && (
-        <div className="bg-white rounded-2xl border border-[#e2ebe5] shadow-sm overflow-hidden">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="bg-[#f8f9ff] text-[#3f493f] border-b border-[#e2ebe5]">
-                <th className="py-3 px-4 font-semibold">Tanggal Periksa</th>
-                <th className="py-3 px-4 font-semibold">Pengantar Balita</th>
-                <th className="py-3 px-4 font-semibold">Usia</th>
-                <th className="py-3 px-4 font-semibold">Berat (kg)</th>
-                <th className="py-3 px-4 font-semibold">Tinggi (cm)</th>
-                <th className="py-3 px-4 font-semibold">Metode</th>
-                <th className="py-3 px-4 font-semibold">Z-Score (TB/U)</th>
-                <th className="py-3 px-4 font-semibold">Status Stunting</th>
-                <th className="py-3 px-4 font-semibold">Petugas Pencatat</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#f1f5f9]">
-              {exams.map((exam) => (
-                <tr key={exam.id} className="hover:bg-[#f8fafc]">
-                  <td className="py-3 px-4 font-bold text-[#0b1c30] whitespace-nowrap">{exam.examDate}</td>
-                  <td className="py-3 px-4">
-                    <p className="font-semibold text-slate-900">
-                      {exam.companionName || child.motherName || child.parentName}
-                    </p>
-                    <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                      {exam.companionRelation || "Ibu Kandung"}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 whitespace-nowrap">{exam.ageMonths} Bulan</td>
-                  <td className="py-3 px-4 font-semibold text-[#0b1c30]">{exam.weight} kg</td>
-                  <td className="py-3 px-4 font-semibold text-[#0b1c30]">{exam.height} cm</td>
-                  <td className="py-3 px-4 capitalize">{exam.method}</td>
-                  <td className="py-3 px-4 font-bold text-[#0b1c30]">{exam.zScoreTbU} SD</td>
-                  <td className="py-3 px-4">
-                    <span className="px-2 py-0.5 rounded-full bg-[#dcfce7] text-[#15803d] font-semibold text-[11px]">
-                      {exam.stuntingStatus}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 text-[#6f7a6e]">{exam.recordedBy}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <MonthlyGrowthHistory exams={exams} child={child} />
       )}
 
       {/* Tab 3: Rekomendasi Klinis */}

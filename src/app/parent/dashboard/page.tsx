@@ -52,33 +52,51 @@ export default function ParentDashboardPage() {
         </span>
       </div>
 
-      {/* Greeting Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex flex-col gap-1">
-          <h1 className="font-heading text-2xl lg:text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            Selamat datang, {displayName} <span className="text-2xl">👋</span>
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-500">
-            Pantau perkembangan dan jadwal pemeriksaan rutin buah hati Anda di{" "}
-            <strong className="text-slate-800 font-semibold">{displayPosyandu}</strong>.
-          </p>
-        </div>
+      {/* Greeting Header & Visual Hero Banner */}
+      <div className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-emerald-800 to-[#14532d] text-white p-6 sm:p-8 shadow-sm">
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="flex flex-col gap-2 max-w-xl">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-emerald-100 text-xs font-semibold w-fit">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-300"></span>
+              {displayPosyandu}
+            </span>
+            <h1 className="font-heading text-2xl lg:text-3xl font-extrabold tracking-tight flex items-center gap-2">
+              Selamat datang, {displayName} <span className="text-2xl">👋</span>
+            </h1>
+            <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
+              Pantau perkembangan kurva KMS dan riwayat pemeriksaan posyandu buah hati Anda secara berkala, transparan, dan akurat.
+            </p>
 
-        <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
-          <button
-            onClick={() => alert("Mengunduh rangkuman catatan KMS digital dalam format PDF...")}
-            className="inline-flex items-center gap-2 bg-white text-slate-700 hover:text-emerald-700 px-4 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-50 border border-slate-200/90 shadow-xs transition-all cursor-pointer"
-          >
-            <span className="material-symbols-outlined text-[18px] text-slate-500">download</span>
-            <span>Unduh Rangkuman KMS (PDF)</span>
-          </button>
-          <Link
-            href="/parent/grafik"
-            className="inline-flex items-center gap-2 bg-emerald-600 text-white px-4 py-2.5 rounded-xl text-xs font-semibold hover:bg-emerald-700 shadow-xs transition-all"
-          >
-            <span className="material-symbols-outlined text-[18px]">show_chart</span>
-            <span>Buka Kurva Pertumbuhan</span>
-          </Link>
+            <div className="pt-2 flex flex-wrap items-center gap-3">
+              <button
+                onClick={() => alert("Mengunduh rangkuman catatan KMS digital dalam format PDF...")}
+                className="inline-flex items-center gap-2 bg-white text-emerald-900 hover:bg-emerald-50 px-4 py-2 rounded-xl text-xs font-bold shadow-xs transition-all cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[18px]">download</span>
+                <span>Unduh Rangkuman KMS</span>
+              </button>
+              <Link
+                href="/parent/grafik"
+                className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-xs transition-all"
+              >
+                <span className="material-symbols-outlined text-[18px]">show_chart</span>
+                <span>Buka Kurva Pertumbuhan</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Banner Photo Preview */}
+          <div className="hidden sm:block w-full sm:w-60 md:w-72 lg:w-80 aspect-[16/10] rounded-xl overflow-hidden shadow-md border-2 border-white/20 shrink-0 bg-emerald-900">
+            <img
+              src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=600&q=80"
+              alt="Ibu dan Balita Posyandu"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src =
+                  "https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=600&q=80";
+              }}
+            />
+          </div>
         </div>
       </div>
 

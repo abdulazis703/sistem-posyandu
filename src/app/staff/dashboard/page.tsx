@@ -3,17 +3,12 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import useChildrenData from '@/app/hooks/useChildrenData';
-import { StuntingBadge } from "@/components/ui/badge";
+import { StuntingBadge } from '@/components/ui/badge';
+import AttendanceDashboard from '@/components/analytics/AttendanceDashboard';
+import StatusComparisonChart from '@/components/analytics/StatusComparisonChart';
 
 export default function StaffDashboardPage() {
   const [selectedFilter, setSelectedFilter] = useState("all");
-
-  const unexaminedChildren = [
-    { name: "Dimas Nugraha", parent: "Rini W.", age: "14 Bulan", rt: "RT 02", phone: "081234567891" },
-    { name: "Siti Rahma", parent: "Dewi K.", age: "22 Bulan", rt: "RT 01", phone: "081234567892" },
-    { name: "Kenzo Pratama", parent: "Lina M.", age: "8 Bulan", rt: "RT 04", phone: "081234567893" },
-    { name: "Zahra Fitria", parent: "Hana S.", age: "31 Bulan", rt: "RT 03", phone: "081234567894" },
-  ];
 
   const { children, hasCustomData, resetChildren } = useChildrenData();
 
@@ -193,10 +188,14 @@ export default function StaffDashboardPage() {
         </div>
       </section>
 
-      {/* Main Grid: Left Analytics + Right Actionable Lists */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
-        {/* Left Column (8 cols) */}
-        <div className="lg:col-span-8 flex flex-col gap-6 sm:gap-8">
+      {/* 2 Fitur Analitik Grafik Garis (Line Chart): Kehadiran 1 Tahun & Tren Status Gizi */}
+      <section className="grid grid-cols-1 xl:grid-cols-2 gap-6 sm:gap-8">
+        <AttendanceDashboard />
+        <StatusComparisonChart />
+      </section>
+
+      {/* Analytics & Cases: Full Width */}
+      <div className="flex flex-col gap-6 sm:gap-8 w-full">
           {/* Growth Status Breakdown Card */}
           <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-xs border border-slate-200/80">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
@@ -363,81 +362,6 @@ export default function StaffDashboardPage() {
             </div>
           </div>
         </div>
-
-        {/* Right Column (4 cols) */}
-        <div className="lg:col-span-4 flex flex-col gap-6">
-          {/* Balita Belum Hadir Bulan Ini */}
-          <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-xs border border-slate-200/80">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <div>
-                <h3 className="font-heading text-sm font-bold text-slate-900">
-                  Belum Ditimbang Bulan Ini
-                </h3>
-                <p className="text-xs text-slate-500">Periode November 2026</p>
-              </div>
-              <span className="px-3 py-1 rounded-full bg-rose-100 text-rose-800 text-xs font-semibold">
-                {unexaminedChildren.length} Balita
-              </span>
-            </div>
-
-            <div className="divide-y divide-slate-100 mt-2">
-              {unexaminedChildren.map((item, idx) => (
-                <div key={idx} className="py-3 flex items-center justify-between gap-3">
-                  <div className="flex flex-col min-w-0">
-                    <p className="text-sm font-semibold text-slate-900 truncate">{item.name}</p>
-                    <span className="text-xs text-slate-500 mt-0.5">
-                      {item.age} • Ibu {item.parent} ({item.rt})
-                    </span>
-                  </div>
-                  <button
-                    onClick={() => alert(`Mengirim pesan WhatsApp pengingat posyandu ke Ibu ${item.parent} (${item.phone})...`)}
-                    className="p-2 text-emerald-700 hover:bg-emerald-50 rounded-xl transition-colors shrink-0"
-                    title="Kirim Pengingat WhatsApp"
-                  >
-                    <span className="material-symbols-outlined text-[20px]">chat</span>
-                  </button>
-                </div>
-              ))}
-            </div>
-
-            <button
-              onClick={() => alert("Mengirim pesan siaran (broadcast WhatsApp) ke 4 orang tua balita yang belum hadir...")}
-              className="w-full mt-4 py-2.5 px-4 bg-emerald-50 hover:bg-emerald-100/80 text-emerald-800 rounded-xl text-xs font-semibold border border-emerald-200/60 transition-colors flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-[18px]">forward_to_inbox</span>
-              <span>Kirim Pengingat Serentak (WA)</span>
-            </button>
-          </div>
-
-          {/* Quick Schedule Widget */}
-          <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-xs border border-slate-200/80 space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="font-heading text-sm font-bold text-slate-900">
-                Jadwal Posyandu Terdekat
-              </h3>
-              <Link href="/staff/pengumuman" className="text-xs font-semibold text-emerald-700 hover:underline">
-                Kelola
-              </Link>
-            </div>
-
-            <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/70 space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold">
-                  Posyandu Melati 04
-                </span>
-                <span className="text-xs font-semibold text-slate-600">Kamis, 14 Nov</span>
-              </div>
-              <p className="text-xs font-semibold text-slate-800">
-                Penimbangan Rutin & Pemberian Vitamin A
-              </p>
-              <p className="text-xs text-slate-500 flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-[16px] text-slate-400">location_on</span>
-                Balai RW 04, Kelurahan Sukamaju
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
-    </div>
   );
 }

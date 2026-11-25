@@ -111,6 +111,25 @@ export default function RegisterPage() {
               </p>
             </div>
 
+            {/* Desktop Illustration Photo Banner */}
+            <div className="hidden lg:block relative w-full rounded-2xl overflow-hidden shadow-sm border border-[#b1f2be]/30 aspect-[16/7] bg-[#2e6a41]/60">
+              <img
+                src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=800&q=80"
+                alt="Ibu dan Bayi Sehat"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src =
+                    "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80";
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex items-end p-3.5">
+                <span className="text-xs font-medium text-emerald-100 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                  Pencatatan antropometri standar Kemenkes RI
+                </span>
+              </div>
+            </div>
+
             {/* Feature Cards (Desktop only agar di mobile langsung menuju form) */}
             <div className="hidden lg:grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-2">
               <div className="rounded-2xl p-4 bg-[#2e6a41]/40 backdrop-blur-sm border border-[#b1f2be]/20">

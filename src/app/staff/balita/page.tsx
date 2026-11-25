@@ -571,9 +571,9 @@ export default function DataBalitaPage() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-slate-50/80 text-slate-500 uppercase text-xs font-semibold border-b border-slate-100">
-                <th className="py-3.5 px-5">Nama Balita</th>
-                <th className="py-3.5 px-4">NIK & Gender</th>
-                <th className="py-3.5 px-4">Usia</th>
+                <th className="py-3.5 px-5 align-middle whitespace-nowrap min-w-[180px]">Nama Balita</th>
+                <th className="py-3.5 px-4 align-middle whitespace-nowrap">NIK & Gender</th>
+                <th className="py-3.5 px-4 align-middle whitespace-nowrap">Usia</th>
                 <th className="py-3.5 px-4">Orang Tua / Wali</th>
                 <th className="py-3.5 px-4">Posyandu</th>
                 <th className="py-3.5 px-4">BB / TB Terakhir</th>
@@ -584,7 +584,7 @@ export default function DataBalitaPage() {
             <tbody className="divide-y divide-slate-100 text-sm">
               {filteredChildren.map((child) => (
                 <tr key={child.id} className="hover:bg-slate-50/70 transition-colors">
-                  <td className="py-3.5 px-5">
+                  <td className="py-3.5 px-5 align-middle">
                     <div className="flex items-center gap-3">
                       <div className="w-9 h-9 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center shrink-0 text-xs">
                         {child.name.slice(0, 2).toUpperCase()}
@@ -602,7 +602,7 @@ export default function DataBalitaPage() {
                       </div>
                     </div>
                   </td>
-                  <td className="py-3.5 px-4 text-slate-700">
+                  <td className="py-3.5 px-4 text-slate-700 whitespace-nowrap align-middle">
                     <p className="font-mono text-xs">{child.nik}</p>
                     <span className="text-xs text-slate-500">
                       {child.gender === "L" ? "Laki-laki" : "Perempuan"}
@@ -623,7 +623,7 @@ export default function DataBalitaPage() {
                       );
                     })()}
                   </td>
-                  <td className="py-3.5 px-4 text-slate-700">
+                  <td className="py-3.5 px-4 text-slate-700 whitespace-nowrap align-middle">
                     <p className="font-medium text-slate-800">{child.motherName || child.parentName}</p>
                     {child.fatherName ? (
                       <span className="text-[11px] text-slate-500 block">Ayah: {child.fatherName}</span>
@@ -631,7 +631,7 @@ export default function DataBalitaPage() {
                       <span className="text-[11px] text-emerald-700 font-medium block">Terhubung e-PPGBM</span>
                     )}
                   </td>
-                  <td className="py-3.5 px-4 text-slate-700">
+                  <td className="py-3.5 px-4 text-slate-700 whitespace-nowrap align-middle">
                     {child.posyandu}
                   </td>
                   <td className="py-3.5 px-4">

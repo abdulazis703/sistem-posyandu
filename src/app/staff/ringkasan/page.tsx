@@ -106,15 +106,11 @@ export default function RingkasanPosyanduPage() {
 
       {/* Hero Welcome Banner */}
       <div className="relative overflow-hidden rounded-2xl bg-emerald-50/80 p-5 sm:p-6 shadow-xs border border-emerald-200/70">
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
           <div className="flex flex-col gap-2 max-w-2xl">
-            <h2 className="font-heading text-xl font-bold text-emerald-900">
-              Ringkasan Capaian Penimbangan SKDN Bulanan 🌱
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Total sasaran balita di 4 Posyandu binaan berjumlah{" "}
-              <strong className="text-emerald-950 font-bold">{totalBalita} anak</strong>, dengan{" "}
-              <strong className="text-emerald-950 font-bold">{hadirCount} anak ({persenHadir}%)</strong> telah tercatat pada periode November 2026.
+            <h2 className="font-heading text-xl font-bold text-emerald-900">Ringkasan Penimbangan Bulanan</h2>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed tabular-nums">
+              Total <strong className="text-emerald-950 font-bold">{totalBalita} anak</strong>, {hadirCount} hadir ({persenHadir}%) – Nov 2026.
             </p>
             <div className="flex flex-wrap items-center gap-3 pt-1">
               <div className="inline-flex items-center gap-2 bg-white px-3 py-1 rounded-full shadow-xs border border-emerald-200/60">
@@ -185,26 +181,20 @@ export default function RingkasanPosyanduPage() {
               </div>
 
               {/* Detail Metrics */}
-              <div className="grid grid-cols-3 gap-3 my-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-3">
                 <div className="p-3 bg-slate-50 rounded-xl text-center border border-slate-200/70">
-                  <span className="text-xs text-slate-500 block font-medium">Sasaran Balita</span>
-                  <span className="font-heading text-lg font-bold text-slate-900 mt-0.5 block">
-                    {pos.totalBalita}
-                  </span>
+                  <span className="text-xs text-slate-500 block font-medium">Target</span>
+                  <span className="font-heading text-2xl font-extrabold text-slate-900 tabular-nums">{pos.totalBalita}</span>
                 </div>
 
                 <div className="p-3 bg-slate-50 rounded-xl text-center border border-slate-200/70">
-                  <span className="text-xs text-slate-500 block font-medium">Tertimbang</span>
-                  <span className="font-heading text-lg font-bold text-emerald-700 mt-0.5 block">
-                    {pos.hadir}
-                  </span>
+                  <span className="text-xs text-slate-500 block font-medium">Hadir</span>
+                  <span className="font-heading text-2xl font-extrabold text-emerald-700 tabular-nums">{pos.hadir} ({pos.persenHadir}%)</span>
                 </div>
 
                 <div className="p-3 bg-slate-50 rounded-xl text-center border border-slate-200/70">
-                  <span className="text-xs text-slate-500 block font-medium">Atensi Stunting</span>
-                  <span className="font-heading text-lg font-bold text-rose-700 mt-0.5 block">
-                    {pos.stuntingCount}
-                  </span>
+                  <span className="text-xs text-slate-500 block font-medium">Stunting</span>
+                  <span className="font-heading text-2xl font-extrabold text-rose-700 tabular-nums">{pos.stuntingCount}</span>
                 </div>
               </div>
 
