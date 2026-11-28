@@ -135,19 +135,19 @@ export default function AttendanceDashboard() {
 
       {/* Mini KPI Ringkas */}
       <div className="grid grid-cols-3 gap-3 my-4">
-        <div className="p-3 bg-emerald-50/70 border border-emerald-100 rounded-xl">
+        <div className="p-3 bg-emerald-50/70 border border-emerald-100 rounded-xl flex flex-col items-center justify-center text-center gap-0.5">
           <span className="text-[11px] font-semibold text-emerald-800 block">Rata-rata Hadir</span>
           <span className="font-heading text-lg font-bold text-emerald-900 tabular-nums">
             {avgRate}%
           </span>
         </div>
-        <div className="p-3 bg-slate-50 border border-slate-200/70 rounded-xl">
+        <div className="p-3 bg-slate-50 border border-slate-200/70 rounded-xl flex flex-col items-center justify-center text-center gap-0.5">
           <span className="text-[11px] font-semibold text-slate-600 block">Total Ditimbang</span>
           <span className="font-heading text-lg font-bold text-slate-900 tabular-nums">
             {totalHadir} <span className="text-[11px] font-normal text-slate-500">sesi</span>
           </span>
         </div>
-        <div className="p-3 bg-rose-50/70 border border-rose-100 rounded-xl">
+        <div className="p-3 bg-rose-50/70 border border-rose-100 rounded-xl flex flex-col items-center justify-center text-center gap-0.5">
           <span className="text-[11px] font-semibold text-rose-800 block">Total Absen</span>
           <span className="font-heading text-lg font-bold text-rose-900 tabular-nums">
             {totalTidakHadir} <span className="text-[11px] font-normal text-slate-500">kali</span>

@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, use } from "react";
+import React, { useState, use, useEffect } from "react";
 import Link from "next/link";
-import { mockChildren, mockExamRecords } from "@/lib/mockData";
+import { Child, ExamRecord } from "@/lib/mockData";
+import { getChildById, getChildExamRecords } from "@/lib/supabase/dataService";
 import { StuntingBadge } from "@/components/ui/badge";
 import { ImtGrowthChart } from "@/components/growth/ImtGrowthChart";
 import MonthlyGrowthHistory from "@/components/growth/MonthlyGrowthHistory";
@@ -15,19 +16,79 @@ export default function DetailBalitaPetugasPage({
   params: Promise<{ id: string }>;
 }) {
   const resolvedParams = use(params);
-  const childId = resolvedParams?.id || "child-1";
+  const childId = resolvedParams?.id || "";
 
-  const child =
-    mockChildren.find((c) => c.id === childId) || mockChildren[0];
-
-  const exams = mockExamRecords.filter(
-    (e) => e.childId === child.id || e.childName === child.name
-  );
+  const [child, setChild] = useState<Child | null>(null);
+  const [exams, setExams] = useState<ExamRecord[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const [activeTab, setActiveTab] = useState<"kurva" | "riwayat" | "rekomendasi">("kurva");
   const [staffCurveType, setStaffCurveType] = useState<"imt" | "tbu" | "bbu">("imt");
   const [showEditModal, setShowEditModal] = useState(false);
   const [editNotes, setEditNotes] = useState("");
+
+  useEffect(() => {
+    if (!childId) {
+      setLoading(false);
+      return;
+    }
+
+    let mounted = true;
+    setLoading(true);
+    getChildById(childId)
+      .then(async (foundChild) => {
+        if (!mounted) return;
+        setChild(foundChild);
+        if (foundChild) {
+          const examRows = await getChildExamRecords(foundChild.id, {
+            name: foundChild.name,
+            parentName: foundChild.parentName,
+          });
+          if (mounted) setExams(examRows);
+        }
+      })
+      .finally(() => {
+        if (mounted) setLoading(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [childId]);
+
+  if (loading) {
+    return (
+      <div className="px-4 sm:px-6 lg:px-8 py-8 max-w-[1440px] mx-auto w-full">
+        <div className="bg-white rounded-2xl p-8 border border-slate-200/80 text-center text-xs text-slate-500">
+          Memuat data detail balita dari Supabase...
+        </div>
+      </div>
+    );
+  }
+
+  if (!child) {
+    return (
+      <div className="px-4 sm:px-6 lg:px-8 py-8 max-w-[1440px] mx-auto w-full">
+        <div className="bg-white rounded-2xl p-8 border border-slate-200/80 text-center space-y-3">
+          <h1 className="font-heading text-lg font-bold text-slate-900">
+            Data Balita Tidak Ditemukan
+          </h1>
+          <p className="text-xs text-slate-500">
+            Data balita dengan ID tersebut tidak tersedia di database Supabase.
+          </p>
+          <div>
+            <Link
+              href="/staff/balita"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-semibold hover:bg-emerald-700"
+            >
+              <span className="material-symbols-outlined text-[16px]">arrow_back</span>
+              <span>Kembali ke Data Balita</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const childImt = calculateImt(child.weight, child.height);
   const childImtAssessment = assessImt(childImt, child.ageMonths || 18, child.gender || "L");
@@ -89,24 +150,15 @@ export default function DetailBalitaPetugasPage({
               <span>Posyandu: <strong className="text-slate-800 font-semibold">{child.posyandu}</strong></span>
             </div>
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-xs text-slate-600">
-              <span>Ibu: <strong className="text-slate-900">{child.motherName || child.parentName}</strong></span>
+              <span>Orang Tua / Wali: <strong className="text-slate-900">{child.motherName || child.parentName}</strong></span>
               {child.fatherName && (
                 <>
                   <span>•</span>
                   <span>Bapak: <strong className="text-slate-900">{child.fatherName}</strong></span>
                 </>
               )}
-              {child.familyRelations && child.familyRelations[2] && (
-                <>
-                  <span>•</span>
-                  <span>Pengasuh/Wali: <strong className="text-slate-900">{child.familyRelations[2].name} ({child.familyRelations[2].relationType})</strong></span>
-                </>
-              )}
             </div>
           </div>
-        </div>
-
-        <div className="flex items-center gap-3">
         </div>
       </div>
 
@@ -117,8 +169,8 @@ export default function DetailBalitaPetugasPage({
           <p className="font-heading text-2xl font-extrabold text-[#0b1c30] mt-1">
             {child.weight} <span className="text-xs font-normal text-[#6f7a6e]">kg</span>
           </p>
-          <span className="text-[11px] text-[#15803d] font-semibold mt-0.5 block">
-            Z-Score BB/U: {child.zScoreBbU} SD (Normal)
+          <span className="text-xs text-[#15803d] font-semibold mt-0.5 block">
+            Z-Score BB/U: {child.zScoreBbU} SD
           </span>
         </div>
 
@@ -127,13 +179,15 @@ export default function DetailBalitaPetugasPage({
           <p className="font-heading text-2xl font-extrabold text-[#0b1c30] mt-1">
             {child.height} <span className="text-xs font-normal text-[#6f7a6e]">cm</span>
           </p>
-          <span className={`text-[11px] font-semibold mt-0.5 block ${child.zScoreTbU < -2 ? "text-[#ba1a1a]" : "text-[#15803d]"
-            }`}>
+          <span
+            className={`text-xs font-semibold mt-0.5 block ${
+              child.zScoreTbU < -2 ? "text-[#ba1a1a]" : "text-[#15803d]"
+            }`}
+          >
             Z-Score TB/U: {child.zScoreTbU} SD ({child.stuntingStatus})
           </span>
         </div>
 
-        {/* IMT Biometric Pill */}
         <div className="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200/90 shadow-xs">
           <div className="flex items-center justify-between">
             <span className="text-xs text-emerald-950 block font-bold">Indeks Massa Tubuh (IMT)</span>
@@ -142,7 +196,7 @@ export default function DetailBalitaPetugasPage({
           <p className="font-heading text-2xl font-extrabold text-emerald-900 mt-1">
             {childImt} <span className="text-xs font-normal text-emerald-700">kg/m²</span>
           </p>
-          <span className="text-[11px] text-emerald-800 font-bold mt-0.5 block">
+          <span className="text-xs text-emerald-800 font-bold mt-0.5 block">
             {childImtAssessment.category} ({childImtAssessment.zScore > 0 ? `+${childImtAssessment.zScore}` : childImtAssessment.zScore} SD)
           </span>
         </div>
@@ -150,43 +204,51 @@ export default function DetailBalitaPetugasPage({
         <div className="p-4 rounded-xl bg-white border border-[#e2ebe5] shadow-xs">
           <span className="text-xs text-[#6f7a6e] block">Lingkar Kepala</span>
           <p className="font-heading text-2xl font-extrabold text-[#0b1c30] mt-1">
-            {child.headCircumference || 46.5} <span className="text-xs font-normal text-[#6f7a6e]">cm</span>
+            {child.headCircumference ?? "-"}{" "}
+            {child.headCircumference != null && (
+              <span className="text-xs font-normal text-[#6f7a6e]">cm</span>
+            )}
           </p>
-          <span className="text-[11px] text-[#15803d] font-semibold mt-0.5 block">
-            Normocephalic (Normal)
+          <span className="text-xs text-[#15803d] font-semibold mt-0.5 block">
+            {child.headCircumference != null ? "Data Ukur Terkini" : "Belum Diukur"}
           </span>
         </div>
 
         <div className="p-4 rounded-xl bg-white border border-[#e2ebe5] shadow-xs col-span-2 sm:col-span-1">
           <span className="text-xs text-[#6f7a6e] block">LiLA (Lingkar Lengan)</span>
           <p className="font-heading text-2xl font-extrabold text-[#0b1c30] mt-1">
-            {child.lila || 14.5} <span className="text-xs font-normal text-[#6f7a6e]">cm</span>
+            {child.lila ?? "-"}{" "}
+            {child.lila != null && (
+              <span className="text-xs font-normal text-[#6f7a6e]">cm</span>
+            )}
           </p>
-          <span className="text-[11px] text-[#15803d] font-semibold mt-0.5 block">
-            Pita Hijau (Gizi Cukup)
+          <span className="text-xs text-[#15803d] font-semibold mt-0.5 block">
+            {child.lila != null ? "Data Ukur Terkini" : "Belum Diukur"}
           </span>
         </div>
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex border-b border-[#e2ebe5] gap-4">
+      <div className="flex border-b border-[#e2ebe5] gap-4 overflow-x-auto">
         <button
           onClick={() => setActiveTab("kurva")}
-          className={`pb-3 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer ${activeTab === "kurva"
-            ? "border-[#15803d] text-[#15803d]"
-            : "border-transparent text-[#6f7a6e] hover:text-[#0b1c30]"
-            }`}
+          className={`pb-3 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
+            activeTab === "kurva"
+              ? "border-[#15803d] text-[#15803d]"
+              : "border-transparent text-[#6f7a6e] hover:text-[#0b1c30]"
+          }`}
         >
           <span className="material-symbols-outlined text-[18px]">show_chart</span>
-          <span>Kurva Pertumbuhan & IMT (WHO)</span>
+          <span>Kurva Pertumbuhan &amp; IMT (WHO)</span>
         </button>
 
         <button
           onClick={() => setActiveTab("riwayat")}
-          className={`pb-3 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer ${activeTab === "riwayat"
-            ? "border-[#15803d] text-[#15803d]"
-            : "border-transparent text-[#6f7a6e] hover:text-[#0b1c30]"
-            }`}
+          className={`pb-3 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
+            activeTab === "riwayat"
+              ? "border-[#15803d] text-[#15803d]"
+              : "border-transparent text-[#6f7a6e] hover:text-[#0b1c30]"
+          }`}
         >
           <span className="material-symbols-outlined text-[18px]">table_rows</span>
           <span>Tabel Riwayat Penimbangan</span>
@@ -194,27 +256,28 @@ export default function DetailBalitaPetugasPage({
 
         <button
           onClick={() => setActiveTab("rekomendasi")}
-          className={`pb-3 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer ${activeTab === "rekomendasi"
-            ? "border-[#15803d] text-[#15803d]"
-            : "border-transparent text-[#6f7a6e] hover:text-[#0b1c30]"
-            }`}
+          className={`pb-3 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
+            activeTab === "rekomendasi"
+              ? "border-[#15803d] text-[#15803d]"
+              : "border-transparent text-[#6f7a6e] hover:text-[#0b1c30]"
+          }`}
         >
           <span className="material-symbols-outlined text-[18px]">clinical_notes</span>
-          <span>Diagnosis & Intervensi Gizi</span>
+          <span>Diagnosis &amp; Intervensi Gizi</span>
         </button>
       </div>
 
       {/* Tab 1: Kurva Pertumbuhan */}
       {activeTab === "kurva" && (
         <div className="space-y-4">
-          {/* Curve Type Switcher */}
-          <div className="flex items-center gap-2 bg-[#f1f5f9] p-1.5 rounded-xl w-fit">
+          <div className="flex items-center gap-2 bg-[#f1f5f9] p-1.5 rounded-xl w-fit flex-wrap">
             <button
               onClick={() => setStaffCurveType("imt")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${staffCurveType === "imt"
-                ? "bg-white text-[#15803d] shadow-xs"
-                : "text-[#64748b] hover:text-[#0f172a]"
-                }`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                staffCurveType === "imt"
+                  ? "bg-white text-[#15803d] shadow-xs"
+                  : "text-[#64748b] hover:text-[#0f172a]"
+              }`}
             >
               <span className="material-symbols-outlined text-[16px]">query_stats</span>
               <span>Kurva IMT menurut Umur (IMT/U WHO)</span>
@@ -222,10 +285,11 @@ export default function DetailBalitaPetugasPage({
 
             <button
               onClick={() => setStaffCurveType("tbu")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${staffCurveType === "tbu"
-                ? "bg-white text-[#15803d] shadow-xs"
-                : "text-[#64748b] hover:text-[#0f172a]"
-                }`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                staffCurveType === "tbu"
+                  ? "bg-white text-[#15803d] shadow-xs"
+                  : "text-[#64748b] hover:text-[#0f172a]"
+              }`}
             >
               <span className="material-symbols-outlined text-[16px]">straighten</span>
               <span>Kurva Tinggi Badan (TB/U)</span>
@@ -233,17 +297,17 @@ export default function DetailBalitaPetugasPage({
 
             <button
               onClick={() => setStaffCurveType("bbu")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${staffCurveType === "bbu"
-                ? "bg-white text-[#15803d] shadow-xs"
-                : "text-[#64748b] hover:text-[#0f172a]"
-                }`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                staffCurveType === "bbu"
+                  ? "bg-white text-[#15803d] shadow-xs"
+                  : "text-[#64748b] hover:text-[#0f172a]"
+              }`}
             >
               <span className="material-symbols-outlined text-[16px]">monitor_weight</span>
               <span>Kurva Berat Badan (BB/U)</span>
             </button>
           </div>
 
-          {/* Sub Curve Display */}
           {staffCurveType === "imt" ? (
             <ImtGrowthChart child={child} role="staff" />
           ) : staffCurveType === "tbu" ? (
@@ -257,15 +321,13 @@ export default function DetailBalitaPetugasPage({
                     Area hijau muda menandakan pita batas deviasi normal (-2 SD s/d +2 SD).
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-1 bg-[#dcfce7] text-[#15803d] rounded-lg text-xs font-semibold">
-                    Plotting Terkini: {child.height} cm ({child.zScoreTbU} SD)
-                  </span>
-                </div>
+                <span className="px-2 py-1 bg-[#dcfce7] text-[#15803d] rounded-lg text-xs font-semibold">
+                  Plotting Terkini: {child.height} cm ({child.zScoreTbU} SD)
+                </span>
               </div>
 
-              <div className="bg-[#f7faf8] rounded-2xl p-4 border border-[#e2ebe5]">
-                <svg viewBox="0 0 700 240" className="w-full h-64 overflow-visible" fill="none">
+              <div className="bg-[#f7faf8] rounded-2xl p-4 border border-[#e2ebe5] overflow-x-auto">
+                <svg viewBox="0 0 700 240" className="w-full h-64 overflow-visible min-w-[580px]" fill="none">
                   <line x1="40" y1="30" x2="680" y2="30" stroke="#E2EBE5" strokeDasharray="3 3" />
                   <line x1="40" y1="80" x2="680" y2="80" stroke="#E2EBE5" strokeDasharray="3 3" />
                   <line x1="40" y1="130" x2="680" y2="130" stroke="#E2EBE5" strokeDasharray="3 3" />
@@ -287,11 +349,6 @@ export default function DetailBalitaPetugasPage({
                     strokeLinejoin="round"
                   />
 
-                  <circle cx="40" cy="180" r="4.5" fill="white" stroke="#15803D" strokeWidth="2.5" />
-                  <circle cx="140" cy="165" r="4.5" fill="white" stroke="#15803D" strokeWidth="2.5" />
-                  <circle cx="240" cy="148" r="4.5" fill="white" stroke="#15803D" strokeWidth="2.5" />
-                  <circle cx="340" cy="128" r="4.5" fill="white" stroke="#15803D" strokeWidth="2.5" />
-                  <circle cx="440" cy="112" r="4.5" fill="white" stroke="#15803D" strokeWidth="2.5" />
                   <circle cx="530" cy="98" r="7" fill={child.riskFlag === "NORMAL" ? "#15803D" : "#E5484D"} fillOpacity="0.25" />
                   <circle cx="530" cy="98" r="5" fill={child.riskFlag === "NORMAL" ? "#15803D" : "#E5484D"} />
 
@@ -316,15 +373,13 @@ export default function DetailBalitaPetugasPage({
                     Grafik trajektori kenaikan berat badan balita terhadap usia.
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-1 bg-[#dcfce7] text-[#15803d] rounded-lg text-xs font-semibold">
-                    Plotting Terkini: {child.weight} kg ({child.zScoreBbU} SD)
-                  </span>
-                </div>
+                <span className="px-2 py-1 bg-[#dcfce7] text-[#15803d] rounded-lg text-xs font-semibold">
+                  Plotting Terkini: {child.weight} kg ({child.zScoreBbU} SD)
+                </span>
               </div>
 
-              <div className="bg-[#f7faf8] rounded-2xl p-4 border border-[#e2ebe5]">
-                <svg viewBox="0 0 700 240" className="w-full h-64 overflow-visible" fill="none">
+              <div className="bg-[#f7faf8] rounded-2xl p-4 border border-[#e2ebe5] overflow-x-auto">
+                <svg viewBox="0 0 700 240" className="w-full h-64 overflow-visible min-w-[580px]" fill="none">
                   <line x1="40" y1="30" x2="680" y2="30" stroke="#E2EBE5" strokeDasharray="3 3" />
                   <line x1="40" y1="80" x2="680" y2="80" stroke="#E2EBE5" strokeDasharray="3 3" />
                   <line x1="40" y1="130" x2="680" y2="130" stroke="#E2EBE5" strokeDasharray="3 3" />
@@ -342,11 +397,6 @@ export default function DetailBalitaPetugasPage({
                     strokeLinejoin="round"
                   />
 
-                  <circle cx="40" cy="210" r="4.5" fill="white" stroke="#059669" strokeWidth="2.5" />
-                  <circle cx="140" cy="190" r="4.5" fill="white" stroke="#059669" strokeWidth="2.5" />
-                  <circle cx="240" cy="165" r="4.5" fill="white" stroke="#059669" strokeWidth="2.5" />
-                  <circle cx="340" cy="140" r="4.5" fill="white" stroke="#059669" strokeWidth="2.5" />
-                  <circle cx="440" cy="120" r="4.5" fill="white" stroke="#059669" strokeWidth="2.5" />
                   <circle cx="530" cy="95" r="5" fill="#059669" />
 
                   <text x="40" y="205" fill="#6B7280" fontSize="11" textAnchor="middle">0 Bln</text>
@@ -363,7 +413,7 @@ export default function DetailBalitaPetugasPage({
         </div>
       )}
 
-      {/* Tab 2: Tabel & Timeline Riwayat Perkembangan Bulanan */}
+      {/* Tab 2: Tabel & Timeline Riwayat Penimbangan */}
       {activeTab === "riwayat" && (
         <MonthlyGrowthHistory exams={exams} child={child} />
       )}
@@ -374,7 +424,7 @@ export default function DetailBalitaPetugasPage({
           <div className="bg-white p-6 rounded-2xl border border-[#e2ebe5] shadow-sm space-y-4">
             <h3 className="font-heading text-sm font-bold text-[#0b1c30] flex items-center gap-2">
               <span className="material-symbols-outlined text-[#15803d] text-[20px]">medical_services</span>
-              Evaluasi Medis & Rekomendasi Gizi
+              Evaluasi Medis &amp; Rekomendasi Gizi
             </h3>
             <p className="text-xs text-[#3f493f] leading-relaxed">
               {child.stuntingStatus === "Normal"
@@ -382,8 +432,8 @@ export default function DetailBalitaPetugasPage({
                 : "Indikasi panjang/tinggi badan anak berada di bawah kurva pertumbuhan standar. Disarankan untuk berkonsultasi dengan petugas gizi Posyandu/Puskesmas untuk evaluasi asupan MP-ASI dan sanitasi lingkungan."}
             </p>
             <div className="p-3 bg-[#f8f9ff] rounded-xl border border-[#e2ebe5] text-xs text-[#6f7a6e] space-y-1">
-              <p><strong>Pemeriksa Terakhir:</strong> Bidan Sri Wahyuni, A.Md.Keb</p>
-              <p><strong>Catatan Tambahan:</strong> Nafsu makan baik, motorik kasar sesuai usia.</p>
+              <p><strong>Pemeriksaan Terakhir:</strong> {child.lastExamDate || "-"}</p>
+              <p><strong>Status Gizi:</strong> {child.wastingStatus} ({child.stuntingStatus})</p>
             </div>
           </div>
 
@@ -395,15 +445,15 @@ export default function DetailBalitaPetugasPage({
             <ul className="space-y-2 text-xs text-[#3f493f]">
               <li className="flex items-center gap-2">
                 <span className="text-[#15803d] font-bold">✓</span>
-                Jadwalkan penimbangan ulang pada sesi Posyandu tanggal 14 November 2024.
+                Jadwalkan penimbangan ulang pada sesi Posyandu bulan berikutnya.
               </li>
               <li className="flex items-center gap-2">
                 <span className="text-[#15803d] font-bold">✓</span>
-                Pastikan pemberian kapsul Vitamin A warna merah telah tercatat.
+                Pastikan pemantauan pemberian kapsul Vitamin A &amp; imunisasi sesuai usia.
               </li>
               <li className="flex items-center gap-2">
                 <span className="text-[#15803d] font-bold">✓</span>
-                Kirim pesan pengingat otomatis ke nomor WhatsApp orang tua (0812-3456-7890).
+                Komunikasikan hasil pertumbuhan terbaru kepada orang tua/wali ({child.parentName}).
               </li>
             </ul>
           </div>

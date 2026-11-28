@@ -1,15 +1,16 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import useChildrenData from "@/app/hooks/useChildrenData";
-import { mockParents, Parent } from "@/lib/mockData";
+import { Parent } from "@/lib/mockData";
+import { getParentAccountsList } from "@/lib/supabase/dataService";
 
 export default function AkunOrangTuaPage() {
   const searchParams = useSearchParams();
   const urlSearch = searchParams.get("search") || "";
-  const { children } = useChildrenData();
+  const [parents, setParents] = useState<Parent[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState(urlSearch);
 
   useEffect(() => {
@@ -18,70 +19,42 @@ export default function AkunOrangTuaPage() {
       setSearch(q);
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    let mounted = true;
+    setLoading(true);
+    getParentAccountsList()
+      .then((rows) => {
+        if (mounted) setParents(rows);
+      })
+      .finally(() => {
+        if (mounted) setLoading(false);
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   const [showAddModal, setShowAddModal] = useState(false);
   const [newParentName, setNewParentName] = useState("");
   const [newPhone, setNewPhone] = useState("");
   const [newNik, setNewNik] = useState("");
   const [newAddress, setNewAddress] = useState("");
-  const [newPosyandu, setNewPosyandu] = useState("Posyandu Melati 04");
+  const [newPosyandu, setNewPosyandu] = useState("Posyandu Melati 01");
 
-  const [extraParents, setExtraParents] = useState<Parent[]>([]);
-
-  // Gabungkan parents statis, parents baru ditambah, dan parents hasil import excel
-  const allParents: Parent[] = useMemo(() => {
-    const map = new Map<string, Parent>();
-    mockParents.forEach((p) => map.set(p.name.toLowerCase(), p));
-    extraParents.forEach((p) => map.set(p.name.toLowerCase(), p));
-
-    children.forEach((c) => {
-      const pName = (c.parentName || "").trim();
-      if (pName && !map.has(pName.toLowerCase())) {
-        const assigned = children.filter((ch) => ch.parentName === pName);
-        map.set(pName.toLowerCase(), {
-          id: `parent-dyn-${c.id}`,
-          name: pName,
-          phone: "08" + (Math.abs(pName.split("").reduce((a, b) => a + b.charCodeAt(0), 123456789)) % 90000000 + 10000000),
-          email: `${pName.toLowerCase().replace(/[^a-z0-9]/g, "")}@posyandu.id`,
-          nik: `3201${c.nik.slice(-12) || "123456789012"}`,
-          address: `${c.posyandu}, Kel. Sukamaju`,
-          posyandu: c.posyandu,
-          childrenCount: assigned.length,
-          children: assigned.map((ch) => ({
-            id: ch.id,
-            name: ch.name,
-            age: `${ch.ageMonths} Bulan`,
-            status: ch.stuntingStatus,
-          })),
-          joinDate: "2026-10-01",
-        });
-      }
-    });
-
-    return Array.from(map.values());
-  }, [children, extraParents]);
-
-  const filteredParents = allParents.filter(
+  const filteredParents = parents.filter(
     (p) =>
       p.name.toLowerCase().includes(search.toLowerCase()) ||
-      p.phone.includes(search) ||
-      p.nik.includes(search)
+      p.phone.toLowerCase().includes(search.toLowerCase()) ||
+      p.email.toLowerCase().includes(search.toLowerCase()) ||
+      p.nik.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleAddParent = (e: React.FormEvent) => {
     e.preventDefault();
-    const newEntry: Parent = {
-      id: `parent-${Date.now()}`,
-      name: newParentName,
-      phone: newPhone,
-      email: `${newParentName.toLowerCase().replace(/\s+/g, ".")}@example.com`,
-      nik: newNik,
-      address: newAddress,
-      posyandu: newPosyandu,
-      childrenCount: 0,
-      children: [],
-      joinDate: new Date().toISOString().split("T")[0],
-    };
-    setExtraParents([newEntry, ...extraParents]);
+    alert(
+      `Untuk membuat akun login baru (${newParentName}), arahkan orang tua mendaftar mandiri melalui halaman /register agar terhubung langsung dengan Supabase Auth.`
+    );
     setShowAddModal(false);
     setNewParentName("");
     setNewPhone("");
@@ -94,16 +67,16 @@ export default function AkunOrangTuaPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <h1 className="font-heading text-2xl lg:text-3xl font-bold text-slate-900 tracking-tight">
-              Akun Orang Tua & Wali
+              Akun Orang Tua &amp; Wali
             </h1>
             <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-medium border border-emerald-200/60">
               Terverifikasi
             </span>
           </div>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Daftar akun orang tua balita yang terdaftar di wilayah kerja Posyandu Melati.
+            Daftar akun orang tua balita yang terdaftar di database Posyandu ({loading ? "..." : `${parents.length} Akun`}).
           </p>
         </div>
 
@@ -123,75 +96,95 @@ export default function AkunOrangTuaPage() {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Cari berdasarkan nama orang tua, nomor HP, atau NIK..."
-          className="w-full bg-transparent text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
+          placeholder="Cari berdasarkan nama orang tua, email, nomor HP, atau NIK..."
+          className="w-full bg-transparent text-base sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
         />
       </div>
 
       {/* Table */}
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full min-w-[920px] text-left border-collapse">
             <thead>
               <tr className="bg-slate-50/80 text-slate-500 uppercase text-xs font-semibold border-b border-slate-100">
-                <th className="py-3.5 px-5">Nama Orang Tua</th>
-                <th className="py-3.5 px-4">Nomor WhatsApp & Email</th>
-                <th className="py-3.5 px-4">Alamat Domisili</th>
-                <th className="py-3.5 px-4">Posyandu</th>
-                <th className="py-3.5 px-4">Jumlah Balita</th>
-                <th className="py-3.5 px-5 text-right">Aksi</th>
+                <th className="py-3.5 px-5 align-middle whitespace-nowrap min-w-[220px]">Nama Orang Tua</th>
+                <th className="py-3.5 px-4 align-middle whitespace-nowrap min-w-[210px]">Nomor WhatsApp &amp; Email</th>
+                <th className="py-3.5 px-4 align-middle min-w-[180px]">Alamat Domisili</th>
+                <th className="py-3.5 px-4 align-middle whitespace-nowrap min-w-[160px]">Posyandu</th>
+                <th className="py-3.5 px-4 align-middle whitespace-nowrap min-w-[130px]">Jumlah Balita</th>
+                <th className="py-3.5 px-5 align-middle whitespace-nowrap text-right min-w-[100px]">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-sm">
-              {filteredParents.map((parent) => (
-                <tr key={parent.id} className="hover:bg-slate-50/70 transition-colors">
-                  <td className="py-3.5 px-5">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs shrink-0">
-                        {parent.name.slice(0, 2).toUpperCase()}
-                      </div>
-                      <div>
-                        <Link
-                          href={`/staff/orang-tua/${parent.id}`}
-                          className="font-semibold text-slate-900 hover:text-emerald-700 transition-colors"
-                        >
-                          {parent.name}
-                        </Link>
-                        <span className="text-xs text-slate-500 block font-mono">
-                          NIK: {parent.nik}
-                        </span>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-3.5 px-4 text-slate-700">
-                    <p className="font-medium text-slate-900">{parent.phone}</p>
-                    <span className="text-xs text-slate-500">{parent.email}</span>
-                  </td>
-                  <td className="py-3.5 px-4 text-slate-600 max-w-xs truncate text-xs sm:text-sm">
-                    {parent.address}
-                  </td>
-                  <td className="py-3.5 px-4">
-                    <span className="px-3 py-1 bg-slate-100 text-slate-700 rounded-full font-medium text-xs border border-slate-200">
-                      {parent.posyandu}
-                    </span>
-                  </td>
-                  <td className="py-3.5 px-4">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 font-medium text-xs border border-emerald-200/60">
-                      <span className="material-symbols-outlined text-[14px]">child_care</span>
-                      <span>{parent.childrenCount} Balita</span>
-                    </span>
-                  </td>
-                  <td className="py-3.5 px-5 text-right">
-                    <Link
-                      href={`/staff/orang-tua/${parent.id}`}
-                      className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 text-xs font-semibold inline-flex items-center gap-1 transition-colors"
-                    >
-                      <span>Detail</span>
-                      <span className="material-symbols-outlined text-[14px]">visibility</span>
-                    </Link>
+              {loading ? (
+                <tr>
+                  <td colSpan={6} className="py-10 px-5 text-center text-xs text-slate-500">
+                    Memuat data akun orang tua dari Supabase...
                   </td>
                 </tr>
-              ))}
+              ) : filteredParents.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="py-10 px-5 text-center text-xs text-slate-500">
+                    Tidak ada akun orang tua yang sesuai dengan pencarian.
+                  </td>
+                </tr>
+              ) : (
+                filteredParents.map((parent) => (
+                  <tr key={parent.id} className="hover:bg-slate-50/70 transition-colors">
+                    <td className="py-3.5 px-5 align-middle">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs shrink-0">
+                          {parent.name.slice(0, 2).toUpperCase()}
+                        </div>
+                        <div className="min-w-0">
+                          <Link
+                            href={`/staff/orang-tua/${parent.id}`}
+                            className="font-semibold text-slate-900 hover:text-emerald-700 transition-colors block truncate"
+                          >
+                            {parent.name}
+                          </Link>
+                          <span className="text-xs text-slate-500 block">
+                            NIK: {parent.nik}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-3.5 px-4 align-middle text-slate-700 whitespace-nowrap">
+                      <p className="font-medium text-slate-900">{parent.phone}</p>
+                      <span className="text-xs text-slate-500">{parent.email}</span>
+                    </td>
+                    <td className="py-3.5 px-4 align-middle text-slate-600 max-w-xs truncate text-sm">
+                      {parent.address}
+                    </td>
+                    <td className="py-3.5 px-4 align-middle whitespace-nowrap">
+                      <span className="px-3 py-1 bg-slate-100 text-slate-700 rounded-full font-medium text-xs border border-slate-200 inline-block">
+                        {parent.posyandu}
+                      </span>
+                    </td>
+                    <td className="py-3.5 px-4 align-middle whitespace-nowrap">
+                      <span
+                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-medium text-xs border ${
+                          parent.childrenCount > 0
+                            ? "bg-emerald-100 text-emerald-800 border-emerald-200/60"
+                            : "bg-slate-100 text-slate-600 border-slate-200"
+                        }`}
+                      >
+                        <span className="material-symbols-outlined text-[14px]">child_care</span>
+                        <span>{parent.childrenCount} Balita</span>
+                      </span>
+                    </td>
+                    <td className="py-3.5 px-5 align-middle whitespace-nowrap text-right">
+                      <Link
+                        href={`/staff/orang-tua/${parent.id}`}
+                        className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 text-xs font-semibold inline-flex items-center gap-1 transition-colors"
+                      >
+                        <span>Detail</span>
+                        <span className="material-symbols-outlined text-[14px]">visibility</span>
+                      </Link>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -288,7 +281,7 @@ export default function AkunOrangTuaPage() {
                   type="submit"
                   className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-semibold shadow-xs cursor-pointer"
                 >
-                  Daftarkan Akun
+                  Panduan Pendaftaran
                 </button>
               </div>
             </form>

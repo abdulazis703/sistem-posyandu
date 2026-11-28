@@ -3,7 +3,8 @@
 import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { signIn } from "@/lib/supabase";
+import { signIn, signOut } from "@/lib/supabase";
+import { TumbuhKuLoader } from "@/components/ui/TumbuhKuLoader";
 
 function LoginContent() {
   const router = useRouter();
@@ -16,6 +17,7 @@ function LoginContent() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [transitionMessage, setTransitionMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // State untuk Edu-Tip Animasi Berputar
@@ -79,13 +81,38 @@ function LoginContent() {
       const result = await signIn(loginEmail, password);
       const userRole = result.role;
 
-      if (redirectUrl) {
-        router.push(redirectUrl);
-      } else if (userRole === "parent") {
-        router.push("/parent/dashboard");
-      } else {
-        router.push("/staff/dashboard");
+      // Pembatasan login berdasarkan tab role yang aktif
+      if (role === "parent" && userRole !== "parent") {
+        await signOut();
+        setErrorMessage(
+          'Akun tersebut adalah akun Petugas / Kader. Silakan masuk melalui tab "Petugas / Kader".'
+        );
+        return;
       }
+
+      if (role === "staff" && userRole !== "staff" && userRole !== "admin") {
+        await signOut();
+        setErrorMessage(
+          'Akun tersebut adalah akun Orang Tua / Wali. Silakan masuk melalui tab "Orang Tua / Wali".'
+        );
+        return;
+      }
+
+      const destination =
+        redirectUrl &&
+        ((userRole === "parent" && !redirectUrl.startsWith("/staff")) ||
+          (userRole !== "parent" && !redirectUrl.startsWith("/parent")))
+          ? redirectUrl
+          : userRole === "parent"
+          ? "/parent/dashboard"
+          : "/staff/dashboard";
+
+      setTransitionMessage(
+        destination.startsWith("/parent")
+          ? "Menyiapkan Ruang TumbuhKu..."
+          : "Memuat Data Posyandu..."
+      );
+      router.push(destination);
     } catch (err: unknown) {
       const errMsg = err instanceof Error ? err.message : String(err);
       console.warn("Login attempt with Supabase:", errMsg);
@@ -96,14 +123,35 @@ function LoginContent() {
       const isDemoStaff = cleanId === "kader.budi@example.com" || cleanId === "bidan.sri@example.com" || cleanId === "admin@posyandu.id" || cleanId.includes("admin") || cleanId.includes("kader");
 
       if ((isDemoParent || isDemoStaff) && (password === "Password123!" || password === "password123")) {
-        // Fallback demo redirect
-        if (redirectUrl) {
-          router.push(redirectUrl);
-        } else if (role === "parent") {
-          router.push("/parent/dashboard");
-        } else {
-          router.push("/staff/dashboard");
+        if (role === "parent" && !isDemoParent) {
+          setErrorMessage(
+            'Akun tersebut adalah akun Petugas / Kader. Silakan masuk melalui tab "Petugas / Kader".'
+          );
+          return;
         }
+        if (role === "staff" && !isDemoStaff) {
+          setErrorMessage(
+            'Akun tersebut adalah akun Orang Tua / Wali. Silakan masuk melalui tab "Orang Tua / Wali".'
+          );
+          return;
+        }
+
+        // Fallback demo redirect
+        const destination =
+          redirectUrl &&
+          ((role === "parent" && !redirectUrl.startsWith("/staff")) ||
+            (role === "staff" && !redirectUrl.startsWith("/parent")))
+            ? redirectUrl
+            : role === "parent"
+            ? "/parent/dashboard"
+            : "/staff/dashboard";
+
+        setTransitionMessage(
+          destination.startsWith("/parent")
+            ? "Menyiapkan Ruang TumbuhKu..."
+            : "Memuat Data Posyandu..."
+        );
+        router.push(destination);
         return;
       }
 
@@ -121,18 +169,6 @@ function LoginContent() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const fillDemoAccount = (demoRole: "parent" | "staff") => {
-    setRole(demoRole);
-    if (demoRole === "parent") {
-      setIdentifier("081234567890");
-      setPassword("Password123!");
-    } else {
-      setIdentifier("kader.budi@example.com");
-      setPassword("Password123!");
-    }
-    setErrorMessage(null);
   };
 
   return (
@@ -158,13 +194,6 @@ function LoginContent() {
                 </span>
               </div>
             </Link>
-
-            <div className="inline-flex items-center gap-2 mt-4 px-3.5 py-1.5 bg-white/90 border border-emerald-200 rounded-full shadow-2xs">
-              <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-              <span className="text-xs text-emerald-800 font-bold">
-                Keluarga Sehat • Generasi Bebas Stunting
-              </span>
-            </div>
           </div>
 
           {/* Middle Value Proposition & Animated Educational Rotating Tip */}
@@ -265,10 +294,6 @@ function LoginContent() {
               <span className="material-symbols-outlined text-[18px]">arrow_back</span>
               Kembali ke Beranda
             </Link>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 rounded-full text-xs font-semibold text-emerald-800 border border-emerald-200/60">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              Sistem Online
-            </div>
           </div>
 
           {/* Form Card Container */}
@@ -409,52 +434,23 @@ function LoginContent() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full h-11 bg-emerald-700 hover:bg-emerald-800 active:bg-emerald-900 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md shadow-emerald-700/20 transition-all flex items-center justify-center gap-2 disabled:opacity-70 cursor-pointer"
+                    className="w-full h-11 bg-emerald-700 hover:bg-emerald-800 active:bg-emerald-900 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md shadow-emerald-700/20 transition-all flex items-center justify-center disabled:opacity-70 cursor-pointer"
                   >
                     {loading ? (
                       <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                     ) : (
-                      <>
-                        <span>Masuk sebagai {role === "parent" ? "Orang Tua" : "Petugas"}</span>
-                        <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-                      </>
+                      <span>Masuk sebagai {role === "parent" ? "Orang Tua" : "Petugas"}</span>
                     )}
                   </button>
                 </div>
               </form>
 
-              {/* Quick Fill Demo Helper Pill */}
-              <div className="mt-5 pt-4 border-t border-slate-100">
-                <span className="text-[11px] font-bold text-slate-500 flex items-center justify-center gap-1.5 mb-2 text-center">
-                  <span className="material-symbols-outlined text-[15px] text-amber-600">bolt</span>
-                  Akses Cepat Akun Demo (1-Klik Isi):
-                </span>
-                <div className="flex items-center justify-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => fillDemoAccount("parent")}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition-colors cursor-pointer"
-                  >
-                    <span className="material-symbols-outlined text-[15px]">person</span>
-                    <span>Ibu Siti (Wali)</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => fillDemoAccount("staff")}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200 transition-colors cursor-pointer"
-                  >
-                    <span className="material-symbols-outlined text-[15px]">badge</span>
-                    <span>Kader Budi (Petugas)</span>
-                  </button>
-                </div>
-              </div>
-
               {/* Registration Link */}
-              <div className="mt-5 text-center">
+              <div className="mt-6 pt-4 border-t border-slate-100 text-center">
                 <p className="text-xs text-slate-600">
                   Belum memiliki akun orang tua?{" "}
                   <Link href="/register" className="font-bold text-emerald-700 hover:underline inline-block">
-                    Daftar Mandiri di Sini
+                    Daftar di sini
                   </Link>
                 </p>
               </div>
@@ -467,6 +463,13 @@ function LoginContent() {
           </div>
         </div>
       </div>
+
+      {transitionMessage && (
+        <TumbuhKuLoader
+          message={transitionMessage}
+          subMessage="Menyelaraskan sesi akun & data Posyandu..."
+        />
+      )}
     </div>
   );
 }

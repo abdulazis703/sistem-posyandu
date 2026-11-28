@@ -138,11 +138,11 @@ export default function StatusComparisonChart() {
       {/* Mini 4 Stat Pills */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 my-4">
         {statusComparisonData.map((item, idx) => (
-          <div key={idx} className="p-2.5 bg-slate-50 rounded-xl border border-slate-200/70">
-            <span className="text-[11px] font-semibold text-slate-600 truncate block">
+          <div key={idx} className="p-2.5 bg-slate-50 rounded-xl border border-slate-200/70 flex flex-col items-center justify-center text-center">
+            <span className="text-[11px] font-semibold text-slate-600 truncate block max-w-full">
               {item.shortLabel}
             </span>
-            <div className="flex items-baseline gap-1.5 mt-0.5">
+            <div className="flex items-baseline justify-center gap-1.5 mt-0.5">
               <span className="font-heading text-base font-bold text-slate-900 tabular-nums">
                 {item.bulanIni}
               </span>

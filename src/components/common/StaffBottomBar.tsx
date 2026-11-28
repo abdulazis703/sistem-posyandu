@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { signOut } from "@/lib/supabase";
+import { usePathname } from "next/navigation";
+import { Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface DrawerItem {
@@ -42,27 +42,14 @@ const moreMenuItems: DrawerItem[] = [
 
 export function StaffBottomBar() {
   const pathname = usePathname();
-  const router = useRouter();
   const [isMoreOpen, setIsMoreOpen] = useState(false);
   const [prevPathname, setPrevPathname] = useState(pathname);
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   // Close drawer when path changes without useEffect
   if (prevPathname !== pathname) {
     setPrevPathname(pathname);
     setIsMoreOpen(false);
   }
-
-  const handleLogout = async () => {
-    try {
-      setIsLoggingOut(true);
-      await signOut();
-    } catch (e) {
-      console.warn("Staff bottom drawer logout error:", e);
-    } finally {
-      router.push("/login");
-    }
-  };
 
   const isMoreActive = moreMenuItems.some(
     (item) => pathname === item.href || pathname.startsWith(item.href)
@@ -147,25 +134,6 @@ export function StaffBottomBar() {
                 );
               })}
             </div>
-
-            {/* Logout Action in Drawer */}
-            <div className="pt-3 mt-3 border-t border-[#f1f5f9]">
-              <button
-                type="button"
-                onClick={handleLogout}
-                disabled={isLoggingOut}
-                className="w-full min-h-[44px] flex items-center justify-center gap-2 py-2.5 rounded-xl border border-[#fee2e2] bg-[#fff5f5] text-[#ba1a1a] text-xs font-bold hover:bg-[#fee2e2]/60 transition-colors cursor-pointer disabled:opacity-50 touch-manipulation"
-              >
-                {isLoggingOut ? (
-                  <span className="w-4 h-4 border-2 border-[#ba1a1a] border-t-transparent rounded-full animate-spin" />
-                ) : (
-                  <>
-                    <span className="material-symbols-outlined text-[18px]">logout</span>
-                    <span>Keluar dari Akun Petugas</span>
-                  </>
-                )}
-              </button>
-            </div>
           </div>
         </div>
       )}
@@ -197,14 +165,12 @@ export function StaffBottomBar() {
                   : "group-hover:bg-[#f1f5f9]"
               )}
             >
-              <span
+              <Home
                 className={cn(
-                  "material-symbols-outlined text-[22px]",
+                  "w-[21px] h-[21px]",
                   pathname === "/staff/dashboard" ? "text-[#15803d]" : "text-[#6f7a6e]"
                 )}
-              >
-                space_dashboard
-              </span>
+              />
             </div>
             <span className="text-[10px] leading-tight mt-0.5 truncate max-w-full">
               Dasbor

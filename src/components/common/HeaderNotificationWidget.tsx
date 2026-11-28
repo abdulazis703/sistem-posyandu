@@ -156,99 +156,104 @@ export function HeaderNotificationWidget({
       </button>
 
       {/* Notification Popover Dropdown */}
-      {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-[calc(100vw-1.5rem)] sm:w-96 max-w-sm bg-white rounded-2xl shadow-xl border border-[#e2ebe5] z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-          {/* Header */}
-          <div className="p-4 border-b border-[#f1f5f9] flex items-center justify-between bg-white">
-            <div className="flex items-center gap-2">
-              <h3 className="font-heading text-sm font-bold text-[#0b1c30]">Notifikasi</h3>
-              {unreadCount > 0 ? (
-                <span className="px-2 py-0.5 rounded-full bg-[#ffdad6] text-[#ba1a1a] text-[10px] font-bold">
-                  {unreadCount} Baru
-                </span>
-              ) : (
-                <span className="px-2 py-0.5 rounded-full bg-[#f1f5f9] text-[#6f7a6e] text-[10px] font-medium">
-                  Semua Dibaca
-                </span>
-              )}
-            </div>
-
-            {unreadCount > 0 && (
-              <button
-                type="button"
-                onClick={markAllAsRead}
-                className="text-[11px] font-semibold text-[#15803d] hover:underline cursor-pointer"
-              >
-                Tandai Semua Dibaca
-              </button>
+      <div
+        aria-hidden={!isOpen}
+        className={`fixed inset-x-3 top-16 mx-auto w-auto max-w-md z-50 max-h-[75vh] overflow-y-auto lg:absolute lg:inset-x-auto lg:right-0 lg:left-auto lg:top-full lg:mt-2 lg:mx-0 lg:w-96 lg:max-w-none lg:max-h-none lg:overflow-visible bg-white rounded-2xl shadow-xl border border-[#e2ebe5] transition-all duration-200 ease-out origin-top-right ${
+          isOpen
+            ? "opacity-100 scale-100 translate-y-0 pointer-events-auto visible"
+            : "opacity-0 scale-95 -translate-y-1.5 pointer-events-none invisible"
+        }`}
+      >
+        {/* Header */}
+        <div className="p-4 border-b border-[#f1f5f9] flex items-center justify-between bg-white rounded-t-2xl">
+          <div className="flex items-center gap-2">
+            <h3 className="font-heading text-sm font-bold text-[#0b1c30]">Notifikasi</h3>
+            {unreadCount > 0 ? (
+              <span className="px-2 py-0.5 rounded-full bg-[#ffdad6] text-[#ba1a1a] text-[10px] font-bold">
+                {unreadCount} Baru
+              </span>
+            ) : (
+              <span className="px-2 py-0.5 rounded-full bg-[#f1f5f9] text-[#6f7a6e] text-[10px] font-medium">
+                Semua Dibaca
+              </span>
             )}
           </div>
 
-          {/* Notification Items List */}
-          <div className="max-h-80 overflow-y-auto divide-y divide-[#f1f5f9]">
-            {notifications.length === 0 ? (
-              <div className="p-6 text-center text-xs text-[#6f7a6e]">
-                Belum ada notifikasi baru.
-              </div>
-            ) : (
-              notifications.map((item) => (
-                <div
-                  key={item.id}
-                  onClick={() => handleNotificationClick(item)}
-                  className={`p-3.5 flex items-start gap-3 transition-colors cursor-pointer hover:bg-[#f0fdf4] group ${
-                    item.unread ? "bg-[#ecfdf3]/50" : "bg-white"
-                  }`}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      handleNotificationClick(item);
-                    }
-                  }}
-                >
-                  <div className="w-8 h-8 rounded-xl bg-white border border-[#e2ebe5] shadow-xs flex items-center justify-center shrink-0 mt-0.5 group-hover:border-[#15803d]/40 transition-colors">
-                    {getIcon(item.type)}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-1">
-                      <p className={`text-xs font-bold truncate transition-colors ${item.unread ? "text-[#0b1c30] group-hover:text-[#15803d]" : "text-[#4b5a53] group-hover:text-[#0b1c30]"}`}>
-                        {item.title}
-                      </p>
-                      {item.unread && (
-                        <span className="w-2 h-2 rounded-full bg-[#15803d] shrink-0" title="Belum dibaca" />
-                      )}
-                    </div>
-                    <p className="text-[11px] text-[#6f7a6e] leading-snug mt-0.5 line-clamp-2">
-                      {item.description}
+          {unreadCount > 0 && (
+            <button
+              type="button"
+              onClick={markAllAsRead}
+              className="text-[11px] font-semibold text-[#15803d] hover:underline cursor-pointer"
+            >
+              Tandai Semua Dibaca
+            </button>
+          )}
+        </div>
+
+        {/* Notification Items List */}
+        <div className="max-h-80 overflow-y-auto divide-y divide-[#f1f5f9]">
+          {notifications.length === 0 ? (
+            <div className="p-6 text-center text-xs text-[#6f7a6e]">
+              Belum ada notifikasi baru.
+            </div>
+          ) : (
+            notifications.map((item) => (
+              <div
+                key={item.id}
+                onClick={() => handleNotificationClick(item)}
+                className={`p-3.5 flex items-start gap-3 transition-colors cursor-pointer hover:bg-[#f0fdf4] group ${
+                  item.unread ? "bg-[#ecfdf3]/50" : "bg-white"
+                }`}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    handleNotificationClick(item);
+                  }
+                }}
+              >
+                <div className="w-8 h-8 rounded-xl bg-white border border-[#e2ebe5] shadow-xs flex items-center justify-center shrink-0 mt-0.5 group-hover:border-[#15803d]/40 transition-colors">
+                  {getIcon(item.type)}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-1">
+                    <p className={`text-xs font-bold truncate transition-colors ${item.unread ? "text-[#0b1c30] group-hover:text-[#15803d]" : "text-[#4b5a53] group-hover:text-[#0b1c30]"}`}>
+                      {item.title}
                     </p>
-                    <div className="flex items-center justify-between mt-1">
-                      <span className="text-[10px] text-[#94a3b8]">
-                        {item.time}
-                      </span>
-                      <span className="text-[10px] text-[#15803d] font-semibold opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
-                        Buka Dashboard
-                        <span className="material-symbols-outlined text-[12px]">chevron_right</span>
-                      </span>
-                    </div>
+                    {item.unread && (
+                      <span className="w-2 h-2 rounded-full bg-[#15803d] shrink-0" title="Belum dibaca" />
+                    )}
+                  </div>
+                  <p className="text-[11px] text-[#6f7a6e] leading-snug mt-0.5 line-clamp-2">
+                    {item.description}
+                  </p>
+                  <div className="flex items-center justify-between mt-1">
+                    <span className="text-[10px] text-[#94a3b8]">
+                      {item.time}
+                    </span>
+                    <span className="text-[10px] text-[#15803d] font-semibold opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
+                      Buka Dashboard
+                      <span className="material-symbols-outlined text-[12px]">chevron_right</span>
+                    </span>
                   </div>
                 </div>
-              ))
-            )}
-          </div>
-
-          {/* Footer */}
-          <div className="p-2.5 bg-[#f8f9ff] border-t border-[#e2ebe5] text-center">
-            <Link
-              href={announcementHref}
-              onClick={() => setIsOpen(false)}
-              className="text-xs font-semibold text-[#15803d] hover:underline inline-flex items-center gap-1"
-            >
-              <span>Buka Seluruh Pengumuman di Dashboard</span>
-              <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
-            </Link>
-          </div>
+              </div>
+            ))
+          )}
         </div>
-      )}
+
+        {/* Footer */}
+        <div className="p-2.5 bg-[#f8f9ff] border-t border-[#e2ebe5] text-center rounded-b-2xl">
+          <Link
+            href={announcementHref}
+            onClick={() => setIsOpen(false)}
+            className="text-xs font-semibold text-[#15803d] hover:underline inline-flex items-center gap-1"
+          >
+            <span>Buka Seluruh Pengumuman di Dashboard</span>
+            <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

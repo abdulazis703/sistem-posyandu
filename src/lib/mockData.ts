@@ -95,6 +95,7 @@ export interface ExamRecord {
   wastingStatus: string;
   riskFlag: "NORMAL" | "NOTICE" | "MODERATE_RISK" | "HIGH_RISK" | "CRITICAL";
   notes?: string;
+  photoUrl?: string | null;
   status: "validated" | "draft";
 }
 

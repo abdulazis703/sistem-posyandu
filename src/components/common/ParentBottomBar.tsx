@@ -3,17 +3,19 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface NavItem {
   href: string;
   label: string;
   icon: string;
+  useHomeIcon?: boolean;
 }
 
 const parentBottomNavItems: NavItem[] = [
-  { href: "/parent/dashboard", label: "Dashboard", icon: "grid_view" },
-  { href: "/parent/grafik", label: "Pertumbuhan", icon: "monitoring" },
+  { href: "/parent/dashboard", label: "Dashboard", icon: "home", useHomeIcon: true },
+  { href: "/parent/grafik", label: "Balita Saya", icon: "child_care" },
   { href: "/parent/riwayat", label: "Riwayat", icon: "clinical_notes" },
   { href: "/parent/pengumuman", label: "Jadwal", icon: "event_available" },
   { href: "/parent/profil", label: "Profil", icon: "account_circle" },
@@ -55,14 +57,23 @@ export function ParentBottomBar() {
                   isActive ? "bg-[#dcfce7]/60" : "group-hover:bg-[#f1f5f9]"
                 )}
               >
-                <span
-                  className={cn(
-                    "material-symbols-outlined text-[22px] transition-transform",
-                    isActive ? "scale-105 text-[#15803d]" : "text-[#6f7a6e]"
-                  )}
-                >
-                  {item.icon}
-                </span>
+                {item.useHomeIcon ? (
+                  <Home
+                    className={cn(
+                      "w-[21px] h-[21px] transition-transform",
+                      isActive ? "scale-105 text-[#15803d]" : "text-[#6f7a6e]"
+                    )}
+                  />
+                ) : (
+                  <span
+                    className={cn(
+                      "material-symbols-outlined text-[22px] transition-transform",
+                      isActive ? "scale-105 text-[#15803d]" : "text-[#6f7a6e]"
+                    )}
+                  >
+                    {item.icon}
+                  </span>
+                )}
               </div>
 
               <span className="text-[10px] leading-tight mt-0.5 tracking-tight truncate max-w-full">

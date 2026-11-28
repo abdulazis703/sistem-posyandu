@@ -1,139 +1,154 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
-import { mockChildren, Child } from "@/lib/mockData";
-import { supabase } from "@/lib/supabase/client";
+import { Child } from "@/lib/mockData";
+import { getCurrentUser } from "@/lib/supabase/auth";
+import { getChildrenList } from "@/lib/supabase/dataService";
 
 export const CHILDREN_STORAGE_KEY = "tumbuhku_children_data";
 export const CHILDREN_SYNC_EVENT = "tumbuhku_children_updated";
 
 /**
- * Get children synchronously from localStorage (if in browser) or fallback to mockChildren.
+ * Helper kompatibilitas untuk komponen pencarian real-time;
+ * mengembalikan cache sesi nyata tanpa fallback data dummy.
  */
 export function getStoredChildren(): Child[] {
   if (typeof window === "undefined") {
-    return mockChildren;
+    return [];
   }
   try {
-    const raw = localStorage.getItem(CHILDREN_STORAGE_KEY);
+    const raw = sessionStorage.getItem(CHILDREN_STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed;
+      if (Array.isArray(parsed)) {
+        return parsed as Child[];
       }
     }
-  } catch (err) {
-    console.warn("Gagal membaca data balita dari localStorage:", err);
+  } catch {
+    // ignore parse error
   }
-  return mockChildren;
+  return [];
 }
 
-/**
- * Persist children to localStorage, dispatch update event, and optionally sync with Supabase.
- */
-function cacheChildren(data: Child[]) {
+function cacheChildrenSession(data: Child[]) {
   if (typeof window === "undefined") return;
   try {
-    localStorage.setItem(CHILDREN_STORAGE_KEY, JSON.stringify(data));
+    sessionStorage.setItem(CHILDREN_STORAGE_KEY, JSON.stringify(data));
     window.dispatchEvent(new CustomEvent(CHILDREN_SYNC_EVENT, { detail: data }));
-  } catch (err) {
-    console.error("Gagal menyimpan ke localStorage:", err);
+  } catch {
+    // ignore storage quota errors
   }
 }
 
-async function fetchRemoteChildren(): Promise<Child[] | null> {
-  const { data, error } = await supabase.from("app_children").select("payload").order("id");
-  if (error) {
-    console.error("Gagal membaca Supabase:", error.message);
-    return null;
-  }
-  return data.map((r) => r.payload as Child);
-}
-
-// Mode ganti-total: isi tabel dibuat sama persis dengan data terbaru
-async function pushRemoteChildren(data: Child[]) {
-  const del = await supabase.from("app_children").delete().neq("id", "");
-  if (del.error) {
-    console.error("Gagal menghapus data lama:", del.error.message);
-    return;
-  }
-  const rows = data.map((c) => ({ id: c.id, nik: c.nik, payload: c }));
-  for (let i = 0; i < rows.length; i += 500) {
-    const { error } = await supabase.from("app_children").insert(rows.slice(i, i + 500));
-    if (error) {
-      console.error("Gagal sync ke Supabase:", error.message);
-      return;
-    }
-  }
-}
-
-export function persistChildren(data: Child[]) {
-  cacheChildren(data);
-  void pushRemoteChildren(data);
-}
-
-/**
- * Clear persisted children and restore mock data.
- */
 export function clearStoredChildren() {
   if (typeof window === "undefined") return;
+  sessionStorage.removeItem(CHILDREN_STORAGE_KEY);
   localStorage.removeItem(CHILDREN_STORAGE_KEY);
-  void supabase.from("app_children").delete().neq("id", "");
-  window.dispatchEvent(new CustomEvent(CHILDREN_SYNC_EVENT, { detail: mockChildren }));
+  window.dispatchEvent(new CustomEvent(CHILDREN_SYNC_EVENT, { detail: [] }));
+}
+
+export interface UseChildrenDataOptions {
+  parentId?: string;
+  enabled?: boolean;
 }
 
 /**
- * Custom hook to subscribe to and manage synchronized children data.
+ * Custom hook sumber tunggal untuk mengambil data balita aktual dari Supabase (public.children).
+ * Menerapkan Auth-First Query Gating dan isolasi data ketat per parent_id.
  */
-export default function useChildrenData() {
-  const [children, setChildrenState] = useState<Child[]>(mockChildren); // sama di server dan client
-  const childrenRef = useRef<Child[]>(mockChildren);
+export default function useChildrenData(options?: UseChildrenDataOptions) {
+  const [children, setChildrenState] = useState<Child[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const childrenRef = useRef<Child[]>([]);
+
+  const explicitParentId = options?.parentId;
+  const enabled = options?.enabled ?? true;
 
   useEffect(() => {
     childrenRef.current = children;
   }, [children]);
 
-  useEffect(() => {
-    let cancelled = false;
+  const loadChildren = useCallback(async () => {
+    if (!enabled) {
+      return;
+    }
 
-    setChildrenState(getStoredChildren()); // cache lokal dulu (cepat)
-    fetchRemoteChildren().then((remote) => {
-      if (!cancelled && remote && remote.length > 0) cacheChildren(remote); // lalu data dari Supabase
-    });
+    setLoading(true);
+    try {
+      // Auth-First Query Gating: pastikan identitas user valid sebelum query ke public.children
+      if (explicitParentId !== undefined) {
+        if (!explicitParentId) {
+          setChildrenState([]);
+          return;
+        }
+        const rows = await getChildrenList({ parentId: explicitParentId });
+        setChildrenState(rows);
+        cacheChildrenSession(rows);
+        return;
+      }
+
+      const user = await getCurrentUser();
+      if (!user?.id) {
+        setChildrenState([]);
+        return;
+      }
+
+      const rows =
+        user.role === "parent"
+          ? await getChildrenList({ parentId: user.id })
+          : await getChildrenList();
+
+      setChildrenState(rows);
+      cacheChildrenSession(rows);
+    } catch (err) {
+      console.error("useChildrenData gagal memuat data balita:", err);
+      setChildrenState([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [enabled, explicitParentId]);
+
+  useEffect(() => {
+    // Bersihkan cache localStorage lama yang berpotensi menyimpan data dummy
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(CHILDREN_STORAGE_KEY);
+    }
+
+    void loadChildren();
 
     const handleSync = (e: Event) => {
       const detail = (e as CustomEvent<Child[]>).detail;
-      setChildrenState(Array.isArray(detail) ? detail : getStoredChildren());
-    };
-    const handleStorage = (e: StorageEvent) => {
-      if (e.key === CHILDREN_STORAGE_KEY) setChildrenState(getStoredChildren());
+      if (Array.isArray(detail)) {
+        setChildrenState(detail);
+      }
     };
 
     window.addEventListener(CHILDREN_SYNC_EVENT, handleSync);
-    window.addEventListener("storage", handleStorage);
     return () => {
-      cancelled = true;
       window.removeEventListener(CHILDREN_SYNC_EVENT, handleSync);
-      window.removeEventListener("storage", handleStorage);
     };
-  }, []);
+  }, [loadChildren]);
 
   const setChildren = useCallback(
     (newData: Child[] | ((prev: Child[]) => Child[])) => {
       const next = typeof newData === "function" ? newData(childrenRef.current) : newData;
-      persistChildren(next); // memicu event, handleSync yang memperbarui state
+      setChildrenState(next);
+      cacheChildrenSession(next);
     },
     []
   );
 
   const resetChildren = useCallback(() => {
     clearStoredChildren();
-  }, []);
+    void loadChildren();
+  }, [loadChildren]);
 
   return {
     children,
+    loading,
+    refresh: loadChildren,
     setChildren,
     resetChildren,
-    hasCustomData: children.length !== mockChildren.length || children[0]?.id !== mockChildren[0]?.id,
+    hasCustomData: false,
   };
 }

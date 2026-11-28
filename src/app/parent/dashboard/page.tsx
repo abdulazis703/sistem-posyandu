@@ -5,30 +5,60 @@ import Link from "next/link";
 import useChildrenData from "@/app/hooks/useChildrenData";
 import { getCurrentUser, UserProfile } from "@/lib/supabase";
 import { StuntingBadge } from "@/components/ui/badge";
+import { TumbuhKuLoader } from "@/components/ui/TumbuhKuLoader";
 import { calculateDetailedAge } from "@/lib/ageHelper";
 
 export default function ParentDashboardPage() {
-  const { children } = useChildrenData();
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
   const [loadingUser, setLoadingUser] = useState(true);
 
   useEffect(() => {
+    let mounted = true;
     getCurrentUser()
-      .then((user) => setCurrentUser(user))
-      .finally(() => setLoadingUser(false));
+      .then((user) => {
+        if (mounted) setCurrentUser(user);
+      })
+      .finally(() => {
+        if (mounted) setLoadingUser(false);
+      });
+    return () => {
+      mounted = false;
+    };
   }, []);
 
-  // Filter balita milik akun yang sedang login (berdasarkan parent_id)
-  const myChildren = currentUser
-    ? children.filter((c) => c.parentId === currentUser.id)
-    : [];
+  // Auth-First Query Gating + Filter eksplisit parent_id
+  const { children: myChildren, loading: loadingChildren } = useChildrenData({
+    parentId: currentUser?.id ?? "",
+    enabled: !loadingUser,
+  });
+
+  const isLoading = loadingUser || loadingChildren;
 
   const displayName = loadingUser
     ? "..."
     : currentUser?.fullName || "Orang Tua";
 
   const displayPosyandu =
-    currentUser?.posyandu || "Posyandu Melati 01 (RW 01)";
+    myChildren[0]?.posyandu ||
+    currentUser?.posyandu ||
+    "Posyandu Melati 01 (RW 01)";
+
+  const examinedCount = myChildren.filter((c) => Boolean(c.lastExamDate)).length;
+  const examinedPct =
+    myChildren.length > 0 ? Math.round((examinedCount / myChildren.length) * 100) : 0;
+
+  const normalCount = myChildren.filter((c) => c.stuntingStatus === "Normal").length;
+  const normalPct =
+    myChildren.length > 0 ? Math.round((normalCount / myChildren.length) * 100) : 0;
+
+  if (isLoading) {
+    return (
+      <TumbuhKuLoader
+        message="Menyiapkan Ruang TumbuhKu..."
+        subMessage="Memuat data balita & Buku KIA Digital Anda..."
+      />
+    );
+  }
 
   return (
     <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-6 sm:gap-8">
@@ -110,14 +140,18 @@ export default function ParentDashboardPage() {
             </span>
             <div className="flex items-baseline gap-2 mt-2">
               <span className="font-heading text-3xl lg:text-4xl font-extrabold text-slate-900">
-                {myChildren.length}
+                {isLoading ? "..." : myChildren.length}
               </span>
               <span className="text-xs text-slate-500 font-medium">Anak</span>
             </div>
             <div className="mt-3 flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
               <span className="text-xs text-emerald-800 font-medium">
-                {myChildren.length > 0 ? "Semua aktif terpantau" : "Menunggu sinkronisasi kader"}
+                {isLoading
+                  ? "Memuat data balita..."
+                  : myChildren.length > 0
+                  ? "Semua aktif terpantau"
+                  : "Belum ada balita terdaftar"}
               </span>
             </div>
           </div>
@@ -135,13 +169,13 @@ export default function ParentDashboardPage() {
               </span>
               <div className="flex items-baseline gap-2 mt-2">
                 <span className="font-heading text-2xl lg:text-3xl font-extrabold text-slate-900">
-                  {myChildren.length > 0 ? 1 : 0}{" "}
+                  {isLoading ? "..." : examinedCount}{" "}
                   <span className="text-xs text-slate-500 font-normal">
-                    dari {myChildren.length} Selesai
+                    dari {isLoading ? "..." : myChildren.length} Selesai
                   </span>
                 </span>
                 <span className="text-xs text-emerald-800 font-bold bg-emerald-100 px-2.5 py-0.5 rounded-full">
-                  {myChildren.length > 0 ? "50%" : "0%"}
+                  {isLoading ? "..." : `${examinedPct}%`}
                 </span>
               </div>
             </div>
@@ -152,12 +186,12 @@ export default function ParentDashboardPage() {
           <div className="mt-3">
             <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
               <div
-                className="bg-emerald-600 h-full rounded-full"
-                style={{ width: myChildren.length > 0 ? "50%" : "0%" }}
+                className="bg-emerald-600 h-full rounded-full transition-all"
+                style={{ width: isLoading ? "0%" : `${examinedPct}%` }}
               ></div>
             </div>
             <div className="flex justify-between items-center mt-2 text-xs text-slate-500">
-              <span>Periode: November 2026</span>
+              <span>Periode Berjalan</span>
               <span className="font-semibold text-slate-800">
                 {myChildren.length > 0 ? "Terjadwal rutin" : "Belum ada jadwal"}
               </span>
@@ -173,14 +207,14 @@ export default function ParentDashboardPage() {
             </span>
             <div className="flex items-baseline gap-2 mt-2">
               <span className="font-heading text-3xl lg:text-4xl font-extrabold text-emerald-700">
-                {myChildren.length > 0 ? "100%" : "-"}
+                {isLoading ? "..." : myChildren.length > 0 ? `${normalPct}%` : "-"}
               </span>
               <span className="text-xs text-slate-500 font-medium">Zona Hijau</span>
             </div>
             <div className="mt-3 flex items-center gap-1.5">
               <span className="material-symbols-outlined text-[16px] text-emerald-600">verified</span>
               <span className="text-xs text-emerald-800 font-medium">
-                {myChildren.length > 0 ? "Tumbuh Kembang Baik" : "Belum ada data ukur"}
+                {myChildren.length > 0 ? "Tumbuh Kembang Terpantau" : "Belum ada data ukur"}
               </span>
             </div>
           </div>
@@ -194,20 +228,24 @@ export default function ParentDashboardPage() {
       <div>
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-heading text-lg font-bold text-slate-900">
-            Kartu Balita Saya ({myChildren.length} Anak)
+            Kartu Balita Saya ({isLoading ? "..." : `${myChildren.length} Anak`})
           </h2>
           <span className="text-xs text-slate-500">
             Otomatis terhubung dari data Posyandu
           </span>
         </div>
 
-        {myChildren.length === 0 ? (
+        {isLoading ? (
+          <div className="bg-white rounded-2xl p-8 border border-slate-200/80 text-center text-xs text-slate-500">
+            Memuat data balita milik akun {displayName}...
+          </div>
+        ) : myChildren.length === 0 ? (
           <div className="bg-white rounded-2xl p-8 border border-slate-200/80 text-center space-y-2">
             <p className="text-sm font-semibold text-slate-800">
               Belum ada data balita yang terhubung ke akun {displayName}.
             </p>
             <p className="text-xs text-slate-500 max-w-md mx-auto">
-              Data balita akan muncul otomatis setelah kader Posyandu mendaftarkan anak Anda menggunakan NIK orang tua ({currentUser?.nik || "-"}).
+              Data balita akan muncul otomatis setelah kader Posyandu mendaftarkan anak Anda ke akun orang tua ini (NIK: {currentUser?.nik || "-"}).
             </p>
           </div>
         ) : (
@@ -244,7 +282,9 @@ export default function ParentDashboardPage() {
                       <span className="font-heading text-base sm:text-lg font-bold text-slate-900 mt-0.5 block">
                         {child.weight} <span className="text-[10px] sm:text-xs font-normal text-slate-500">kg</span>
                       </span>
-                      <span className="text-[11px] sm:text-xs text-emerald-700 font-semibold truncate block">Normal</span>
+                      <span className="text-[11px] sm:text-xs text-emerald-700 font-semibold truncate block">
+                        {child.wastingStatus}
+                      </span>
                     </div>
 
                     <div className="p-2 sm:p-3 bg-slate-50 rounded-xl text-center border border-slate-200/70">
@@ -252,7 +292,9 @@ export default function ParentDashboardPage() {
                       <span className="font-heading text-base sm:text-lg font-bold text-slate-900 mt-0.5 block">
                         {child.height} <span className="text-[10px] sm:text-xs font-normal text-slate-500">cm</span>
                       </span>
-                      <span className="text-[11px] sm:text-xs text-emerald-700 font-semibold truncate block">Normal</span>
+                      <span className="text-[11px] sm:text-xs text-emerald-700 font-semibold truncate block">
+                        {child.stuntingStatus}
+                      </span>
                     </div>
 
                     <div className="p-2 sm:p-3 bg-slate-50 rounded-xl text-center border border-slate-200/70">
@@ -260,7 +302,9 @@ export default function ParentDashboardPage() {
                       <span className="font-heading text-base sm:text-lg font-bold text-emerald-700 mt-0.5 block">
                         {child.zScoreTbU} <span className="text-[10px] sm:text-xs font-normal text-slate-500">SD</span>
                       </span>
-                      <span className="text-[11px] sm:text-xs text-emerald-700 font-semibold truncate block">Sesuai Usia</span>
+                      <span className="text-[11px] sm:text-xs text-emerald-700 font-semibold truncate block">
+                        {child.stuntingStatus === "Normal" ? "Sesuai Usia" : "Perlu Pantau"}
+                      </span>
                     </div>
                   </div>
 

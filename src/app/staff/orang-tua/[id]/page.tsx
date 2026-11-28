@@ -1,9 +1,9 @@
 "use client";
 
-import React, { use } from "react";
+import React, { use, useEffect, useState } from "react";
 import Link from "next/link";
-import useChildrenData from "@/app/hooks/useChildrenData";
-import { mockParents } from "@/lib/mockData";
+import { Child, Parent } from "@/lib/mockData";
+import { getParentAccountById } from "@/lib/supabase/dataService";
 import { StuntingBadge } from "@/components/ui/badge";
 import { calculateDetailedAge } from "@/lib/ageHelper";
 
@@ -13,21 +13,73 @@ export default function DetailAkunOrangTuaPage({
   params: Promise<{ id: string }>;
 }) {
   const resolvedParams = use(params);
-  const parentId = resolvedParams?.id || "parent-1";
+  const parentId = resolvedParams?.id || "";
 
-  const { children } = useChildrenData();
+  const [parent, setParent] = useState<Parent | null>(null);
+  const [assignedChildren, setAssignedChildren] = useState<Child[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const parent =
-    mockParents.find((p) => p.id === parentId) || mockParents[0];
+  useEffect(() => {
+    if (!parentId) {
+      setLoading(false);
+      return;
+    }
 
-  const assignedChildren = children.filter(
-    (c) => c.parentId === parent.id || c.parentName.toLowerCase().includes(parent.name.toLowerCase())
-  );
+    let mounted = true;
+    setLoading(true);
+    getParentAccountById(parentId)
+      .then((res) => {
+        if (!mounted) return;
+        setParent(res.parent);
+        setAssignedChildren(res.children);
+      })
+      .finally(() => {
+        if (mounted) setLoading(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [parentId]);
+
+  if (loading) {
+    return (
+      <div className="max-w-[1240px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="bg-white rounded-2xl p-8 border border-slate-200/80 text-center text-xs text-slate-500">
+          Memuat detail akun orang tua...
+        </div>
+      </div>
+    );
+  }
+
+  if (!parent) {
+    return (
+      <div className="max-w-[1240px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-6">
+        <div className="bg-white rounded-2xl p-8 border border-slate-200/80 text-center space-y-3">
+          <h1 className="font-heading text-lg font-bold text-slate-900">
+            Akun Orang Tua Tidak Ditemukan
+          </h1>
+          <p className="text-xs text-slate-500">
+            Data akun dengan ID tersebut tidak tersedia di database Supabase.
+          </p>
+          <div>
+            <Link
+              href="/staff/orang-tua"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-semibold hover:bg-emerald-700"
+            >
+              <span className="material-symbols-outlined text-[16px]">arrow_back</span>
+              <span>Kembali ke Daftar Akun</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-[1240px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 flex flex-col gap-6 sm:gap-8">
       {/* Top Breadcrumb */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-2 text-xs text-slate-500">
           <Link href="/staff/orang-tua" className="hover:text-emerald-700">Akun Orang Tua</Link>
           <span>/</span>
@@ -49,19 +101,16 @@ export default function DetailAkunOrangTuaPage({
             {parent.name.slice(0, 2).toUpperCase()}
           </div>
           <div>
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2.5 flex-wrap">
               <h1 className="font-heading text-xl lg:text-2xl font-bold text-slate-900">
                 {parent.name}
               </h1>
               <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold border border-emerald-200/60">
-                {parent.roleInFamily || "Ibu Kandung"}
+                {parent.roleInFamily || "Orang Tua / Wali"}
               </span>
             </div>
             <p className="text-xs text-slate-500 mt-1">
               Terdaftar sejak {parent.joinDate} • Wilayah {parent.posyandu}
-              {parent.spouseName && (
-                <span> • Pasangan: <strong className="text-slate-800">{parent.spouseName}</strong></span>
-              )}
             </p>
           </div>
         </div>
@@ -84,48 +133,36 @@ export default function DetailAkunOrangTuaPage({
           <div className="bg-white rounded-2xl p-6 border border-[#e2ebe5] shadow-sm space-y-4">
             <h3 className="font-heading text-sm font-bold text-[#0b1c30] flex items-center gap-2 pb-2 border-b border-[#f1f5f9]">
               <span className="material-symbols-outlined text-[#15803d] text-[20px]">contact_mail</span>
-              Informasi Kontak & Domisili
+              Informasi Kontak &amp; Domisili
             </h3>
 
-            <div className="space-y-3 text-xs text-[#3f493f]">
+            <div className="space-y-3 text-sm text-[#3f493f]">
               <div>
-                <span className="text-[#6f7a6e] block text-[11px]">Nomor WhatsApp</span>
-                <p className="font-bold text-[#0b1c30] mt-0.5 flex items-center gap-1.5">
+                <span className="text-[#6f7a6e] block text-xs">Nomor WhatsApp</span>
+                <p className="font-semibold text-[#0b1c30] mt-0.5 flex items-center gap-1.5">
                   <span className="material-symbols-outlined text-[16px] text-[#15803d]">chat</span>
                   {parent.phone}
                 </p>
               </div>
 
               <div>
-                <span className="text-[#6f7a6e] block text-[11px]">Alamat Email</span>
+                <span className="text-[#6f7a6e] block text-xs">Alamat Email</span>
                 <p className="font-medium text-[#0b1c30] mt-0.5">{parent.email}</p>
               </div>
 
               <div>
-                <span className="text-[#6f7a6e] block text-[11px]">Nomor Induk Kependudukan (NIK)</span>
-                <p className="font-mono font-bold text-[#0b1c30] mt-0.5">{parent.nik}</p>
+                <span className="text-[#6f7a6e] block text-xs">Nomor Induk Kependudukan (NIK)</span>
+                <p className="font-semibold text-[#0b1c30] mt-0.5">{parent.nik}</p>
               </div>
 
-              {parent.spouseName && (
-                <div className="p-3 bg-emerald-50/70 rounded-xl border border-emerald-200/60">
-                  <span className="text-emerald-900 font-bold block text-[11px]">
-                    Data Pasangan (Orang Tua Kedua)
-                  </span>
-                  <p className="font-bold text-slate-900 mt-0.5">{parent.spouseName}</p>
-                  <p className="text-[11px] text-slate-600">
-                    NIK: {parent.spouseNik || "-"} • WA: {parent.spousePhone || "-"}
-                  </p>
-                </div>
-              )}
-
               <div>
-                <span className="text-[#6f7a6e] block text-[11px]">Alamat Tinggal</span>
+                <span className="text-[#6f7a6e] block text-xs">Alamat Tinggal</span>
                 <p className="font-medium text-[#0b1c30] mt-0.5 leading-relaxed">{parent.address}</p>
               </div>
 
               <div>
-                <span className="text-[#6f7a6e] block text-[11px]">Posyandu Penugasan</span>
-                <p className="font-bold text-[#15803d] mt-0.5">{parent.posyandu}</p>
+                <span className="text-[#6f7a6e] block text-xs">Posyandu Penugasan</span>
+                <p className="font-semibold text-[#15803d] mt-0.5">{parent.posyandu}</p>
               </div>
             </div>
           </div>
@@ -142,7 +179,7 @@ export default function DetailAkunOrangTuaPage({
             </div>
 
             <p className="text-xs text-[#6f7a6e]">
-              Semua data balita di bawah ini otomatis tampil pada dashboard akun aplikasi orang tua tanpa proses verifikasi manual.
+              Semua data balita di bawah ini terhubung langsung berdasarkan parent_id pada database Posyandu.
             </p>
 
             <div className="space-y-3">
@@ -151,7 +188,7 @@ export default function DetailAkunOrangTuaPage({
                 return (
                   <div
                     key={c.id}
-                    className="p-4 rounded-xl bg-slate-50 border border-slate-200/70 flex items-center justify-between gap-4 hover:border-emerald-300 transition-all"
+                    className="p-4 rounded-xl bg-slate-50 border border-slate-200/70 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-emerald-300 transition-all"
                   >
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center text-xs shrink-0">
@@ -162,8 +199,8 @@ export default function DetailAkunOrangTuaPage({
                         <p className="text-xs text-slate-500">
                           Umur Presisi: <strong className="text-emerald-800">{ageDetail.textLong}</strong> • {c.gender === "L" ? "Laki-laki" : "Perempuan"}
                         </p>
-                        <p className="text-[11px] text-slate-500">
-                          NIK: {c.nik} • Hubungan: <strong className="text-slate-700">Anak Kandung</strong>
+                        <p className="text-xs text-slate-500">
+                          NIK: {c.nik} • {c.posyandu}
                         </p>
                         <div className="mt-1.5 flex items-center gap-2">
                           <span className="text-xs font-semibold text-slate-800">
@@ -179,7 +216,7 @@ export default function DetailAkunOrangTuaPage({
                         href={`/staff/balita/${c.id}`}
                         className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors"
                       >
-                        Buka Grafik
+                        Buka Detail
                       </Link>
                     </div>
                   </div>

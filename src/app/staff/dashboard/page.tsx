@@ -4,13 +4,23 @@ import React, { useState } from "react";
 import Link from "next/link";
 import useChildrenData from '@/app/hooks/useChildrenData';
 import { StuntingBadge } from '@/components/ui/badge';
+import { TumbuhKuLoader } from '@/components/ui/TumbuhKuLoader';
 import AttendanceDashboard from '@/components/analytics/AttendanceDashboard';
 import StatusComparisonChart from '@/components/analytics/StatusComparisonChart';
 
 export default function StaffDashboardPage() {
   const [selectedFilter, setSelectedFilter] = useState("all");
 
-  const { children, hasCustomData, resetChildren } = useChildrenData();
+  const { children, loading, hasCustomData, resetChildren } = useChildrenData();
+
+  if (loading) {
+    return (
+      <TumbuhKuLoader
+        message="Memuat Data Posyandu..."
+        subMessage="Menyiapkan dasbor operasional & analitik SKDN..."
+      />
+    );
+  }
 
   const totalBalita = children.length;
   const examinedCount = children.filter((c) => c.weight > 0 || c.lastExamDate).length;
@@ -35,10 +45,14 @@ export default function StaffDashboardPage() {
       {/* Top Greeting & Operational Header */}
       <header className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 sm:gap-6 pb-2">
         <div className="flex flex-col gap-1.5 max-w-2xl">
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex flex-wrap items-center gap-2 mb-1">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-medium border border-emerald-200/60">
               <span className="material-symbols-outlined text-[16px] text-emerald-700">verified</span>
               Sistem Pemantauan Rutin SKDN
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-medium border border-emerald-200/60">
+              <span className="material-symbols-outlined text-[16px] text-emerald-700">location_on</span>
+              Posyandu Melati 1 s/d 4
             </span>
             <span className="text-slate-300">•</span>
             <span className="text-xs text-slate-500">Sinkronisasi Terakhir: 10 Menit Lalu</span>
@@ -66,10 +80,6 @@ export default function StaffDashboardPage() {
               <span>Reset Data</span>
             </button>
           )}
-          <div className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200/70 shadow-xs text-xs font-semibold">
-            <span className="material-symbols-outlined text-[18px] text-emerald-600">location_on</span>
-            <span>Posyandu Melati 1 s/d 4</span>
-          </div>
           <Link
             href="/staff/laporan"
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-slate-700 hover:bg-slate-50 hover:text-emerald-700 transition-all text-xs font-semibold shadow-xs border border-slate-200/90"
@@ -90,22 +100,20 @@ export default function StaffDashboardPage() {
       {/* 4 Stat Summary Cards */}
       <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
         {/* Card 1: Total Balita */}
-        <div className="bg-white p-5 sm:p-6 rounded-2xl shadow-xs border border-slate-200/80 flex flex-col justify-between hover:shadow-sm transition-all">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex flex-col">
-              <span className="text-xs font-semibold text-slate-600">Total Balita Terdaftar</span>
-              <span className="text-xs text-slate-500">Sasaran Wilayah Binaan (S)</span>
-            </div>
-            <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0 border border-emerald-100">
-              <span className="material-symbols-outlined text-[26px]">child_care</span>
-            </div>
+        <div className="bg-white p-5 sm:p-6 rounded-2xl shadow-xs border border-slate-200/80 flex flex-col items-center justify-center text-center gap-3 hover:shadow-sm transition-all">
+          <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0 border border-emerald-100">
+            <span className="material-symbols-outlined text-[26px]">child_care</span>
           </div>
-          <div className="flex flex-col gap-2">
-            <div className="flex items-baseline gap-2">
+          <div className="flex flex-col items-center">
+            <span className="text-xs font-semibold text-slate-600">Total Balita Terdaftar</span>
+            <span className="text-xs text-slate-500">Sasaran Wilayah Binaan (S)</span>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex items-baseline justify-center gap-2">
               <span className="font-heading text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">{totalBalita}</span>
               <span className="text-xs text-slate-500 font-medium">Jiwa</span>
             </div>
-            <div className="inline-flex items-center gap-1.5 self-start px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-medium">
+            <div className="inline-flex items-center justify-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-medium">
               <span className="material-symbols-outlined text-[14px]">trending_up</span>
               <span>{hasCustomData ? "Sinkron Data Impor Terkini" : "+12 anak baru bulan ini"}</span>
             </div>
@@ -113,28 +121,26 @@ export default function StaffDashboardPage() {
         </div>
 
         {/* Card 2: Pemeriksaan Bulan Ini */}
-        <div className="bg-white p-5 sm:p-6 rounded-2xl shadow-xs border border-slate-200/80 flex flex-col justify-between hover:shadow-sm transition-all">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex flex-col">
-              <span className="text-xs font-semibold text-slate-600">Pemeriksaan Bulan Ini</span>
-              <span className="text-xs text-slate-500">Cakupan Penimbangan (D/S)</span>
-            </div>
-            <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0 border border-emerald-100">
-              <span className="material-symbols-outlined text-[26px]">fact_check</span>
-            </div>
+        <div className="bg-white p-5 sm:p-6 rounded-2xl shadow-xs border border-slate-200/80 flex flex-col items-center justify-center text-center gap-3 hover:shadow-sm transition-all">
+          <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0 border border-emerald-100">
+            <span className="material-symbols-outlined text-[26px]">fact_check</span>
           </div>
-          <div className="flex flex-col gap-2.5">
-            <div className="flex items-baseline justify-between">
+          <div className="flex flex-col items-center">
+            <span className="text-xs font-semibold text-slate-600">Pemeriksaan Bulan Ini</span>
+            <span className="text-xs text-slate-500">Cakupan Penimbangan (D/S)</span>
+          </div>
+          <div className="w-full flex flex-col items-center gap-2.5">
+            <div className="flex items-baseline justify-center gap-2">
               <div className="flex items-baseline gap-1.5">
                 <span className="font-heading text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">{examinedCount}</span>
                 <span className="text-sm text-slate-500 font-medium">/ {totalBalita}</span>
               </div>
-              <span className="text-xs font-bold text-emerald-700">{coveragePercent}%</span>
+              <span className="text-xs font-bold text-emerald-700">({coveragePercent}%)</span>
             </div>
             <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
               <div className="h-full rounded-full bg-emerald-600 transition-all" style={{ width: `${coveragePercent}%` }}></div>
             </div>
-            <div className="inline-flex items-center gap-1.5 self-start px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-medium border border-emerald-200/60">
+            <div className="inline-flex items-center justify-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-medium border border-emerald-200/60">
               <span className="material-symbols-outlined text-[14px]">schedule</span>
               <span>Cakupan tercatat sistem</span>
             </div>
@@ -142,22 +148,20 @@ export default function StaffDashboardPage() {
         </div>
 
         {/* Card 3: Balita Perlu Ditinjau */}
-        <div className="bg-white p-5 sm:p-6 rounded-2xl shadow-xs border border-slate-200/80 flex flex-col justify-between hover:shadow-sm transition-all">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex flex-col">
-              <span className="text-xs font-semibold text-slate-600">Balita Perlu Ditinjau</span>
-              <span className="text-xs text-slate-500">Atensi Klinis & Konfirmasi</span>
-            </div>
-            <div className="w-12 h-12 rounded-xl bg-rose-50 flex items-center justify-center text-rose-700 shrink-0 border border-rose-100">
-              <span className="material-symbols-outlined text-[26px]">warning</span>
-            </div>
+        <div className="bg-white p-5 sm:p-6 rounded-2xl shadow-xs border border-slate-200/80 flex flex-col items-center justify-center text-center gap-3 hover:shadow-sm transition-all">
+          <div className="w-12 h-12 rounded-xl bg-rose-50 flex items-center justify-center text-rose-700 shrink-0 border border-rose-100">
+            <span className="material-symbols-outlined text-[26px]">warning</span>
           </div>
-          <div className="flex flex-col gap-2">
-            <div className="flex items-baseline gap-2">
+          <div className="flex flex-col items-center">
+            <span className="text-xs font-semibold text-slate-600">Balita Perlu Ditinjau</span>
+            <span className="text-xs text-slate-500">Atensi Klinis & Konfirmasi</span>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex items-baseline justify-center gap-2">
               <span className="font-heading text-3xl lg:text-4xl font-extrabold text-rose-700 tracking-tight">{atRiskChildren.length}</span>
               <span className="text-xs text-slate-500 font-medium">Balita</span>
             </div>
-            <div className="inline-flex items-center gap-1.5 self-start px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 text-xs font-medium border border-rose-200/70">
+            <div className="inline-flex items-center justify-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 text-xs font-medium border border-rose-200/70">
               <span className="material-symbols-outlined text-[14px]">priority_high</span>
               <span>{severelyStuntedCount} Sangat Pendek, {stuntedCount} Pendek</span>
             </div>
@@ -165,22 +169,20 @@ export default function StaffDashboardPage() {
         </div>
 
         {/* Card 4: Posyandu Binaan */}
-        <div className="bg-white p-5 sm:p-6 rounded-2xl shadow-xs border border-slate-200/80 flex flex-col justify-between hover:shadow-sm transition-all">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex flex-col">
-              <span className="text-xs font-semibold text-slate-600">Pos Layanan Terbuka</span>
-              <span className="text-xs text-slate-500">Kelurahan Sukamaju</span>
-            </div>
-            <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700 shrink-0 border border-slate-200/80">
-              <span className="material-symbols-outlined text-[26px]">location_city</span>
-            </div>
+        <div className="bg-white p-5 sm:p-6 rounded-2xl shadow-xs border border-slate-200/80 flex flex-col items-center justify-center text-center gap-3 hover:shadow-sm transition-all">
+          <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700 shrink-0 border border-slate-200/80">
+            <span className="material-symbols-outlined text-[26px]">location_city</span>
           </div>
-          <div className="flex flex-col gap-2">
-            <div className="flex items-baseline gap-2">
+          <div className="flex flex-col items-center">
+            <span className="text-xs font-semibold text-slate-600">Pos Layanan Terbuka</span>
+            <span className="text-xs text-slate-500">Kelurahan Sukamaju</span>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex items-baseline justify-center gap-2">
               <span className="font-heading text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">4</span>
               <span className="text-xs text-slate-500 font-medium">Posyandu Aktif</span>
             </div>
-            <div className="inline-flex items-center gap-1.5 self-start px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-medium border border-emerald-200/60">
+            <div className="inline-flex items-center justify-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-medium border border-emerald-200/60">
               <span className="material-symbols-outlined text-[14px]">check_circle</span>
               <span>100% Pos Terkoneksi Real-time</span>
             </div>

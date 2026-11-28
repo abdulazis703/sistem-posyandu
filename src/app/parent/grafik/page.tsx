@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import useChildrenData from "@/app/hooks/useChildrenData";
-import { mockChildren } from "@/lib/mockData";
+import { getCurrentUser, UserProfile } from "@/lib/supabase";
 import { StuntingBadge } from "@/components/ui/badge";
 import { ImtGrowthChart } from "@/components/growth/ImtGrowthChart";
 import { calculateImt, assessImt } from "@/lib/imtStandards";
@@ -12,15 +12,75 @@ import { calculateDetailedAge } from "@/lib/ageHelper";
 export default function GrafikPertumbuhanParentPage() {
   const [selectedChildIndex, setSelectedChildIndex] = useState(0);
   const [activeCurveTab, setActiveCurveTab] = useState<"imt" | "bb" | "tb">("imt");
-  const { children } = useChildrenData();
+  const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
+  const [loadingUser, setLoadingUser] = useState(true);
 
-  const matched = children.filter(
-    (c) => c.parentId === "parent-1" || c.parentName.toLowerCase().includes("sari")
-  );
-  const myChildren = matched.length > 0 ? matched : (children.length > 0 ? children : mockChildren);
+  useEffect(() => {
+    let mounted = true;
+    getCurrentUser()
+      .then((user) => {
+        if (mounted) setCurrentUser(user);
+      })
+      .finally(() => {
+        if (mounted) setLoadingUser(false);
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  // Auth-First Query Gating + Filter eksplisit parent_id
+  const { children: myChildren, loading: loadingChildren } = useChildrenData({
+    parentId: currentUser?.id ?? "",
+    enabled: !loadingUser,
+  });
+
+  const isLoading = loadingUser || loadingChildren;
+
+  if (isLoading) {
+    return (
+      <div className="w-full max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="bg-white rounded-2xl p-8 border border-slate-200/80 text-center text-xs text-slate-500">
+          Memuat data pertumbuhan balita...
+        </div>
+      </div>
+    );
+  }
+
+  if (myChildren.length === 0) {
+    return (
+      <div className="w-full max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-6">
+        <div className="flex items-center gap-2 text-xs text-slate-500">
+          <Link href="/parent/dashboard" className="hover:text-emerald-700">Dashboard</Link>
+          <span>/</span>
+          <span className="text-slate-800 font-semibold">Balita Saya</span>
+        </div>
+
+        <div className="bg-white rounded-2xl p-8 sm:p-10 border border-slate-200/80 shadow-xs text-center space-y-3">
+          <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center mx-auto border border-emerald-100">
+            <span className="material-symbols-outlined text-[28px]">child_care</span>
+          </div>
+          <h1 className="font-heading text-lg sm:text-xl font-bold text-slate-900">
+            Belum Ada Balita Terdaftar
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto leading-relaxed">
+            Akun <strong>{currentUser?.fullName || "Anda"}</strong> saat ini memiliki 0 data balita di sistem Posyandu. Grafik pertumbuhan akan tampil otomatis setelah kader mendaftarkan buah hati Anda.
+          </p>
+          <div className="pt-2">
+            <Link
+              href="/parent/dashboard"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors"
+            >
+              <span className="material-symbols-outlined text-[16px]">arrow_back</span>
+              <span>Kembali ke Dashboard</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const activeChild = myChildren[selectedChildIndex] || myChildren[0];
-
   const childImt = calculateImt(activeChild.weight, activeChild.height);
   const childImtAssessment = assessImt(
     childImt,
@@ -35,7 +95,7 @@ export default function GrafikPertumbuhanParentPage() {
         <div className="flex items-center gap-2 text-xs text-slate-500">
           <Link href="/parent/dashboard" className="hover:text-emerald-700">Dashboard</Link>
           <span>/</span>
-          <span className="text-slate-800 font-semibold">Grafik Pertumbuhan & IMT</span>
+          <span className="text-slate-800 font-semibold">Balita Saya &amp; Grafik Pertumbuhan</span>
         </div>
 
         <div className="flex flex-wrap sm:flex-nowrap items-center gap-3">
@@ -45,7 +105,7 @@ export default function GrafikPertumbuhanParentPage() {
             <select
               value={selectedChildIndex}
               onChange={(e) => setSelectedChildIndex(Number(e.target.value))}
-              className="bg-transparent text-xs font-semibold text-slate-800 focus:outline-none cursor-pointer"
+              className="bg-transparent text-base sm:text-xs font-semibold text-slate-800 focus:outline-none cursor-pointer"
             >
               {myChildren.map((child, idx) => (
                 <option key={child.id} value={idx}>
@@ -103,7 +163,7 @@ export default function GrafikPertumbuhanParentPage() {
           <span className="font-heading text-sm font-bold text-slate-900 block mt-0.5">
             {activeChild.lastExamDate}
           </span>
-          <span className="text-xs text-emerald-700 font-medium">Tercatat Valid di e-PPGBM</span>
+          <span className="text-xs text-emerald-700 font-medium">Tercatat di Posyandu</span>
         </div>
       </div>
 
@@ -116,7 +176,7 @@ export default function GrafikPertumbuhanParentPage() {
             {activeChild.weight} <span className="text-xs font-normal text-slate-500">kg</span>
           </p>
           <span className="text-xs text-emerald-700 font-medium mt-1 block">
-            Z-Score: +0.2 SD (Ideal)
+            Z-Score BB/U: {activeChild.zScoreBbU} SD
           </span>
         </div>
 
@@ -127,11 +187,11 @@ export default function GrafikPertumbuhanParentPage() {
             {activeChild.height} <span className="text-xs font-normal text-slate-500">cm</span>
           </p>
           <span className="text-xs text-emerald-700 font-medium mt-1 block">
-            Z-Score: {activeChild.zScoreTbU} SD (Normal)
+            Z-Score TB/U: {activeChild.zScoreTbU} SD
           </span>
         </div>
 
-        {/* Card 3: IMT (Baru & Disorot) */}
+        {/* Card 3: IMT */}
         <div className="p-4 sm:p-5 bg-emerald-50/60 rounded-2xl border border-emerald-200/80 shadow-xs">
           <div className="flex items-center justify-between">
             <span className="text-xs text-emerald-900 block font-bold">Indeks Massa Tubuh</span>
@@ -149,10 +209,13 @@ export default function GrafikPertumbuhanParentPage() {
         <div className="p-4 sm:p-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
           <span className="text-xs text-slate-500 block font-medium">Lingkar Kepala</span>
           <p className="font-heading text-2xl lg:text-3xl font-extrabold text-slate-900 mt-1">
-            {activeChild.headCircumference || 46.5} <span className="text-xs font-normal text-slate-500">cm</span>
+            {activeChild.headCircumference ?? "-"}{" "}
+            {activeChild.headCircumference != null && (
+              <span className="text-xs font-normal text-slate-500">cm</span>
+            )}
           </p>
           <span className="text-xs text-emerald-700 font-medium mt-1 block">
-            Pertumbuhan Otak Baik
+            {activeChild.headCircumference != null ? "Data Ukur Terkini" : "Belum Diukur"}
           </span>
         </div>
 
@@ -160,10 +223,13 @@ export default function GrafikPertumbuhanParentPage() {
         <div className="p-4 sm:p-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs col-span-2 sm:col-span-1">
           <span className="text-xs text-slate-500 block font-medium">Lingkar Lengan (LiLA)</span>
           <p className="font-heading text-2xl lg:text-3xl font-extrabold text-slate-900 mt-1">
-            {activeChild.lila || 14.5} <span className="text-xs font-normal text-slate-500">cm</span>
+            {activeChild.lila ?? "-"}{" "}
+            {activeChild.lila != null && (
+              <span className="text-xs font-normal text-slate-500">cm</span>
+            )}
           </p>
           <span className="text-xs text-emerald-700 font-medium mt-1 block">
-            Pita Hijau (Gizi Cukup)
+            {activeChild.lila != null ? "Data Ukur Terkini" : "Belum Diukur"}
           </span>
         </div>
       </div>
@@ -212,10 +278,8 @@ export default function GrafikPertumbuhanParentPage() {
 
       {/* Tab Content Display */}
       {activeCurveTab === "imt" ? (
-        /* Komponen Visualisasi IMT Balita Interaktif */
         <ImtGrowthChart child={activeChild} role="parent" />
       ) : activeCurveTab === "bb" ? (
-        /* KMS Berat Badan Tradisional */
         <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/80 shadow-xs space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
             <div>
@@ -229,7 +293,7 @@ export default function GrafikPertumbuhanParentPage() {
             <div className="flex items-center gap-3">
               <span className="inline-flex items-center gap-1.5 text-xs text-emerald-800 font-medium bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200/60">
                 <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
-                Status BB: Normal / Naik Sesuai Garis (N)
+                Status BB: {activeChild.wastingStatus} ({activeChild.weight} kg)
               </span>
             </div>
           </div>
@@ -241,12 +305,10 @@ export default function GrafikPertumbuhanParentPage() {
               <line x1="40" y1="130" x2="660" y2="130" stroke="#E2E8F0" strokeDasharray="3 3" />
               <line x1="40" y1="180" x2="660" y2="180" stroke="#CBD5E1" />
 
-              {/* KMS WHO Standard Growth Bands */}
               <path d="M40,210 Q220,185 360,170 T660,140 L660,165 T360,195 Q220,205 40,225 Z" fill="#FEE2E2" opacity="0.7" />
               <path d="M40,195 Q220,170 360,150 T660,115 L660,140 T360,170 Q220,185 40,210 Z" fill="#FEF3C7" opacity="0.8" />
               <path d="M40,160 Q220,120 360,90 T660,40 L660,115 T360,150 Q220,170 40,195 Z" fill="#D1FAE5" opacity="0.85" />
 
-              {/* Trajectory Plot Line */}
               <path
                 d="M40,215 Q140,195 240,170 T440,125 T640,75"
                 stroke="#059669"
@@ -256,12 +318,7 @@ export default function GrafikPertumbuhanParentPage() {
               />
 
               {[
-                { cx: 40, cy: 215, val: "3.2 kg" },
-                { cx: 140, cy: 195, val: "5.1 kg" },
-                { cx: 240, cy: 170, val: "7.0 kg" },
-                { cx: 340, cy: 145, val: "8.4 kg" },
-                { cx: 440, cy: 125, val: "9.6 kg" },
-                { cx: 540, cy: 100, val: "10.8 kg" },
+                { cx: 540, cy: 100, val: `${activeChild.weight} kg` },
               ].map((p, i) => (
                 <g key={i}>
                   <circle cx={p.cx} cy={p.cy} r="6" fill="#059669" stroke="#FFFFFF" strokeWidth="2.5" />
@@ -282,7 +339,6 @@ export default function GrafikPertumbuhanParentPage() {
           </div>
         </div>
       ) : (
-        /* Kurva Tinggi Badan (TB/U) */
         <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/80 shadow-xs space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
             <div>
@@ -308,12 +364,10 @@ export default function GrafikPertumbuhanParentPage() {
               <line x1="40" y1="130" x2="660" y2="130" stroke="#E2E8F0" strokeDasharray="3 3" />
               <line x1="40" y1="180" x2="660" y2="180" stroke="#CBD5E1" />
 
-              {/* Band Normal TB/U */}
               <path d="M40,170 Q220,130 380,85 T660,45 L660,135 Q400,165 220,185 T40,205 Z" fill="#D1FAE5" opacity="0.85" />
               <path d="M40,170 Q220,130 380,85 T660,45" stroke="#86EFAC" strokeWidth="1.5" strokeDasharray="3 2" />
               <path d="M40,205 Q220,185 400,165 T660,135" stroke="#86EFAC" strokeWidth="1.5" strokeDasharray="3 2" />
 
-              {/* Plot Anak */}
               <path
                 d="M40,190 L140,175 L240,155 L340,135 L440,118 L540,98"
                 stroke="#059669"
@@ -323,11 +377,6 @@ export default function GrafikPertumbuhanParentPage() {
               />
 
               {[
-                { cx: 40, cy: 190, val: "49 cm" },
-                { cx: 140, cy: 175, val: "61 cm" },
-                { cx: 240, cy: 155, val: "68 cm" },
-                { cx: 340, cy: 135, val: "74 cm" },
-                { cx: 440, cy: 118, val: "78 cm" },
                 { cx: 540, cy: 98, val: `${activeChild.height} cm` },
               ].map((p, i) => (
                 <g key={i}>

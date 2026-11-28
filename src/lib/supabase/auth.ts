@@ -9,6 +9,8 @@ export interface UserProfile {
   fullName: string;
   posyandu?: string;
   nik?: string;
+  address?: string;
+  createdAt?: string;
 }
 
 export async function signIn(email: string, password: string) {
@@ -23,7 +25,7 @@ export async function signIn(email: string, password: string) {
     .from("users")
     .select("id, email, phone, role")
     .eq("id", data.user.id)
-    .single();
+    .maybeSingle();
 
   const role =
     (userRecord?.role as "parent" | "staff" | "admin") ||
@@ -93,9 +95,9 @@ export async function getCurrentUser(): Promise<UserProfile | null> {
 
   const { data: userProfile } = await supabase
     .from("users")
-    .select("id, email, phone, role")
+    .select("id, email, phone, role, created_at")
     .eq("id", user.id)
-    .single();
+    .maybeSingle();
 
   const role =
     (userProfile?.role as "parent" | "staff" | "admin") ||
@@ -104,27 +106,32 @@ export async function getCurrentUser(): Promise<UserProfile | null> {
 
   let dbFullName: string | undefined;
   let dbNik: string | undefined;
+  let dbAddress: string | undefined;
+  let dbCreatedAt: string | undefined;
 
   if (role === "parent") {
     const { data: parentProf } = await supabase
       .from("parent_profiles")
-      .select("full_name, nik")
+      .select("full_name, nik, address, created_at")
       .eq("user_id", user.id)
-      .single();
+      .maybeSingle();
     dbFullName = parentProf?.full_name;
     dbNik = parentProf?.nik;
+    dbAddress = parentProf?.address;
+    dbCreatedAt = parentProf?.created_at || userProfile?.created_at;
   } else {
     const { data: staffProf } = await supabase
       .from("staff_profiles")
-      .select("full_name")
+      .select("full_name, created_at")
       .eq("user_id", user.id)
-      .single();
+      .maybeSingle();
     dbFullName = staffProf?.full_name;
+    dbCreatedAt = staffProf?.created_at || userProfile?.created_at;
   }
 
   return {
     id: user.id,
-    email: user.email || "",
+    email: userProfile?.email || user.email || "",
     phone: userProfile?.phone || user.user_metadata?.phone,
     role,
     fullName:
@@ -134,5 +141,7 @@ export async function getCurrentUser(): Promise<UserProfile | null> {
       "Pengguna",
     posyandu: user.user_metadata?.posyandu || "Posyandu Melati 01 (RW 01)",
     nik: dbNik || user.user_metadata?.nik,
+    address: dbAddress || "",
+    createdAt: dbCreatedAt,
   };
 }

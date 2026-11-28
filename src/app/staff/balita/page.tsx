@@ -464,64 +464,44 @@ export default function DataBalitaPage() {
 
       {/* Top Summary Metrics */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex items-center justify-between">
-          <div className="flex flex-col">
-            <span className="text-xs text-slate-500 font-medium">Total Balita Terdaftar</span>
-            <div className="flex items-baseline gap-1.5 mt-1">
-              <span className="font-heading text-3xl lg:text-4xl font-extrabold text-slate-900">{children.length}</span>
-              <span className="text-xs text-slate-500 font-medium">Anak</span>
-            </div>
-            <span className="text-xs text-emerald-700 font-medium mt-1 flex items-center gap-0.5">
-              <span className="material-symbols-outlined text-[14px]">verified</span> Data Tersimpan
-            </span>
+        <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex flex-col items-center justify-center text-center">
+          <span className="text-xs text-slate-500 font-medium">Total Balita Terdaftar</span>
+          <div className="flex items-baseline justify-center gap-1.5 mt-1.5">
+            <span className="font-heading text-3xl lg:text-4xl font-extrabold text-slate-900">{children.length}</span>
+            <span className="text-xs text-slate-500 font-medium">Anak</span>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-100">
-            <span className="material-symbols-outlined text-[24px]">child_care</span>
-          </div>
+          <span className="text-xs text-emerald-700 font-medium mt-1.5">
+            Data Tersimpan
+          </span>
         </div>
 
-        <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex items-center justify-between">
-          <div className="flex flex-col">
-            <span className="text-xs text-slate-500 font-medium">Status Gizi Normal</span>
-            <div className="flex items-baseline gap-1.5 mt-1">
-              <span className="font-heading text-3xl lg:text-4xl font-extrabold text-emerald-700">{normalCount}</span>
-              <span className="text-xs text-slate-500 font-medium">Anak</span>
-            </div>
-            <span className="text-xs text-emerald-700 font-medium mt-1">
-              {children.length > 0 ? Math.round((normalCount / children.length) * 100) : 0}% dari total balita
-            </span>
+        <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex flex-col items-center justify-center text-center">
+          <span className="text-xs text-slate-500 font-medium">Status Gizi Normal</span>
+          <div className="flex items-baseline justify-center gap-1.5 mt-1.5">
+            <span className="font-heading text-3xl lg:text-4xl font-extrabold text-emerald-700">{normalCount}</span>
+            <span className="text-xs text-slate-500 font-medium">Anak</span>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-100">
-            <span className="material-symbols-outlined text-[24px]">verified</span>
-          </div>
+          <span className="text-xs text-emerald-700 font-medium mt-1.5">
+            {children.length > 0 ? Math.round((normalCount / children.length) * 100) : 0}% dari total balita
+          </span>
         </div>
 
-        <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex items-center justify-between">
-          <div className="flex flex-col">
-            <span className="text-xs text-slate-500 font-medium">Risiko Stunting (TB/U)</span>
-            <div className="flex items-baseline gap-1.5 mt-1">
-              <span className="font-heading text-3xl lg:text-4xl font-extrabold text-amber-700">{stuntedCount}</span>
-              <span className="text-xs text-slate-500 font-medium">Anak</span>
-            </div>
-            <span className="text-xs text-amber-700 font-medium mt-1">Dalam pemantauan aktif</span>
+        <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex flex-col items-center justify-center text-center">
+          <span className="text-xs text-slate-500 font-medium">Risiko Stunting (TB/U)</span>
+          <div className="flex items-baseline justify-center gap-1.5 mt-1.5">
+            <span className="font-heading text-3xl lg:text-4xl font-extrabold text-amber-700">{stuntedCount}</span>
+            <span className="text-xs text-slate-500 font-medium">Anak</span>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center border border-amber-100">
-            <span className="material-symbols-outlined text-[24px]">monitoring</span>
-          </div>
+          <span className="text-xs text-amber-700 font-medium mt-1.5">Dalam pemantauan aktif</span>
         </div>
 
-        <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex items-center justify-between">
-          <div className="flex flex-col">
-            <span className="text-xs text-slate-500 font-medium">Perlu Tinjauan Gizi</span>
-            <div className="flex items-baseline gap-1.5 mt-1">
-              <span className="font-heading text-3xl lg:text-4xl font-extrabold text-rose-700">{reviewCount}</span>
-              <span className="text-xs text-slate-500 font-medium">Anak</span>
-            </div>
-            <span className="text-xs text-rose-700 font-medium mt-1">Prioritas Intervensi</span>
+        <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex flex-col items-center justify-center text-center">
+          <span className="text-xs text-slate-500 font-medium">Perlu Tinjauan Gizi</span>
+          <div className="flex items-baseline justify-center gap-1.5 mt-1.5">
+            <span className="font-heading text-3xl lg:text-4xl font-extrabold text-rose-700">{reviewCount}</span>
+            <span className="text-xs text-slate-500 font-medium">Anak</span>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-rose-50 text-rose-700 flex items-center justify-center border border-rose-100">
-            <span className="material-symbols-outlined text-[24px]">warning</span>
-          </div>
+          <span className="text-xs text-rose-700 font-medium mt-1.5">Prioritas Intervensi</span>
         </div>
       </section>
 
@@ -568,102 +548,111 @@ export default function DataBalitaPage() {
       {/* Main Table */}
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full min-w-[1080px] text-left border-collapse">
             <thead>
               <tr className="bg-slate-50/80 text-slate-500 uppercase text-xs font-semibold border-b border-slate-100">
-                <th className="py-3.5 px-5 align-middle whitespace-nowrap min-w-[180px]">Nama Balita</th>
-                <th className="py-3.5 px-4 align-middle whitespace-nowrap">NIK & Gender</th>
-                <th className="py-3.5 px-4 align-middle whitespace-nowrap">Usia</th>
-                <th className="py-3.5 px-4">Orang Tua / Wali</th>
-                <th className="py-3.5 px-4">Posyandu</th>
-                <th className="py-3.5 px-4">BB / TB Terakhir</th>
-                <th className="py-3.5 px-4">Status Stunting (TB/U)</th>
-                <th className="py-3.5 px-5 text-right">Aksi</th>
+                <th className="py-3.5 px-5 align-middle whitespace-nowrap min-w-[200px]">Nama Balita</th>
+                <th className="py-3.5 px-4 align-middle whitespace-nowrap min-w-[160px]">NIK &amp; Gender</th>
+                <th className="py-3.5 px-4 align-middle whitespace-nowrap min-w-[165px]">Usia</th>
+                <th className="py-3.5 px-4 align-middle whitespace-nowrap min-w-[160px]">Orang Tua / Wali</th>
+                <th className="py-3.5 px-4 align-middle whitespace-nowrap min-w-[150px]">Posyandu</th>
+                <th className="py-3.5 px-4 align-middle whitespace-nowrap min-w-[150px]">BB / TB Terakhir</th>
+                <th className="py-3.5 px-4 align-middle whitespace-nowrap min-w-[160px]">Status Stunting (TB/U)</th>
+                <th className="py-3.5 px-5 align-middle whitespace-nowrap text-right min-w-[105px]">Aksi</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 text-sm">
-              {filteredChildren.map((child) => (
-                <tr key={child.id} className="hover:bg-slate-50/70 transition-colors">
-                  <td className="py-3.5 px-5 align-middle">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center shrink-0 text-xs">
-                        {child.name.slice(0, 2).toUpperCase()}
-                      </div>
-                      <div>
-                        <Link
-                          href={`/staff/balita/${child.id}`}
-                          className="font-semibold text-slate-900 hover:text-emerald-700 transition-colors block"
-                        >
-                          {child.name}
-                        </Link>
-                        <span className="text-xs text-slate-500">
-                          Lahir: {child.birthDate}
-                        </span>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-3.5 px-4 text-slate-700 whitespace-nowrap align-middle">
-                    <p className="font-mono text-xs">{child.nik}</p>
-                    <span className="text-xs text-slate-500">
-                      {child.gender === "L" ? "Laki-laki" : "Perempuan"}
-                    </span>
-                  </td>
-                  <td className="py-3.5 px-4 text-slate-900">
-                    {(() => {
-                      const ageDetail = calculateDetailedAge(child.birthDate);
-                      return (
-                        <div>
-                          <p className="font-bold text-slate-900 text-xs sm:text-sm">
-                            {ageDetail.textBadge}
-                          </p>
-                          <span className="text-[11px] text-emerald-800 font-medium block">
-                            {ageDetail.textLong}
-                          </span>
-                        </div>
-                      );
-                    })()}
-                  </td>
-                  <td className="py-3.5 px-4 text-slate-700 whitespace-nowrap align-middle">
-                    <p className="font-medium text-slate-800">{child.motherName || child.parentName}</p>
-                    {child.fatherName ? (
-                      <span className="text-[11px] text-slate-500 block">Ayah: {child.fatherName}</span>
-                    ) : (
-                      <span className="text-[11px] text-emerald-700 font-medium block">Terhubung e-PPGBM</span>
-                    )}
-                  </td>
-                  <td className="py-3.5 px-4 text-slate-700 whitespace-nowrap align-middle">
-                    {child.posyandu}
-                  </td>
-                  <td className="py-3.5 px-4">
-                    <span className="font-semibold text-slate-900">{child.weight} kg</span> /{" "}
-                    <span className="font-semibold text-slate-900">{child.height} cm</span>
-                    <span className="text-xs text-slate-500 block mt-0.5">
-                      {child.lastExamDate}
-                    </span>
-                  </td>
-                  <td className="py-3.5 px-4">
-                    <StuntingBadge status={child.stuntingStatus} />
-                  </td>
-                  <td className="py-3.5 px-5 text-right">
-                    <div className="flex items-center justify-end gap-1.5">
-                      <Link
-                        href={`/staff/balita/${child.id}`}
-                        className="p-2 rounded-xl bg-slate-100 text-slate-700 hover:text-emerald-700 hover:bg-emerald-50 transition-colors"
-                        title="Lihat Detail Balita"
-                      >
-                        <span className="material-symbols-outlined text-[18px]">visibility</span>
-                      </Link>
-                      <Link
-                        href="/staff/pemeriksaan"
-                        className="p-2 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors"
-                        title="Catat Pemeriksaan Balita Ini"
-                      >
-                        <span className="material-symbols-outlined text-[18px]">add_chart</span>
-                      </Link>
-                    </div>
+            <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
+              {filteredChildren.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="py-10 px-5 text-center text-xs text-slate-500">
+                    Tidak ada data balita yang ditemukan.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                filteredChildren.map((child) => (
+                  <tr key={child.id} className="hover:bg-slate-50/70 transition-colors">
+                    <td className="py-3.5 px-5 align-middle">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center shrink-0 text-xs">
+                          {child.name.slice(0, 2).toUpperCase()}
+                        </div>
+                        <div className="min-w-0">
+                          <Link
+                            href={`/staff/balita/${child.id}`}
+                            className="font-semibold text-slate-900 hover:text-emerald-700 transition-colors block truncate"
+                          >
+                            {child.name}
+                          </Link>
+                          <span className="text-xs text-slate-500 block">
+                            Lahir: {child.birthDate}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-3.5 px-4 text-slate-700 whitespace-nowrap align-middle">
+                      <p className="text-xs font-medium text-slate-800">{child.nik}</p>
+                      <span className="text-xs text-slate-500 block">
+                        {child.gender === "L" ? "Laki-laki" : "Perempuan"}
+                      </span>
+                    </td>
+                    <td className="py-3.5 px-4 text-slate-900 whitespace-nowrap align-middle min-w-[165px]">
+                      {(() => {
+                        const ageDetail = calculateDetailedAge(child.birthDate);
+                        return (
+                          <div className="flex flex-col gap-0.5">
+                            <p className="font-semibold text-slate-900 text-sm whitespace-nowrap">
+                              {ageDetail.textBadge}
+                            </p>
+                            <span className="text-xs text-emerald-800 font-medium whitespace-nowrap">
+                              {ageDetail.textLong}
+                            </span>
+                          </div>
+                        );
+                      })()}
+                    </td>
+                    <td className="py-3.5 px-4 text-slate-700 whitespace-nowrap align-middle">
+                      <p className="font-medium text-slate-800 text-sm">{child.motherName || child.parentName}</p>
+                      {child.fatherName ? (
+                        <span className="text-xs text-slate-500 block">Ayah: {child.fatherName}</span>
+                      ) : (
+                        <span className="text-xs text-emerald-700 font-medium block">Terhubung Posyandu</span>
+                      )}
+                    </td>
+                    <td className="py-3.5 px-4 text-slate-700 whitespace-nowrap align-middle text-sm">
+                      {child.posyandu}
+                    </td>
+                    <td className="py-3.5 px-4 whitespace-nowrap align-middle">
+                      <span className="font-semibold text-slate-900 text-sm">{child.weight} kg</span>{" "}
+                      <span className="text-slate-400">/</span>{" "}
+                      <span className="font-semibold text-slate-900 text-sm">{child.height} cm</span>
+                      <span className="text-xs text-slate-500 block mt-0.5">
+                        {child.lastExamDate}
+                      </span>
+                    </td>
+                    <td className="py-3.5 px-4 whitespace-nowrap align-middle">
+                      <StuntingBadge status={child.stuntingStatus} />
+                    </td>
+                    <td className="py-3.5 px-5 text-right whitespace-nowrap align-middle">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <Link
+                          href={`/staff/balita/${child.id}`}
+                          className="p-2 rounded-xl bg-slate-100 text-slate-700 hover:text-emerald-700 hover:bg-emerald-50 transition-colors shrink-0"
+                          title="Lihat Detail Balita"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">visibility</span>
+                        </Link>
+                        <Link
+                          href="/staff/pemeriksaan"
+                          className="p-2 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors shrink-0"
+                          title="Catat Pemeriksaan Balita Ini"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">add_chart</span>
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

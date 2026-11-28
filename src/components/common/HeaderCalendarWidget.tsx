@@ -92,103 +92,108 @@ export function HeaderCalendarWidget() {
       </button>
 
       {/* Datepicker Popover */}
-      {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-[calc(100vw-1.5rem)] sm:w-72 max-w-xs bg-white rounded-2xl shadow-xl border border-[#e2ebe5] p-4 z-50 animate-in fade-in zoom-in-95 duration-150">
-          {/* Header Month / Year controls */}
-          <div className="flex items-center justify-between pb-3 mb-2 border-b border-[#f1f5f9]">
-            <button
-              type="button"
-              onClick={prevMonth}
-              className="p-1.5 text-[#6f7a6e] hover:text-[#0b1c30] hover:bg-[#f8f9ff] rounded-lg transition-colors"
-            >
-              <span className="material-symbols-outlined text-[18px]">chevron_left</span>
-            </button>
-            <div className="font-heading text-xs font-bold text-[#0b1c30]">
-              {monthNames[month]} {year}
-            </div>
-            <button
-              type="button"
-              onClick={nextMonth}
-              className="p-1.5 text-[#6f7a6e] hover:text-[#0b1c30] hover:bg-[#f8f9ff] rounded-lg transition-colors"
-            >
-              <span className="material-symbols-outlined text-[18px]">chevron_right</span>
-            </button>
+      <div
+        aria-hidden={!isOpen}
+        className={`fixed inset-x-3 top-16 mx-auto w-auto max-w-md z-50 max-h-[75vh] overflow-y-auto lg:absolute lg:inset-x-auto lg:right-0 lg:left-auto lg:top-full lg:mt-2 lg:mx-0 lg:w-80 lg:max-w-none lg:max-h-none lg:overflow-visible bg-white rounded-2xl shadow-xl border border-[#e2ebe5] p-4 transition-all duration-200 ease-out origin-top-right ${
+          isOpen
+            ? "opacity-100 scale-100 translate-y-0 pointer-events-auto visible"
+            : "opacity-0 scale-95 -translate-y-1.5 pointer-events-none invisible"
+        }`}
+      >
+        {/* Header Month / Year controls */}
+        <div className="flex items-center justify-between pb-3 mb-2 border-b border-[#f1f5f9]">
+          <button
+            type="button"
+            onClick={prevMonth}
+            className="p-1.5 text-[#6f7a6e] hover:text-[#0b1c30] hover:bg-[#f8f9ff] rounded-lg transition-colors"
+          >
+            <span className="material-symbols-outlined text-[18px]">chevron_left</span>
+          </button>
+          <div className="font-heading text-xs font-bold text-[#0b1c30]">
+            {monthNames[month]} {year}
           </div>
-
-          {/* Weekday headers */}
-          <div className="grid grid-cols-7 gap-1 text-center mb-1 text-[11px] font-semibold text-[#6f7a6e]">
-            <span>Min</span>
-            <span>Sen</span>
-            <span>Sel</span>
-            <span>Rab</span>
-            <span>Kam</span>
-            <span>Jum</span>
-            <span>Sab</span>
-          </div>
-
-          {/* Days grid */}
-          <div className="grid grid-cols-7 gap-1 text-center">
-            {/* Empty slots for month start */}
-            {Array.from({ length: firstDay }).map((_, i) => (
-              <div key={`empty-${i}`} className="h-8" />
-            ))}
-
-            {/* Days of current month */}
-            {Array.from({ length: totalDays }).map((_, i) => {
-              const dayNum = i + 1;
-              const isToday =
-                currentDate.getDate() === dayNum &&
-                currentDate.getMonth() === month &&
-                currentDate.getFullYear() === year;
-
-              const isSelected =
-                selectedDate.getDate() === dayNum &&
-                selectedDate.getMonth() === month &&
-                selectedDate.getFullYear() === year;
-
-              return (
-                <button
-                  key={`day-${dayNum}`}
-                  type="button"
-                  onClick={() => {
-                    const picked = new Date(year, month, dayNum);
-                    setSelectedDate(picked);
-                    setDisplayDateStr(formatIndonesianDate(picked));
-                    setIsOpen(false);
-                  }}
-                  className={`h-8 w-8 mx-auto rounded-lg text-xs font-medium flex items-center justify-center transition-all ${
-                    isSelected
-                      ? "bg-[#15803d] text-white font-bold shadow-xs"
-                      : isToday
-                      ? "bg-[#dcfce7] text-[#15803d] font-bold border border-[#86efac]"
-                      : "text-[#0b1c30] hover:bg-[#eff4ff]"
-                  }`}
-                >
-                  {dayNum}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Popover footer shortcut */}
-          <div className="mt-3 pt-2.5 border-t border-[#f1f5f9] flex items-center justify-between text-[11px]">
-            <button
-              type="button"
-              onClick={() => {
-                const now = new Date();
-                setSelectedDate(now);
-                setViewMonth(new Date(now.getFullYear(), now.getMonth(), 1));
-                setDisplayDateStr(formatIndonesianDate(now));
-                setIsOpen(false);
-              }}
-              className="font-bold text-[#15803d] hover:underline"
-            >
-              Hari Ini
-            </button>
-            <span className="text-[#6f7a6e]">Pilih tanggal</span>
-          </div>
+          <button
+            type="button"
+            onClick={nextMonth}
+            className="p-1.5 text-[#6f7a6e] hover:text-[#0b1c30] hover:bg-[#f8f9ff] rounded-lg transition-colors"
+          >
+            <span className="material-symbols-outlined text-[18px]">chevron_right</span>
+          </button>
         </div>
-      )}
+
+        {/* Weekday headers */}
+        <div className="grid grid-cols-7 gap-1 text-center mb-1 text-[11px] font-semibold text-[#6f7a6e]">
+          <span>Min</span>
+          <span>Sen</span>
+          <span>Sel</span>
+          <span>Rab</span>
+          <span>Kam</span>
+          <span>Jum</span>
+          <span>Sab</span>
+        </div>
+
+        {/* Days grid */}
+        <div className="grid grid-cols-7 gap-1 text-center">
+          {/* Empty slots for month start */}
+          {Array.from({ length: firstDay }).map((_, i) => (
+            <div key={`empty-${i}`} className="h-8" />
+          ))}
+
+          {/* Days of current month */}
+          {Array.from({ length: totalDays }).map((_, i) => {
+            const dayNum = i + 1;
+            const isToday =
+              currentDate.getDate() === dayNum &&
+              currentDate.getMonth() === month &&
+              currentDate.getFullYear() === year;
+
+            const isSelected =
+              selectedDate.getDate() === dayNum &&
+              selectedDate.getMonth() === month &&
+              selectedDate.getFullYear() === year;
+
+            return (
+              <button
+                key={`day-${dayNum}`}
+                type="button"
+                onClick={() => {
+                  const picked = new Date(year, month, dayNum);
+                  setSelectedDate(picked);
+                  setDisplayDateStr(formatIndonesianDate(picked));
+                  setIsOpen(false);
+                }}
+                className={`h-8 w-8 mx-auto rounded-lg text-xs font-medium flex items-center justify-center transition-all ${
+                  isSelected
+                    ? "bg-[#15803d] text-white font-bold shadow-xs"
+                    : isToday
+                    ? "bg-[#dcfce7] text-[#15803d] font-bold border border-[#86efac]"
+                    : "text-[#0b1c30] hover:bg-[#eff4ff]"
+                }`}
+              >
+                {dayNum}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Popover footer shortcut */}
+        <div className="mt-3 pt-2.5 border-t border-[#f1f5f9] flex items-center justify-between text-[11px]">
+          <button
+            type="button"
+            onClick={() => {
+              const now = new Date();
+              setSelectedDate(now);
+              setViewMonth(new Date(now.getFullYear(), now.getMonth(), 1));
+              setDisplayDateStr(formatIndonesianDate(now));
+              setIsOpen(false);
+            }}
+            className="font-bold text-[#15803d] hover:underline"
+          >
+            Hari Ini
+          </button>
+          <span className="text-[#6f7a6e]">Pilih tanggal</span>
+        </div>
+      </div>
     </div>
   );
 }
